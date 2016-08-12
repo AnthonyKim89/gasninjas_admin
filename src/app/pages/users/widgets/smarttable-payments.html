@@ -1,0 +1,41 @@
+<div class="horizontal-scroll">
+  <table class="table" st-table="paymentInfo.payments">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+      <th st-sort="fullname">Full Name</th>
+      <th st-sort="last4">Last 4 Digits</th>
+      <th st-sort="exp">Expiry Date</th>
+      <th st-sort="created">Created At</th>
+      <th st-sort="is_default">Default Card</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><input st-search="fullname" placeholder="Search Full Name" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="last4" placeholder="Search Last 4" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in paymentInfo.payments">
+      <td class="table-id">{{item.id}}</td>
+      <td>{{item.fullname}}</td>
+      <td>{{item.cc_last_four}}</td>
+      <td>{{item.exp}}</td>
+      <td>{{item.created | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td>{{item.is_default ? 'Yes' : ''}}</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="6" class="text-center">
+        <div st-pagination="" st-items-by-page="paymentInfo.smartTablePageSize" st-displayed-pages="5"></div>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

@@ -13,6 +13,10 @@ $hover: 24;
   transform: scale(1.2);
 }
 
+span.btn:hover, .btn.btn-noscale:hover {
+  transform: scale(1.0);
+}
+
 @mixin styleButton($color, $borderColor) {
   background: $color;
   border-color: $borderColor;

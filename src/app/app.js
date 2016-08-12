@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('BlurAdmin', [
+angular.module('GasNinjasAdmin', [
   'ngAnimate',
   'ui.bootstrap',
   'ui.sortable',
@@ -12,7 +12,11 @@ angular.module('BlurAdmin', [
   'ui.slimscroll',
   'ngJsTree',
   'angular-progress-button-styles',
+  'ngResource',
+  'bgf.paginateAnything',
+  'ui.select',
+  'ngBootbox',
 
-  'BlurAdmin.theme',
-  'BlurAdmin.pages'
+  'GasNinjasAdmin.theme',
+  'GasNinjasAdmin.pages'
 ]);

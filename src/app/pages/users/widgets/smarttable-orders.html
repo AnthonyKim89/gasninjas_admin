@@ -1,0 +1,60 @@
+<div class="horizontal-scroll">
+  <div class="form-group select-page-size-wrap ">
+    <label>Orders on page
+      <select class="form-control selectpicker show-tick" title="Orders on page" selectpicker
+              ng-model="orderInfo.smartTablePageSize" ng-options="i for i in [5,10,15,20,25]">
+      </select>
+    </label>
+  </div>
+  <table class="table" st-table="orderInfo.orders">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+      <th st-sort="vehicle_id">Vehicle Id</th>
+      <th st-sort="gas_type">Gas Type</th>
+      <th st-sort="parking_address">Parking Address</th>
+      <th st-sort="gallons">Gallons</th>
+      <th st-sort="created">Created At</th>
+      <th st-sort="to_deliver_on">To Deliver On</th>
+      <th st-sort="delivered_on">Delivered On</th>
+      <th st-sort="status">Status</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><input st-search="vehicle_id" placeholder="Vehicle" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="gas_type" placeholder="Gas Type" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="parking_address" placeholder="Parking Address" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="gallons" placeholder="Gallons" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th><input st-search="status" placeholder="Status" class="input-sm form-control search-input"
+                 type="search"/></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in orderInfo.orders">
+      <td class="table-id">{{item.id}}</td>
+      <td>{{item.vehicle_id}}</td>
+      <td>{{item.gas_type}}</td>
+      <td>{{item.parking_address}}</td>
+      <td>{{item.gallons}}</td>
+      <td>{{item.created | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td>{{item.to_deliver_on}}</td>
+      <td>{{item.delivered_on | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td>{{item.status}}</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="9" class="text-center">
+        <div st-pagination="" st-items-by-page="orderInfo.smartTablePageSize" st-displayed-pages="5"></div>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

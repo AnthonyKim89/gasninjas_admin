@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.theme')
+  angular.module('GasNinjasAdmin.theme')
       .factory('baPanel', baPanel);
 
   /** @ngInject */

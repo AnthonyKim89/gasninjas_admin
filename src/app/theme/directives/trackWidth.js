@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.theme')
+  angular.module('GasNinjasAdmin.theme')
       .directive('trackWidth', trackWidth);
 
   /** @ngInject */

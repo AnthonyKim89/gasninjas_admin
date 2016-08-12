@@ -1,17 +1,18 @@
 /**
- * @author a.demeshko
- * created on 3/1/16
+ * @author Anthony
+ * created on 06/08/2016
  */
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.pages.users')
-    .factory('UsersService', UsersService);
+  angular.module('GasNinjasAdmin.pages.users')
+    .factory('UserService', UserService);
 
   /** @ngInject */
-  function UsersService($resource, SERVER_URL) {
+  function UserService($resource, SERVER_URL) {
     return $resource(SERVER_URL + '/api/users/:id', {id: '@id'}, {
-      getUsers: {method: 'GET', url: SERVER_URL + '/api/users/list_users'}
+    	getUserList: {method: 'GET', url: SERVER_URL + '/api/users/list_users/all'},
+      getUserInfo: {method: 'GET', url: SERVER_URL + '/api/users/get_info/:id'}
     });
   }
 

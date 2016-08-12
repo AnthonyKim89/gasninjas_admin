@@ -20,7 +20,7 @@ gulp.task('partials', function() {
             quotes: true
         }))
         .pipe($.angularTemplatecache('templateCacheHtml.js', {
-            module: 'BlurAdmin',
+            module: 'GasNinjasAdmin',
             root: 'app'
         }))
         .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
@@ -100,12 +100,12 @@ gulp.task('build', ['html', 'fonts', 'other']);
 
 gulp.task('production', ['build'], function() {
     return gulp.src(conf.paths.dist + '/index.html')
-        .pipe(inject.replace('http://localhost', 'http://api.gasninjas.com'))
+        .pipe(inject.replace('http://localhost/gn_api', 'http://api.gasninjas.com'))
         .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
 });
 
 gulp.task('staging', ['build'], function() {
     return gulp.src(conf.paths.dist + '/index.html')
-        .pipe(inject.replace('http://localhost', 'http://api.gasninjas.com'))
+        .pipe(inject.replace('http://localhost/gn_api', 'http://localhost/gn_api'))
         .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
 });

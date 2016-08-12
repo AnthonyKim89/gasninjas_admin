@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.pages.dashboard')
+  angular.module('GasNinjasAdmin.pages.dashboard')
       .directive('dashboardLineChart', dashboardLineChart);
 
   /** @ngInject */

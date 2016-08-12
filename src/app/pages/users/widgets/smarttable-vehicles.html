@@ -1,0 +1,48 @@
+<div class="horizontal-scroll">
+  <table class="table" st-table="vehicleInfo.vehicles">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+      <th st-sort="make">Make</th>
+      <th st-sort="model">Model</th>
+      <th st-sort="year">Year</th>
+      <th st-sort="color">Color</th>
+      <th st-sort="tag">Tag</th>
+      <th st-sort="gas_type">Gas Type</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><input st-search="make" placeholder="Search Make" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="model" placeholder="Search Model" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="year" placeholder="Search Year" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="color" placeholder="Search Color" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="tag" placeholder="Search Tag" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input st-search="gas_type" placeholder="Search Gas Type" class="input-sm form-control search-input"
+                 type="search"/></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in vehicleInfo.vehicles">
+      <td class="table-id">{{item.id}}</td>
+      <td>{{item.make}}</td>
+      <td>{{item.make}}</td>
+      <td>{{item.year}}</td>
+      <td>{{item.color}}</td>
+      <td>{{item.tag}}</td>
+      <td>{{item.gas_type}}</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="7" class="text-center">
+        <div st-pagination="" st-items-by-page="vehicleInfo.smartTablePageSize" st-displayed-pages="5"></div>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

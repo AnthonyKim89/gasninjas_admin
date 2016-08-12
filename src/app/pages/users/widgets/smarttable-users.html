@@ -1,0 +1,47 @@
+<div class="horizontal-scroll">
+  <div class="form-group select-page-size-wrap ">
+    <label>Users per page
+      <select class="form-control selectpicker show-tick" title="Rows on page" selectpicker
+              ng-model="pagination.perPage" ng-options="i for i in pagination.perPagePresets">
+      </select>
+    </label>
+  </div>
+  <table class="table">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" >#</th>
+      <th >Full Name</th>
+      <th >Email</th>
+      <th >Phone</th>
+      <th >Created At</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><input ng-model="pagination.urlParams.query_fullname" placeholder="Search Full Name" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th><input ng-model="pagination.urlParams.query_email" placeholder="Search Email" class="input-sm form-control search-input" type="search"/>
+      </th>
+      <th><input ng-model="pagination.urlParams.query_phone" placeholder="Search Phone" class="input-sm form-control search-input" type="search"/>
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="user in pagination.items" ng-click="viewUser(user.id)" class="table-row-clickable">
+      <td class="table-id">{{user.id}}</td>
+      <td>{{user.fullname}}</td>
+      <!-- <td><a class="email-link" ng-href="mailto:{{user.email}}">{{user.email}}</a></td> -->
+      <td>{{user.email}}</td>
+      <td>{{user.phone}}</td>
+      <td>{{user.created | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="5" class="text-center">
+        <bgf-pagination url="pagination.apiUrl" url-params="pagination.urlParams" auto-presets="false" collection="pagination.items" page="pagination.page" per-page="pagination.perPage" per-page-presets="pagination.perPagePresets" link-group-size="2" template-url="app/pages/users/paginate/paginate-users.html"></bgf-pagination>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

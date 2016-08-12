@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.theme.components')
+  angular.module('GasNinjasAdmin.theme.components')
       .directive('baSidebarToggleMenu', baSidebarToggleMenu)
       .directive('baSidebarCollapseMenu', baSidebarCollapseMenu)
       .directive('baSidebarTogglingItem', baSidebarTogglingItem)
