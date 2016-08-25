@@ -8,6 +8,9 @@
   angular.module('GasNinjasAdmin.pages', [
     'ui.router',
 
+    'GasNinjasAdmin.components',
+
+    'GasNinjasAdmin.pages.login',
     'GasNinjasAdmin.pages.dashboard',
     'GasNinjasAdmin.pages.users',
     'GasNinjasAdmin.pages.orders',

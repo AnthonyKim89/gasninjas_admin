@@ -43,6 +43,19 @@
                     </div>
                     <div class="form-group">
                         <label for="to_deliver_on">
+                            Price Per Gallon*
+                        </label>
+                        <ui-select ng-model="prices.selected" theme="bootstrap">
+                            <ui-select-match placeholder="Type to search...">
+                                {{$select.selected.text}}
+                            </ui-select-match>
+                            <ui-select-choices refresh-delay="300" repeat="price in prices.list | filter: $select.search">
+                                {{price.text}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="form-group">
+                        <label for="to_deliver_on">
                             To Deliver On*
                         </label>
                         <ui-select ng-model="delivery_windows.selected" theme="bootstrap">
@@ -55,17 +68,11 @@
                         </ui-select>
                     </div>
                     <div class="form-group">
-                        <label for="delivered_on">
-                            Delivered On (Optional)
+                        <label for="notes">
+                            Notes (Optional)
                         </label>
-                        <div class="input-group input-append date" id="datetimepicker">
-                            <input class="form-control form-date" date-format="yyyy-MM-dd hh:mm:00" id="delivered_on" name="delivered_on" ng-model="order.delivered_on" placeholder="Delivered On" required="" type="text">
-                            </input>
-                            <span class="input-group-addon add-on">
-                                <i class="fa fa-calendar">
-                                </i>
-                            </span>
-                        </div>
+                        <textarea class="form-control" id="notes" name="notes" ng-model="order.notes" placeholder="Notes">
+                        </textarea>
                     </div>
                     <div class="form-group">
                         <label for="send_to_onfleet">
@@ -77,7 +84,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    
+                    <div id="google-maps" style="height: 500px"></div>
                 </div>
             </div>
             <div class="row">

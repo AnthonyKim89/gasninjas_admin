@@ -16,7 +16,9 @@ angular.module('GasNinjasAdmin', [
   'bgf.paginateAnything',
   'ui.select',
   'ngBootbox',
+  'ngLodash',
 
+  'GasNinjasAdmin.constants',
   'GasNinjasAdmin.theme',
   'GasNinjasAdmin.pages'
 ]);

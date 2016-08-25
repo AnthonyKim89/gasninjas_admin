@@ -106,6 +106,6 @@ gulp.task('production', ['build'], function() {
 
 gulp.task('staging', ['build'], function() {
     return gulp.src(conf.paths.dist + '/index.html')
-        .pipe(inject.replace('http://localhost/gn_api', 'http://localhost/gn_api'))
+        .pipe(inject.replace('http://localhost/gn_api', 'http://104.155.170.104'))
         .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
 });

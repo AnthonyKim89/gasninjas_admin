@@ -28,12 +28,7 @@
             url: '/new',
             templateUrl: 'app/pages/orders/views/new.html',
             controller: 'OrderNewCtrl',
-            title: 'Manage Orders',
-            resolve: {
-                DeliveryWindows: function(OrderService) {
-                    return OrderService.getDeliveryWindows().$promise;
-                }
-            }
+            title: 'Manage Orders'
         }).state('orders.edit', {
             url: '/edit',
             templateUrl: 'app/pages/orders/views/edit.html',
@@ -41,11 +36,6 @@
             title: 'Manage Orders',
             params: {
                 order: null
-            },
-            resolve: {
-                DeliveryWindows: function(OrderService) {
-                    return OrderService.getDeliveryWindows().$promise;
-                }
             }
         });
         $urlRouterProvider.when('/orders', '/orders/list');

@@ -35,13 +35,13 @@
       <td>{{order.to_deliver_on}}</td>
       <td>{{order.delivered_on | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
       <td>
-        <button class="status-button btn btn-xs btn-primary btn-noscale" ng-if="order.status == 10">Complete</button>
-        <button class="status-button btn btn-xs btn-warning btn-noscale" ng-if="order.status == 5">Canceled</button>
-        <button class="status-button btn btn-xs btn-default btn-noscale" ng-if="order.status != 10 && order.status != 5">Pending</button>
+        <button class="status-button btn btn-xs btn-info btn-noscale" ng-if="order.status == 10" ng-disabled="true">Complete</button>
+        <button class="status-button btn btn-xs btn-warning btn-noscale" ng-if="order.status == 5" ng-disabled="true">Canceled</button>
+        <button class="status-button btn btn-xs btn-default btn-noscale" ng-if="order.status != 10 && order.status != 5" ng-disabled="true">Pending</button>
       </td>
       <td>
         <div class="buttons" ng-show="!rowform.$visible">
-          <button class="btn btn-primary editable-table-button btn-xs" ng-click="editOrder(order)">Edit</button>
+          <button class="btn btn-primary editable-table-button btn-xs" ng-click="editOrder(order)">{{order.status == 10 || order.status == 5 ? 'View' : 'Edit'}}</button>
           <button class="btn btn-danger editable-table-button btn-xs" ng-click="deleteOrder(order.id)">Delete</button>
         </div>
       </td>

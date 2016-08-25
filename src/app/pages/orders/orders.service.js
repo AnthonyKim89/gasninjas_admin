@@ -10,12 +10,13 @@
 
   /** @ngInject */
   function OrderService($resource, SERVER_URL) {
-    return $resource(SERVER_URL + '/api/refills/:id', {id: '@id'}, {
+    return $resource(SERVER_URL + '/api/refills/:id', {id: '@id', zip: '@zip'}, {
     	addNewOrder: {method: 'POST', url: SERVER_URL + '/api/refills/add_order'},
     	addNewOrderWithOnfleet: {method: 'POST', url: SERVER_URL + '/api/refills/add_order/onfleet'},
     	editOrder: {method: 'PUT', url: SERVER_URL + '/api/refills/edit_order/:id'},
-    	getDeliveryWindows: {method: 'GET', isArray: true, url: SERVER_URL + '/api/refills/get_delivery_windows'},
+      completeOrder: {method: 'PUT', url: SERVER_URL + '/api/refills/complete_order/:id'},
       deleteOrder: {method: 'POST', url: SERVER_URL + '/api/refills/delete_order/:id'},
+      getPrices: {method: 'POST', url: SERVER_URL + '/api/prices/find_new/:zip'},
     });
   }
 

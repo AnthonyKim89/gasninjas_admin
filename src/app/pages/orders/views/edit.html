@@ -47,6 +47,19 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="to_deliver_on">
+                                            Price Per Gallon*
+                                        </label>
+                                        <ui-select ng-model="prices.selected" theme="bootstrap">
+                                            <ui-select-match placeholder="Type to search...">
+                                                {{$select.selected.text}}
+                                            </ui-select-match>
+                                            <ui-select-choices refresh-delay="300" repeat="price in prices.list | filter: $select.search">
+                                                {{price.text}}
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="to_deliver_on">
                                             To Deliver On*
                                         </label>
                                         <ui-select ng-model="delivery_windows.selected" theme="bootstrap">
@@ -71,7 +84,14 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <!-- <div class="form-group">
+                                    <div class="form-group">
+                                        <label for="notes">
+                                            Notes (Optional)
+                                        </label>
+                                        <textarea class="form-control" id="notes" name="notes" ng-model="order.notes" placeholder="Notes">
+                                        </textarea>
+                                    </div>
+                                    <div class="form-group" ng-if="!order.task_id">
                                         <label for="send_to_onfleet">
                                             Send to Onfleet
                                         </label>
@@ -79,9 +99,16 @@
                                             <switch color="success" name="send_to_onfleet" ng-model="order.send_to_onfleet">
                                             </switch>
                                         </div>
-                                    </div> -->
+                                    </div>
+                                    <div class="form-group" ng-if="order.task_id">
+                                        <label for="send_to_onfleet">
+                                            Send to Onfleet
+                                        </label>
+                                        <button name="send_to_onfleet" class="status-button btn btn-xs btn-info btn-noscale" ng-disabled="true">Sent</button>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
+                                    <div id="google-maps" style="height: 500px"></div>
                                 </div>
                             </div>
                             <div class="row">
@@ -90,7 +117,7 @@
                                         <button class="btn btn-danger" ng-click="deleteOrder()">
                                             Delete Order
                                         </button>
-                                        <button class="btn btn-primary" type="submit">
+                                        <button class="btn btn-primary" type="submit" ng-if="order.status != 10 && order.status !=5">
                                             Edit Order
                                         </button>
                                     </div>
@@ -112,35 +139,14 @@
                                         </div>
                                     </div>
                                     <div class="form-group" ng-show="order.complete">
-                                        <label for="gas_types">
-                                            Gas Type*
+                                        <label for="notes">
+                                            Completion Notes*
                                         </label>
-                                        <input class="form-control" id="gas_types" name="gas_type" ng-model="order.gas_type" placeholder="Gas Type" required="" type="number">
-                                        </input>
-                                    </div>
-                                    <div class="form-group" ng-show="order.complete">
-                                        <label for="gallons">
-                                            Gallons*
-                                        </label>
-                                        <input class="form-control" id="gallons" name="gallons" ng-model="order.gallons" placeholder="Gallons" required="" type="number">
-                                        </input>
-                                    </div>
-                                    <div class="form-group" ng-show="order.complete">
-                                        <label for="price">
-                                            Price Per Gallons*
-                                        </label>
-                                        <input class="form-control" id="price" name="price" ng-model="order.price" placeholder="Price Per Gallons" required="" type="number">
-                                        </input>
+                                        <textarea class="form-control" id="notes" name="notes" ng-model="order.completion_notes" placeholder="Notes">
+                                        </textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group" ng-show="order.complete">
-                                        <label for="notes">
-                                            Notes (Optional)
-                                        </label>
-                                        <textarea class="form-control" id="notes" name="notes" ng-model="order.notes" placeholder="Notes">
-                                        </textarea>
-                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -149,7 +155,7 @@
                                         <button class="btn btn-danger" ng-click="deleteOrder()">
                                             Delete Order
                                         </button>
-                                        <button class="btn btn-primary" type="submit">
+                                        <button class="btn btn-primary" type="submit" ng-if="order.status != 10 && order.status !=5">
                                             Complete Order
                                         </button>
                                     </div>
