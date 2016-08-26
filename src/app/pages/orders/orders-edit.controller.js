@@ -20,7 +20,7 @@
                 gallons: $state.params.order.gallons,
                 price_per_gallon: $state.params.order.price_per_gallon,
                 to_deliver_on: $state.params.order.to_deliver_on,
-                delivered_on: $state.params.order.delivered_on,
+                // delivered_on: $state.params.order.delivered_on,
                 notes: $state.params.order.notes,
                 completion_notes: '',
                 status: $state.params.order.status,
@@ -34,7 +34,10 @@
                 city: $state.params.order.city,
                 street_name: $state.params.order.street_name,
                 street_number: $state.params.order.street_number,
+
+                refill_schedule: $state.params.order.refill_schedule
             };
+
         } else {
             $state.go('orders.list');
         }
@@ -49,6 +52,7 @@
         $scope.fetchUsers = fnFetchUsers;
         $scope.initDateTimePicker = fnInitDateTimePicker;
         $scope.initGoogleMap = fnInitGoogleMap;
+        $scope.initScheduler = fnInitScheduler;
         $scope.placeChanged = fnHandlerOnPlaceChanged;
         $scope.centerChanged = fnHandlerOnCenterChanged;
 
@@ -80,6 +84,7 @@
 
         $scope.initDateTimePicker();
         $timeout($scope.initGoogleMap, 500);
+        $timeout($scope.initScheduler, 1000);
 
         $scope.$watch('users.selected', function(newVal, oldVal) {
             if (!newVal) return;
@@ -109,6 +114,7 @@
         function fnInitDateTimePicker() {
             var is_loaded = $('#delivered_on').attr('date-format');
             if (is_loaded) {
+                console.log($scope.order.delivered_on);
                 $('#delivered_on').datetimepicker();
             } else {
                 $timeout(fnInitDateTimePicker, 500);
@@ -119,6 +125,25 @@
             //We can't edit already completed order!
             if ($scope.order.status == 10 || $scope.order.status == 5)
                 return false;
+
+            var scheduler = $('#myScheduler').scheduler('value');
+
+            if (!$scope.users.selected){
+                alert("Please select a user.");
+                return;
+            }
+            if (!$scope.vehicles.selected){
+                alert("Please select a vehicle.");
+                return;
+            }
+            if (!$scope.delivery_windows.selected){
+                alert("Please select a delivery window.");
+                return;
+            }
+            if (!$scope.prices.selected){
+                alert("Please select a price.");
+                return;
+            }
 
             $scope.order.user_id = $scope.users.selected.id;
             $scope.order.vehicle_id = $scope.vehicles.selected.id;
@@ -137,7 +162,7 @@
                 price_per_gallon: $scope.order.price,
                 to_deliver_on: $scope.order.to_deliver_on,
                 notes: $scope.order.notes,
-                
+
                 zip: $scope.order.zip,
                 latlong: $scope.order.latlong,
                 country: $scope.order.country,
@@ -152,6 +177,12 @@
                     hour: date.getHours(),
                     minute: date.getMinutes()
                 },
+
+                repeat: {
+                    startDateTime: new Date(scheduler.startDateTime).getTime() / 1000,
+                    timeZone: scheduler.timeZone.offset,
+                    recurrencePattern: scheduler.recurrencePattern
+                }
             };
 
             OrderService.editOrder({ id: $scope.order.id }, data, fnCallbackEditOrder);
@@ -250,6 +281,20 @@
             }
         }
 
+        function fnInitScheduler() {
+            $('#myScheduler').scheduler();
+
+            if ($scope.order && $scope.order.refill_schedule) {
+                $('#myScheduler').scheduler('value', {
+                    startDateTime: $scope.order.refill_schedule.startDateTime,
+                    timeZone: {
+                        offset: $scope.order.refill_schedule.timeZone
+                    },
+                    recurrencePattern: $scope.order.refill_schedule.recurrencePattern
+                });
+            }
+        }
+
         function fnInitGoogleMap() {
             if (!$scope.order)
                 return;
@@ -257,11 +302,11 @@
             var mapCanvas = document.getElementById('google-maps');
 
             var center = null;
-            if ($scope.order.latlong){
+            if ($scope.order.latlong) {
                 var pos = $scope.order.latlong.split(',');
-                center = {lat: parseFloat(pos[0]), lng: parseFloat(pos[1])};
+                center = { lat: parseFloat(pos[0]), lng: parseFloat(pos[1]) };
             }
-            
+
             var mapOptions = {
                 center: center ? center : new google.maps.LatLng(44.5403, -78.5463),
                 zoom: 8,
@@ -297,7 +342,7 @@
             $scope.searchBox = new google.maps.places.SearchBox(document.getElementById('parking_address'));
 
             google.maps.event.addListener($scope.searchBox, 'places_changed', $scope.placeChanged);
-            
+
             map.addListener('bounds_changed', $scope.centerChanged);
             map.addListener('dragend', $scope.centerChanged);
         }
@@ -334,7 +379,7 @@
             var geocoder = new google.maps.Geocoder;
             var pos = $scope.map.getCenter();
 
-            if ($scope.marker){
+            if ($scope.marker) {
                 $scope.marker.setMap(null);
             }
 
@@ -384,7 +429,7 @@
 
             if (result && result.success) {
                 $scope.delivery_windows.list = result.prices.windows;
-                
+
                 $scope.prices.list = [];
                 $scope.prices.list[0] = {
                     gas_type: 87,

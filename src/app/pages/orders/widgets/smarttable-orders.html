@@ -38,6 +38,7 @@
         <button class="status-button btn btn-xs btn-info btn-noscale" ng-if="order.status == 10" ng-disabled="true">Complete</button>
         <button class="status-button btn btn-xs btn-warning btn-noscale" ng-if="order.status == 5" ng-disabled="true">Canceled</button>
         <button class="status-button btn btn-xs btn-default btn-noscale" ng-if="order.status != 10 && order.status != 5" ng-disabled="true">Pending</button>
+        <button class="status-button btn btn-xs btn-info btn-noscale" ng-if="order.refill_schedule" ng-disabled="true">Repeat</button>
       </td>
       <td>
         <div class="buttons" ng-show="!rowform.$visible">

@@ -82,6 +82,14 @@
                             <switch name="send_to_onfleet" color="success" ng-model="order.send_to_onfleet"></switch>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="scheduler">
+                            Schedule
+                        </label>
+                        <div class="fuelux">
+                            <div include-with-scope="app/pages/orders/widgets/repeat-order.html"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div id="google-maps" style="height: 500px"></div>

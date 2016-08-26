@@ -13,6 +13,7 @@
         $scope.placeChanged = fnHandlerOnPlaceChanged;
         $scope.centerChanged = fnHandlerOnCenterChanged;
         $scope.initGoogleMap = fnInitGoogleMap;
+        $scope.initScheduler = fnInitScheduler;
 
         $scope.users = {
             list: [],
@@ -59,6 +60,8 @@
 
         $timeout($scope.initGoogleMap, 100);
 
+        $timeout($scope.initScheduler, 1000);
+
         $scope.$watch('users.selected', function(newVal, oldVal) {
             if (newVal === oldVal) return;
             $scope.vehicles.selected = null;
@@ -83,6 +86,25 @@
         })
 
         function fnAddOrder() {
+            var scheduler = $('#myScheduler').scheduler('value');
+
+            if (!$scope.users.selected){
+                alert("Please select a user.");
+                return;
+            }
+            if (!$scope.vehicles.selected){
+                alert("Please select a vehicle.");
+                return;
+            }
+            if (!$scope.delivery_windows.selected){
+                alert("Please select a delivery window.");
+                return;
+            }
+            if (!$scope.prices.selected){
+                alert("Please select a price.");
+                return;
+            }
+
             $scope.order.user_id = $scope.users.selected.id;
             $scope.order.vehicle_id = $scope.vehicles.selected.id;
             $scope.order.to_deliver_on = $scope.delivery_windows.selected.key;
@@ -104,6 +126,12 @@
                 city: $scope.order.city,
                 street_name: $scope.order.street_name,
                 street_number: $scope.order.street_number,
+
+                repeat: {
+                    startDateTime: new Date(scheduler.startDateTime).getTime() / 1000,
+                    timeZone: scheduler.timeZone.offset,
+                    recurrencePattern: scheduler.recurrencePattern
+                }
             };
 
             if ($scope.order.send_to_onfleet) {
@@ -151,7 +179,14 @@
                 case -1:
                     toastr.warning('Successfully added a new order, but failed to send to the Onfleet!');
                     break;
+                default:
+                    toastr.error(result.message ? result.message : 'Unknown Server Error');
+                    break;
             }
+        }
+
+        function fnInitScheduler() {
+            $('#myScheduler').scheduler();
         }
 
         function fnInitGoogleMap() {

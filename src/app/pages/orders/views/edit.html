@@ -106,6 +106,14 @@
                                         </label>
                                         <button name="send_to_onfleet" class="status-button btn btn-xs btn-info btn-noscale" ng-disabled="true">Sent</button>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="scheduler">
+                                            Schedule
+                                        </label>
+                                        <div class="fuelux">
+                                            <div include-with-scope="app/pages/orders/widgets/repeat-order.html"></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div id="google-maps" style="height: 500px"></div>

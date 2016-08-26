@@ -28,7 +28,7 @@
     "angular-touch": "~1.4.6",
     "angular-ui-sortable": "~0.13.4",
     "animate.css": "~3.4.0",
-    "bootstrap": "~3.3.5",
+    "bootstrap": "^3.3.7",
     "bootstrap-select": "~1.9.3",
     "bootstrap-switch": "~3.3.2",
     "bootstrap-tagsinput": "~0.5.0",
@@ -85,9 +85,15 @@
         "./dist/ammap/maps/js/worldLow.js"
       ]
     },
+    "moment": {
+      "main": [
+        "./min/moment-with-locales.js"
+      ]
+    },
     "bootstrap": {
       "main": [
         "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js",
         "js/dropdown.js",
         "./dist/fonts/**.*"
       ]
