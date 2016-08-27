@@ -10,7 +10,19 @@
     function OrderEditCtrl($scope, $state, $http, $timeout, $ngBootbox, toastr, lodash, UserService, OrderService) {
         $scope.order = {};
 
-        if ($state.params.order) {
+        $scope.editOrder = fnEditOrder;
+        $scope.completeOrder = fnCompleteOrder;
+        $scope.deleteOrder = fnDeleteOrder;
+        $scope.fetchUsers = fnFetchUsers;
+        $scope.initDateTimePicker = fnInitDateTimePicker;
+        $scope.initGoogleMap = fnInitGoogleMap;
+        $scope.initScheduler = fnInitScheduler;
+        $scope.placeChanged = fnHandlerOnPlaceChanged;
+        $scope.centerChanged = fnHandlerOnCenterChanged;
+
+        if (!$state.params.order) {
+            $state.go('orders.list');
+        } else {
             $scope.order = {
                 id: $state.params.order.id,
                 user_id: $state.params.order.user_id,
@@ -20,7 +32,7 @@
                 gallons: $state.params.order.gallons,
                 price_per_gallon: $state.params.order.price_per_gallon,
                 to_deliver_on: $state.params.order.to_deliver_on,
-                // delivered_on: $state.params.order.delivered_on,
+                delivered_on: $state.params.order.delivered_on,
                 notes: $state.params.order.notes,
                 completion_notes: '',
                 status: $state.params.order.status,
@@ -38,23 +50,12 @@
                 refill_schedule: $state.params.order.refill_schedule
             };
 
-        } else {
-            $state.go('orders.list');
+            $scope.initDateTimePicker();
         }
 
         if ($scope.order && typeof $scope.order.complete === 'undefined') {
             $scope.order.complete = true;
         }
-
-        $scope.editOrder = fnEditOrder;
-        $scope.completeOrder = fnCompleteOrder;
-        $scope.deleteOrder = fnDeleteOrder;
-        $scope.fetchUsers = fnFetchUsers;
-        $scope.initDateTimePicker = fnInitDateTimePicker;
-        $scope.initGoogleMap = fnInitGoogleMap;
-        $scope.initScheduler = fnInitScheduler;
-        $scope.placeChanged = fnHandlerOnPlaceChanged;
-        $scope.centerChanged = fnHandlerOnCenterChanged;
 
         $scope.users = {
             list: [],
@@ -82,7 +83,6 @@
         };
         $scope.marker = null;
 
-        $scope.initDateTimePicker();
         $timeout($scope.initGoogleMap, 500);
         $timeout($scope.initScheduler, 1000);
 
@@ -113,9 +113,16 @@
 
         function fnInitDateTimePicker() {
             var is_loaded = $('#delivered_on').attr('date-format');
-            if (is_loaded) {
-                console.log($scope.order.delivered_on);
-                $('#delivered_on').datetimepicker();
+            if (is_loaded && $scope.order) {
+                try{
+                    $('#delivered_on').datetimepicker({
+                        defaultDate: new Date($scope.order.delivered_on)
+                    });
+                }catch(error){
+                    console.error(error);
+                    $('#delivered_on').datetimepicker();
+                }
+                
             } else {
                 $timeout(fnInitDateTimePicker, 500);
             }
@@ -152,7 +159,9 @@
             $scope.order.gas_type = $scope.prices.selected.gas_type;
             $scope.order.price = $scope.prices.selected.price;
 
-            var date = new Date($scope.order.delivered_on);
+            var date = new Date($('#delivered_on').val());
+            var offsetMins = date.getTimezoneOffset();
+            var new_date = new Date(date.getTime() + offsetMins * 60 * 1000);
 
             var data = {
                 user_id: $scope.users.selected.id,
@@ -171,16 +180,16 @@
                 street_number: $scope.order.street_number,
 
                 delivered_on: {
-                    year: date.getFullYear(),
-                    month: date.getMonth() + 1,
-                    day: date.getDate(),
-                    hour: date.getHours(),
-                    minute: date.getMinutes()
+                    year: new_date.getFullYear(),
+                    month: new_date.getMonth() + 1,
+                    day: new_date.getDate(),
+                    hour: new_date.getHours(),
+                    minute: new_date.getMinutes()
                 },
 
                 repeat: {
-                    startDateTime: new Date(scheduler.startDateTime).getTime() / 1000,
-                    timeZone: scheduler.timeZone.offset,
+                    // startDateTime: new Date(scheduler.startDateTime).getTime() / 1000,
+                    // timeZone: scheduler.timeZone.offset,
                     recurrencePattern: scheduler.recurrencePattern
                 }
             };

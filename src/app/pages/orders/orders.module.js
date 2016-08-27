@@ -28,12 +28,31 @@
             url: '/new',
             templateUrl: 'app/pages/orders/views/new.html',
             controller: 'OrderNewCtrl',
-            title: 'Manage Orders'
+            title: 'Add a New Order',
+            sidebarMeta: {
+                order: 100,
+            },
         }).state('orders.edit', {
             url: '/edit',
             templateUrl: 'app/pages/orders/views/edit.html',
             controller: 'OrderEditCtrl',
             title: 'Manage Orders',
+            params: {
+                order: null
+            }
+        }).state('orders.list_schedules', {
+            url: '/list_schedules',
+            templateUrl: 'app/pages/schedules/views/list.html',
+            controller: 'ScheduleListCtrl',
+            title: 'Manage Schedules',
+            sidebarMeta: {
+                order: 200,
+            },
+        }).state('orders.edit_schedule', {
+            url: '/edit_schedule',
+            templateUrl: 'app/pages/schedules/views/edit.html',
+            controller: 'ScheduleEditCtrl',
+            title: 'Manage Schedules',
             params: {
                 order: null
             }

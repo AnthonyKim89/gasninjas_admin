@@ -1,0 +1,52 @@
+<div class="horizontal-scroll">
+  <div class="form-group select-page-size-wrap ">
+    <label>Schedules per page
+      <select class="form-control selectpicker show-tick" title="Rows on page" selectpicker
+              ng-model="pagination.perPage" ng-options="i for i in pagination.perPagePresets">
+      </select>
+    </label>
+  </div>
+  <table class="table">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" >#</th>
+      <th>Refill ID</th>
+      <th>User</th>
+      <th>Started At</th>
+      <th>Time Zone</th>
+      <th>RECURRENCE PATTERN</th>
+      <th>Next Recurrence</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="order in pagination.items">
+      <td class="table-id">{{order.refill_schedule.id}}</td>
+      <td><a href="" ng-click="editOrder(order)">{{order.id}}</a></td>
+      <td><a href="" ng-click="viewUser(order.user.id)">{{order.user.email}}</a></td>
+      <td>{{order.refill_schedule.startDateTime | date:'MM/dd/yyyy'}}</td>
+      <td>{{order.refill_schedule.timeZone}}</td>
+      <td>{{order.refill_schedule.recurrencePattern}}</td>
+      <td>{{order.refill_schedule.nextDateTime | date:'MM/dd/yyyy'}}</td>
+      <td>
+        <button class="status-button btn btn-xs btn-info btn-noscale" ng-if="order.refill_schedule.active" ng-disabled="true">Active</button>
+        <button class="status-button btn btn-xs btn-default btn-noscale" ng-if="!order.refill_schedule.active" ng-disabled="true">Inactive</button>
+      </td>
+      <td>
+        <div class="buttons" ng-show="!rowform.$visible">
+          <button class="btn btn-primary editable-table-button btn-xs" ng-click="editSchedule(order)">Edit</button>
+          <button class="btn btn-danger editable-table-button btn-xs" ng-click="deleteSchedule(order.refill_schedule.id)">Delete</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="9" class="text-center">
+        <bgf-pagination url="pagination.apiUrl" url-params="pagination.urlParams" auto-presets="false" collection="pagination.items" page="pagination.page" per-page="pagination.perPage" per-page-presets="pagination.perPagePresets" link-group-size="2" template-url="app/pages/orders/paginate/paginate-orders.html"></bgf-pagination>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

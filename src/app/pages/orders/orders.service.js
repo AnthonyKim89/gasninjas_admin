@@ -17,6 +17,7 @@
       completeOrder: {method: 'PUT', url: SERVER_URL + '/api/refills/complete_order/:id'},
       deleteOrder: {method: 'POST', url: SERVER_URL + '/api/refills/delete_order/:id'},
       getPrices: {method: 'POST', url: SERVER_URL + '/api/prices/find_new/:zip'},
+      deleteSchedule: {method: 'POST', url: SERVER_URL + '/api/refills/delete_schedule/:id'},
     });
   }
 

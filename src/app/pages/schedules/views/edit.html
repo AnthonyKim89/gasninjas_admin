@@ -1,0 +1,40 @@
+<div class="widgets">
+    <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="EDIT SCHEDULE">
+        <form name="scheduleForm" ng-submit="editSchedule()">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="send_to_onfleet">
+                            Active
+                        </label>
+                        <div class="switches clearfix">
+                            <switch name="send_to_onfleet" color="success" ng-model="order.refill_schedule.active"></switch>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label for="scheduler">
+                            Repeat Schedule
+                        </label>
+                        <div class="fuelux">
+                            <div include-with-scope="app/pages/schedules/widgets/repeat-order.html"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button class="btn btn-danger" ng-click="deleteSchedule()">
+                            Delete Schedule
+                        </button>
+                        <button class="btn btn-primary" type="submit">
+                            Edit Schedule
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
