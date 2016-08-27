@@ -188,8 +188,8 @@
                 },
 
                 repeat: {
-                    // startDateTime: new Date(scheduler.startDateTime).getTime() / 1000,
-                    // timeZone: scheduler.timeZone.offset,
+                    startDateTime: new Date(scheduler.startDateTime).getTime() / 1000,
+                    timeZone: scheduler.timeZone.offset,
                     recurrencePattern: scheduler.recurrencePattern
                 }
             };
