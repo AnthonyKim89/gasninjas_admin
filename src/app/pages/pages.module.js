@@ -9,9 +9,11 @@
     'ui.router',
 
     'GasNinjasAdmin.components',
+    'GasNinjasAdmin.models',
 
     'GasNinjasAdmin.pages.login',
     'GasNinjasAdmin.pages.dashboard',
+    'GasNinjasAdmin.pages.organizations',
     'GasNinjasAdmin.pages.users',
     'GasNinjasAdmin.pages.orders',
   ])

@@ -7,19 +7,28 @@
     angular.module('GasNinjasAdmin.pages.orders')
         .controller('OrderNewCtrl', OrderNewCtrl);
 
-    function OrderNewCtrl($scope, $state, $http, $timeout, toastr, lodash, UserService, OrderService) {
+    function OrderNewCtrl($scope, $state, $http, $timeout, toastr, lodash, OrganizationService, UserService, OrderService) {
         $scope.addOrder = fnAddOrder;
         $scope.fetchUsers = fnFetchUsers;
+        $scope.fetchOrganizations = fnFetchOrganizations;
         $scope.placeChanged = fnHandlerOnPlaceChanged;
         $scope.centerChanged = fnHandlerOnCenterChanged;
         $scope.initGoogleMap = fnInitGoogleMap;
         $scope.initScheduler = fnInitScheduler;
 
+        $scope.organizations = {
+            list: [],
+            page: 1,
+            selected: null,
+            loading: false,
+            hasMore: true
+        };
         $scope.users = {
             list: [],
             page: 1,
             selected: null,
-            loading: false
+            loading: false,
+            hasMore: true,
         };
         $scope.vehicles = {
             list: [],
@@ -62,20 +71,37 @@
 
         $timeout($scope.initScheduler, 1000);
 
+        $scope.$watch('organizations.selected', function(newVal, oldVal) {
+            if (newVal === oldVal) return;
+
+            $scope.users.selected = null;
+            $scope.users.hasMore = true;
+
+            if (newVal) {
+                $scope.delivery_windows.list = newVal.delivery_windows;
+            }
+
+            $scope.fetchUsers(null);
+        });
+
         $scope.$watch('users.selected', function(newVal, oldVal) {
             if (newVal === oldVal) return;
+
             $scope.vehicles.selected = null;
-            UserService.getUserInfo({
-                id: newVal.id
-            }).$promise.then(function(data) {
-                for (var i = 0, len = data.user.vehicles.length; i < len; i++) {
-                    data.user.vehicles[i].name = data.user.vehicles[i].make + " - " + data.user.vehicles[i].color + " - " + data.user.vehicles[i].gas_type;
-                }
-                $scope.vehicles.list = data.user.vehicles;
-            }).catch(function(err) {
-                console.error('Failed to Load User Info from the API Server', err);
-                toastr.error('Failed to Load User Info from the API Server');
-            });
+
+            if (newVal && newVal.id) {
+                UserService.getUserInfo({
+                    id: newVal.id
+                }).$promise.then(function(data) {
+                    for (var i = 0, len = data.user.vehicles.length; i < len; i++) {
+                        data.user.vehicles[i].name = data.user.vehicles[i].make + " - " + data.user.vehicles[i].color + " - " + data.user.vehicles[i].gas_type;
+                    }
+                    $scope.vehicles.list = data.user.vehicles;
+                }).catch(function(err) {
+                    console.error('Failed to Load User Info from the API Server', err);
+                    toastr.error('Failed to Load User Info from the API Server');
+                });
+            }
         });
 
         $scope.$watch('vehicles.selected', function(newVal, oldVal) {
@@ -88,19 +114,19 @@
         function fnAddOrder() {
             var scheduler = $('#myScheduler').scheduler('value');
 
-            if (!$scope.users.selected){
+            if (!$scope.users.selected) {
                 alert("Please select a user.");
                 return;
             }
-            if (!$scope.vehicles.selected){
+            if (!$scope.vehicles.selected) {
                 alert("Please select a vehicle.");
                 return;
             }
-            if (!$scope.delivery_windows.selected){
+            if (!$scope.delivery_windows.selected) {
                 alert("Please select a delivery window.");
                 return;
             }
-            if (!$scope.prices.selected){
+            if (!$scope.prices.selected) {
                 alert("Please select a price.");
                 return;
             }
@@ -112,6 +138,7 @@
             $scope.order.price = $scope.prices.selected.price;
 
             var data = {
+                organization_id: $scope.organizations.selected ? $scope.organizations.selected.id : 0,
                 user_id: $scope.users.selected.id,
                 vehicle_id: $scope.vehicles.selected.id,
                 parking_address: $scope.order.parking_address,
@@ -119,7 +146,7 @@
                 price_per_gallon: $scope.order.price,
                 to_deliver_on: $scope.order.to_deliver_on,
                 notes: $scope.order.notes,
-                
+
                 zip: $scope.order.zip,
                 latlong: $scope.order.latlong,
                 country: $scope.order.country ? $scope.order.country : ' ',
@@ -151,19 +178,71 @@
                 $event.stopPropagation();
                 $event.preventDefault();
             }
+
             $scope.users.loading = true;
+
+            var organization_id = 0;
+
+            if ($scope.organizations.selected) {
+                organization_id = $scope.organizations.selected.id;
+            }
+
             $http({
                 method: 'GET',
-                url: SERVER_URL + '/api/users/list_users',
+                url: SERVER_URL + '/api/users/list_users/' + organization_id,
                 params: {
-                    query_email: $select.search,
-                    page: $scope.users.page
+                    query_email: $select ? $select.search : '',
+                    page: $scope.users.page,
+                    limit: 10
                 }
             }).then(function(response) {
                 $scope.users.page++;
                 $scope.users.list = $scope.users.list.concat(response.data);
+                if (response.data.length < 10)
+                    $scope.users.hasMore = false;
+            }, function(response) {
+                if (response.status === 404) {
+                    $scope.users.hasMore = false;
+                }
             })['finally'](function() {
                 $scope.users.loading = false;
+            });
+        }
+
+        function fnFetchOrganizations($select, $event) {
+            // no event means first load!
+            if (!$event) {
+                $scope.organizations.page = 1;
+                $scope.organizations.list = [
+                    {
+                        id: 0,
+                        name: '----------------------------------------------'
+                    }
+                ];
+            } else {
+                $event.stopPropagation();
+                $event.preventDefault();
+            }
+
+            $scope.organizations.loading = true;
+
+            $http({
+                method: 'GET',
+                url: SERVER_URL + '/api/organizations/list_organizations',
+                params: {
+                    query: $select.search,
+                    page: $scope.organizations.page,
+                    limit: 10
+                }
+            }).then(function(response) {
+                $scope.organizations.list = $scope.organizations.list.concat(response.data);
+
+                $scope.organizations.page++;
+                
+                if (response.data.length < 10)
+                    $scope.organizations.hasMore = false;
+            })['finally'](function() {
+                $scope.organizations.loading = false;
             });
         }
 
@@ -226,7 +305,7 @@
             $scope.searchBox = new google.maps.places.SearchBox(document.getElementById('parking_address'));
 
             google.maps.event.addListener($scope.searchBox, 'places_changed', $scope.placeChanged);
-            
+
             map.addListener('bounds_changed', $scope.centerChanged);
             map.addListener('dragend', $scope.centerChanged);
         }
@@ -263,7 +342,7 @@
             var geocoder = new google.maps.Geocoder;
             var pos = $scope.map.getCenter();
 
-            if ($scope.marker){
+            if ($scope.marker) {
                 $scope.marker.setMap(null);
             }
 
@@ -309,7 +388,8 @@
 
         function fnCallbackGetPrices(result) {
             if (result && result.success) {
-                $scope.delivery_windows.list = result.prices.windows;
+                if (!$scope.organizations.selected)
+                    $scope.delivery_windows.list = result.prices.windows;
                 $scope.prices.list = [];
                 $scope.prices.list[0] = {
                     gas_type: 87,

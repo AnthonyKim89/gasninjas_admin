@@ -7,12 +7,13 @@
     angular.module('GasNinjasAdmin.pages.orders')
         .controller('OrderEditCtrl', OrderEditCtrl);
 
-    function OrderEditCtrl($scope, $state, $http, $timeout, $ngBootbox, toastr, lodash, UserService, OrderService) {
+    function OrderEditCtrl($scope, $state, $http, $timeout, $ngBootbox, toastr, lodash, UserService, OrderService, data) {
         $scope.order = {};
 
         $scope.editOrder = fnEditOrder;
         $scope.completeOrder = fnCompleteOrder;
         $scope.deleteOrder = fnDeleteOrder;
+        $scope.fetchOrganizations = fnFetchOrganizations;
         $scope.fetchUsers = fnFetchUsers;
         $scope.initDateTimePicker = fnInitDateTimePicker;
         $scope.initGoogleMap = fnInitGoogleMap;
@@ -20,34 +21,35 @@
         $scope.placeChanged = fnHandlerOnPlaceChanged;
         $scope.centerChanged = fnHandlerOnCenterChanged;
 
-        if (!$state.params.order) {
+        if (!data.order) {
             $state.go('orders.list');
         } else {
             $scope.order = {
-                id: $state.params.order.id,
-                user_id: $state.params.order.user_id,
-                vehicle_id: $state.params.order.vehicle_id,
-                parking_address: $state.params.order.parking_address,
-                gas_type: parseInt($state.params.order.gas_type),
-                gallons: $state.params.order.gallons,
-                price_per_gallon: $state.params.order.price_per_gallon,
-                to_deliver_on: $state.params.order.to_deliver_on,
-                delivered_on: $state.params.order.delivered_on,
-                notes: $state.params.order.notes,
+                id: data.order.id,
+                user_id: data.order.user_id,
+                vehicle_id: data.order.vehicle_id,
+                parking_address: data.order.parking_address,
+                gas_type: parseInt(data.order.gas_type),
+                gallons: data.order.gallons,
+                price_per_gallon: data.order.price_per_gallon,
+                to_deliver_on: data.order.to_deliver_on,
+                delivered_on: data.order.delivered_on,
+                notes: data.order.notes,
                 completion_notes: '',
-                status: $state.params.order.status,
-                user: $state.params.order.user,
-                task_id: $state.params.order.task_id,
-                send_to_onfleet: $state.params.order.task_id ? true : false,
+                status: data.order.status,
+                organization: data.order.organization,
+                user: data.order.user,
+                task_id: data.order.task_id,
+                send_to_onfleet: data.order.task_id ? true : false,
 
-                zip: $state.params.order.zip,
-                latlong: $state.params.order.latlong,
-                country: $state.params.order.country,
-                city: $state.params.order.city,
-                street_name: $state.params.order.street_name,
-                street_number: $state.params.order.street_number,
+                zip: data.order.zip,
+                latlong: data.order.latlong,
+                country: data.order.country,
+                city: data.order.city,
+                street_name: data.order.street_name,
+                street_number: data.order.street_number,
 
-                refill_schedule: $state.params.order.refill_schedule
+                refill_schedule: data.order.refill_schedule
             };
 
             $scope.initDateTimePicker();
@@ -57,11 +59,19 @@
             $scope.order.complete = true;
         }
 
+        $scope.organizations = {
+            list: [],
+            page: 1,
+            selected: $scope.order ? $scope.order.organization : null,
+            loading: false,
+            hasMore: true
+        };
         $scope.users = {
             list: [],
             page: 1,
             selected: $scope.order ? $scope.order.user : null,
-            loading: false
+            loading: false,
+            hasMore: true
         };
         $scope.vehicles = {
             list: [],
@@ -86,43 +96,61 @@
         $timeout($scope.initGoogleMap, 500);
         $timeout($scope.initScheduler, 1000);
 
+        $scope.$watch('organizations.selected', function(newVal, oldVal) {
+            if (newVal === oldVal) return;
+
+            $scope.users.selected = null;
+            $scope.users.hasMore = true;
+
+            if (newVal) {
+                $scope.delivery_windows.list = newVal.delivery_windows;
+            }
+
+            $scope.fetchUsers(null);
+        });
+
         $scope.$watch('users.selected', function(newVal, oldVal) {
             if (!newVal) return;
 
             $scope.vehicles.selected = null;
-            UserService.getUserInfo({
-                id: newVal.id
-            }).$promise.then(function(data) {
-                for (var i = 0, len = data.user.vehicles.length; i < len; i++) {
-                    data.user.vehicles[i].name = data.user.vehicles[i].make + " - " + data.user.vehicles[i].color + " - " + data.user.vehicles[i].gas_type;
 
-                    if ($scope.order.vehicle_id === data.user.vehicles[i].id) {
-                        $scope.vehicles.selected = data.user.vehicles[i];
+            if (newVal && newVal.id) {
+                UserService.getUserInfo({
+                    id: newVal.id
+                }).$promise.then(function(data) {
+                    for (var i = 0, len = data.user.vehicles.length; i < len; i++) {
+                        data.user.vehicles[i].name = data.user.vehicles[i].make + " - " + data.user.vehicles[i].color + " - " + data.user.vehicles[i].gas_type;
+
+                        if ($scope.order.vehicle_id === data.user.vehicles[i].id) {
+                            $scope.vehicles.selected = data.user.vehicles[i];
+                        }
                     }
-                }
-                $scope.vehicles.list = data.user.vehicles;
-            }).catch(function(err) {
-                console.error('Failed to Load User Info from the API Server', err);
-                toastr.error('Failed to Load User Info from the API Server');
-            });
+                    $scope.vehicles.list = data.user.vehicles;
+                }).catch(function(err) {
+                    console.error('Failed to Load User Info from the API Server', err);
+                    toastr.error('Failed to Load User Info from the API Server');
+                });
+            }
         });
         $scope.$watch('vehicles.selected', function(newVal, oldVal) {
             if (newVal === oldVal || newVal == null) return;
             $scope.order.gas_type = parseInt(newVal.gas_type);
+
+            $scope.prices.selected = lodash.find($scope.prices.list, { gas_type: $scope.order.gas_type });
         });
 
         function fnInitDateTimePicker() {
             var is_loaded = $('#delivered_on').attr('date-format');
             if (is_loaded && $scope.order) {
-                try{
+                try {
                     $('#delivered_on').datetimepicker({
                         defaultDate: new Date($scope.order.delivered_on)
                     });
-                }catch(error){
+                } catch (error) {
                     console.error(error);
                     $('#delivered_on').datetimepicker();
                 }
-                
+
             } else {
                 $timeout(fnInitDateTimePicker, 500);
             }
@@ -135,19 +163,19 @@
 
             var scheduler = $('#myScheduler').scheduler('value');
 
-            if (!$scope.users.selected){
+            if (!$scope.users.selected) {
                 alert("Please select a user.");
                 return;
             }
-            if (!$scope.vehicles.selected){
+            if (!$scope.vehicles.selected) {
                 alert("Please select a vehicle.");
                 return;
             }
-            if (!$scope.delivery_windows.selected){
+            if (!$scope.delivery_windows.selected) {
                 alert("Please select a delivery window.");
                 return;
             }
-            if (!$scope.prices.selected){
+            if (!$scope.prices.selected) {
                 alert("Please select a price.");
                 return;
             }
@@ -164,6 +192,7 @@
             var new_date = new Date(date.getTime() + offsetMins * 60 * 1000);
 
             var data = {
+                organization_id: $scope.organizations.selected ? $scope.organizations.selected.id : 0,
                 user_id: $scope.users.selected.id,
                 vehicle_id: $scope.vehicles.selected.id,
                 parking_address: $scope.order.parking_address,
@@ -222,10 +251,18 @@
                 $event.stopPropagation();
                 $event.preventDefault();
             }
+
             $scope.users.loading = true;
+            
+            var organization_id = 0;
+
+            if ($scope.organizations.selected) {
+                organization_id = $scope.organizations.selected.id;
+            }
+
             $http({
                 method: 'GET',
-                url: SERVER_URL + '/api/users/list_users',
+                url: SERVER_URL + '/api/users/list_users/' + organization_id,
                 params: {
                     query_email: $select.search,
                     page: $scope.users.page
@@ -233,8 +270,51 @@
             }).then(function(response) {
                 $scope.users.page++;
                 $scope.users.list = $scope.users.list.concat(response.data);
+                if (response.data.length < 10)
+                    $scope.users.hasMore = false;
+            }, function(response) {
+                if (response.status === 404) {
+                    $scope.users.hasMore = false;
+                }
             })['finally'](function() {
                 $scope.users.loading = false;
+            });
+        }
+
+        function fnFetchOrganizations($select, $event) {
+            // no event means first load!
+            if (!$event) {
+                $scope.organizations.page = 1;
+                $scope.organizations.list = [
+                    {
+                        id: 0,
+                        name: '----------------------------------------------'
+                    }
+                ];
+            } else {
+                $event.stopPropagation();
+                $event.preventDefault();
+            }
+
+            $scope.organizations.loading = true;
+
+            $http({
+                method: 'GET',
+                url: SERVER_URL + '/api/organizations/list_organizations',
+                params: {
+                    query: $select.search,
+                    page: $scope.organizations.page,
+                    limit: 10
+                }
+            }).then(function(response) {
+                $scope.organizations.list = $scope.organizations.list.concat(response.data);
+
+                $scope.organizations.page++;
+                
+                if (response.data.length < 10)
+                    $scope.organizations.hasMore = false;
+            })['finally'](function() {
+                $scope.organizations.loading = false;
             });
         }
 

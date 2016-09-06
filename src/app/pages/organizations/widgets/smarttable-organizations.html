@@ -1,0 +1,63 @@
+<div class="horizontal-scroll">
+  <div class="add-row-editable-table">
+    <button class="btn btn-primary" ng-click="addOrganization()">Add a New Organization</button>
+  </div>
+  <div class="form-group select-page-size-wrap ">
+    <label>Organizations per page
+      <select class="form-control selectpicker show-tick" title="Rows on page" selectpicker
+              ng-model="pagination.perPage" ng-options="i for i in pagination.perPagePresets">
+      </select>
+    </label>
+  </div>
+  <table class="table">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" >#</th>
+      <th>Name</th>
+      <th>Margin Price</th>
+      <th>Delivery Windows</th>
+      <th>Created At</th>
+      <th>Members</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><input ng-model="pagination.urlParams.query" placeholder="Search Name" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="organization in pagination.items" ng-click="viewOrganization(organization.id)" class="table-row-clickable">
+      <td class="table-id">{{organization.id}}</td>
+      <td>{{organization.name}}</td>
+      <!-- <td><a class="email-link" ng-href="mailto:{{organization.email}}">{{organization.email}}</a></td> -->
+      <td>{{organization.margin | currency}}</td>
+      <td>
+        <div class="delivery_window" ng-repeat="delivery_window in getDeliveryWindows(organization.delivery_windows)">
+          {{delivery_window}}
+        </div>
+      </td>
+      <td>{{organization.createdAt | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+      <td>{{organization.users.length}}</td>
+      <td>
+        <div class="buttons" ng-show="!rowform.$visible">
+          <button class="btn btn-primary editable-table-button btn-xs" ng-click="editOrganization(organization.id)">Edit</button>
+          <button class="btn btn-danger editable-table-button btn-xs" ng-click="deleteOrganization(organization.id)">Delete</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="7" class="text-center">
+        <bgf-pagination url="pagination.apiUrl" url-params="pagination.urlParams" auto-presets="false" collection="pagination.items" page="pagination.page" per-page="pagination.perPage" per-page-presets="pagination.perPagePresets" link-group-size="2" template-url="app/pages/organizations/paginate/paginate-organizations.html"></bgf-pagination>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

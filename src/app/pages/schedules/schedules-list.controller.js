@@ -32,7 +32,7 @@
         }
 
         function fnEditOrder(order) {
-            $state.go('orders.edit', { order: order });
+            $state.go('orders.edit', { id: order.id });
         }
 
         function fnEditSchedule(order) {

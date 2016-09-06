@@ -1,0 +1,46 @@
+<div class="widgets">
+    <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="ADD NEW">
+        <form name="organizationForm" ng-submit="addOrganization()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">
+                            Name*
+                        </label>
+                        <input class="form-control" id="name" ng-model="organization.name" placeholder="Name" required="" type="text">
+                        </input>
+                    </div>
+                    <div class="form-group">
+                        <label for="to_deliver_on">
+                            Allowed Delivery Windows*
+                        </label>
+                        <ui-select multiple ng-model="delivery_windows.selected" theme="bootstrap" close-on-select="true">
+                            <ui-select-match placeholder="Type to search...">
+                                {{$item? $item.text : ''}}
+                            </ui-select-match>
+                            <ui-select-choices refresh-delay="300" repeat="delivery_window in delivery_windows.list | filter: $select.search">
+                                {{delivery_window.text}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="form-group">
+                        <label for="margin">
+                            Margin Price*
+                        </label>
+                        <input class="form-control" id="margin" ng-model="organization.margin" placeholder="Margin Price" required="" type="number" step="0.01">
+                        </input>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">
+                            Add a New Organization
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

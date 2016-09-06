@@ -14,7 +14,7 @@
             title: 'Users',
             sidebarMeta: {
                 icon: 'ion-person',
-                order: 100,
+                order: 200,
             },
         }).state('users.list', {
             url: '/list',

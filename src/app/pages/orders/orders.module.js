@@ -14,7 +14,7 @@
             title: 'Orders',
             sidebarMeta: {
                 icon: 'ion-pull-request',
-                order: 200,
+                order: 300,
             },
         }).state('orders.list', {
             url: '/list',
@@ -24,21 +24,33 @@
             sidebarMeta: {
                 order: 0,
             },
+        }).state('orders.list_biz', {
+            url: '/list_biz',
+            templateUrl: 'app/pages/orders/views/list_biz.html',
+            controller: 'BizOrderListCtrl',
+            title: 'Manage Biz Orders',
+            sidebarMeta: {
+                order: 50,
+            },
         }).state('orders.new', {
             url: '/new',
             templateUrl: 'app/pages/orders/views/new.html',
             controller: 'OrderNewCtrl',
             title: 'Add a New Order',
             sidebarMeta: {
-                order: 100,
+                order: 150,
             },
         }).state('orders.edit', {
-            url: '/edit',
+            url: '/edit/:id',
             templateUrl: 'app/pages/orders/views/edit.html',
             controller: 'OrderEditCtrl',
             title: 'Manage Orders',
-            params: {
-                order: null
+            resolve: {
+                data: function(OrderService, $stateParams) {
+                    return OrderService.getOrderInfo({
+                        id: $stateParams.id
+                    }).$promise;
+                }
             }
         }).state('orders.list_schedules', {
             url: '/list_schedules',
@@ -46,7 +58,7 @@
             controller: 'ScheduleListCtrl',
             title: 'Manage Schedules',
             sidebarMeta: {
-                order: 200,
+                order: 100,
             },
         }).state('orders.edit_schedule', {
             url: '/edit_schedule',
