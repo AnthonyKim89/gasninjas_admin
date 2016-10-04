@@ -7,13 +7,14 @@
 
 (function() {
 
-  function authInterceptor($rootScope, $q, $cookies, $injector, Util) {
+  function authInterceptor($rootScope, $q, $cookies, $injector, Util, SERVER_URL) {
     var state;
     return {
       // Add authorization token to headers
       request: function(config) {
         config.headers = config.headers || {};
-        if ($cookies.get('token') && Util.isSameOrigin(config.url)) {
+        //if ($cookies.get('token') && Util.isSameOrigin(config.url)) {
+        if ($cookies.get('token')) {
           config.headers.Authorization = 'Bearer ' + $cookies.get('token');
         }
         return config;

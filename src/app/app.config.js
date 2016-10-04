@@ -2,11 +2,11 @@
   angular.module("GasNinjasAdmin.constants", [])
 
   .constant("appConfig", {
-  	"userRoles": [
-  		"guest",
-  		"user",
-  		"admin"
-  	]
+    "userRoles": [
+      "guest",
+      "user",
+      "admin"
+    ]
   });
-  
+
 })(angular);

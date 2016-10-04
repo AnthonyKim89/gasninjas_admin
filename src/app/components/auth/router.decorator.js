@@ -20,7 +20,11 @@
               event.preventDefault();
               return Auth.isLoggedIn(_.noop)
                 .then(function(is) {
-                  $state.go(is ? 'dashboard' : 'login');
+                  if (is) {
+                    $state.go('dashboard');
+                  }else {
+                    location.href = 'auth.html';
+                  }
                 });
             });
         } else {
@@ -31,7 +35,7 @@
               }
 
               event.preventDefault();
-              $state.go('dashboard');
+              location.href = 'auth.html';
             });
         }
       });

@@ -2,7 +2,7 @@
 
 (function() {
 
-    function AuthService($location, $http, $cookies, $q, appConfig, Util, UserService) {
+    function AuthService($location, $http, $cookies, $q, appConfig, Util, UserService, SERVER_URL) {
         var safeCb = Util.safeCb;
         var currentUser = {};
         var userRoles = appConfig.userRoles || [];
@@ -21,12 +21,13 @@
              * @return {Promise}
              */
             login: function(user, callback) {
-                return $http.post('/auth/local', {
+                return $http.post(SERVER_URL + '/api/users/login', {
                         email: user.email,
                         password: user.password
                     })
                     .then(function(res) {
-                        $cookies.put('token', res.data.token);
+                        if (res.data && res.data.data)
+                            $cookies.put('token', res.data.data.token);
                         currentUser = UserService.getUserInfo({id: 'me'});
                         return currentUser.$promise;
                     })
@@ -160,12 +161,12 @@
              */
             isLoggedIn: function(callback) {
                 if (arguments.length === 0) {
-                    return currentUser.hasOwnProperty('role');
+                    return currentUser.hasOwnProperty('user');
                 }
 
                 return Auth.getCurrentUser(null)
                     .then(function(user) {
-                        var is = user.hasOwnProperty('role');
+                        var is = user.hasOwnProperty('user');
                         safeCb(callback)(is);
                         return is;
                     });

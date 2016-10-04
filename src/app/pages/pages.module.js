@@ -2,22 +2,22 @@
  * @author v.lugovsky
  * created on 16.12.2015
  */
-(function () {
+(function() {
   'use strict';
 
   angular.module('GasNinjasAdmin.pages', [
-    'ui.router',
+      'ui.router',
 
-    'GasNinjasAdmin.components',
-    'GasNinjasAdmin.models',
+      'GasNinjasAdmin.components',
+      'GasNinjasAdmin.models',
 
-    'GasNinjasAdmin.pages.login',
-    'GasNinjasAdmin.pages.dashboard',
-    'GasNinjasAdmin.pages.organizations',
-    'GasNinjasAdmin.pages.users',
-    'GasNinjasAdmin.pages.orders',
-  ])
-      .config(routeConfig);
+      'GasNinjasAdmin.pages.login',
+      'GasNinjasAdmin.pages.dashboard',
+      'GasNinjasAdmin.pages.organizations',
+      'GasNinjasAdmin.pages.users',
+      'GasNinjasAdmin.pages.orders',
+    ])
+    .config(routeConfig);
 
   /** @ngInject */
   function routeConfig($urlRouterProvider, baSidebarServiceProvider) {
