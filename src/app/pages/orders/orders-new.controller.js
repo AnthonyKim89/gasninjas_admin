@@ -155,7 +155,7 @@
                 street_number: $scope.order.street_number ? $scope.order.street_number : ' ',
 
                 repeat: {
-                    startDateTime: new Date(scheduler.startDateTime).getTime() / 1000,
+                    startDateTime: new Date(scheduler.startDateTime).getTime() / 1000 + 12 * 3600,
                     timeZone: scheduler.timeZone.offset,
                     recurrencePattern: scheduler.recurrencePattern
                 }
