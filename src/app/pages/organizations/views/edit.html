@@ -34,6 +34,14 @@
                                         <input class="form-control" id="margin" ng-model="organization.margin" placeholder="Margin Price" required="" type="number" step="0.01">
                                         </input>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="send_to_onfleet">
+                                            Send SMS to Confirm a Refill Schedule
+                                        </label>
+                                        <div class="switches clearfix">
+                                            <switch name="text_to_confirm" color="success" ng-model="organization.textToConfirm"></switch>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">

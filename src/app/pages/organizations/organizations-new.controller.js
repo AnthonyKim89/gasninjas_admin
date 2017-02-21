@@ -28,6 +28,7 @@
             var data = {
                 name: $scope.organization.name,
                 margin: $scope.organization.margin,
+                textToConfirm: $scope.organization.textToConfirm,
                 delivery_windows: {
                     '_ids': lodash.map($scope.delivery_windows.selected, 'id')
                 }
