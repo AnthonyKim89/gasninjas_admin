@@ -1,0 +1,37 @@
+<div class="widgets">
+    <div ba-panel ba-panel-title="Push notification to Users" ba-panel-class="with-scroll">
+        <form name="notificationForm" ng-submit="pushNotification()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="title">
+                            Title
+                        </label>
+                        <input class="form-control" id="parking_address" ng-model="notification.title" placeholder="Title" type="text">
+                        </input>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="message">
+                            Message*
+                        </label>
+                        <textarea class="form-control" id="message" name="message" ng-model="notification.message" placeholder="Message to be sent" required="">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit" ng-disabled="isSending">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

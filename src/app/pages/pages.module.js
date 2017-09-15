@@ -1,6 +1,8 @@
 /**
  * @author v.lugovsky
  * created on 16.12.2015
+ * 
+ * modified on 14 Sep 2017
  */
 (function() {
   'use strict';
@@ -16,6 +18,7 @@
       'GasNinjasAdmin.pages.organizations',
       'GasNinjasAdmin.pages.users',
       'GasNinjasAdmin.pages.orders',
+      'GasNinjasAdmin.pages.settings',
     ])
     .config(routeConfig);
 
