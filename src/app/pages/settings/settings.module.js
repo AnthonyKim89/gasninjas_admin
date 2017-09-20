@@ -14,7 +14,7 @@
       title: 'Settings',
       sidebarMeta: {
         icon: 'ion-android-settings',
-        order: 400,
+        order: 999,
       },
       authenticate: true
     }).state('settings.notification', {

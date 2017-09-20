@@ -1,0 +1,110 @@
+<div class="widgets">
+  <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="EDIT">
+    <form name="myForm" ng-submit="editDeliveryWindow()">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="key">
+              Key*
+            </label>
+            <input class="form-control" id="key" ng-model="delivery_window.key" placeholder="Key" required="" type="text">
+            </input>
+          </div>
+          <div class="form-group">
+            <label for="text">
+              Text*
+            </label>
+            <input class="form-control" id="text" ng-model="delivery_window.text" placeholder="Text" required="" type="text">
+            </input>
+          </div>
+          <div class="form-group">
+            <label for="price">
+              Price*
+            </label>
+            <input class="form-control" id="price" ng-model="delivery_window.price" placeholder="Price" required="" type="number" step="0.001">
+            </input>
+          </div>
+          <div class="form-group">
+            <label for="cutoff">
+              CutOff*
+            </label>
+            <input class="form-control" id="cutoff" ng-model="delivery_window.cutoff" placeholder="CutOff" required="" type="text">
+            </input>
+          </div>
+          <div class="form-group">
+            <label for="threshold">
+              Threshold*
+            </label>
+            <input class="form-control" id="threshold" ng-model="delivery_window.threshold" placeholder="Threshold" required="" type="number" step="1">
+            </input>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="from">
+              Slot From*
+            </label>
+            <div class="input-group input-append date" id="datetimepicker_from">
+              <input class="form-control form-date" date-format="hh:mm" id="from" name="from" placeholder="From" required="" type="text">
+              </input>
+              <span class="input-group-addon add-on">
+                                <i class="fa fa-clock-o">
+                                </i>
+                            </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="to">
+              Slot To*
+            </label>
+            <div class="input-group input-append date" id="datetimepicker_to">
+              <input class="form-control form-date" date-format="hh:mm" id="to" name="to" placeholder="To" required="" type="text">
+              </input>
+              <span class="input-group-addon add-on">
+                                <i class="fa fa-clock-o">
+                                </i>
+                            </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="active_days">
+              Active Days
+            </label>
+            <div class="weekDays-selector">
+              <input type="checkbox" id="weekday-sun" class="weekday" ng-model="delivery_window.active_days[0]" />
+              <label for="weekday-sun">S</label>
+              <input type="checkbox" id="weekday-mon" class="weekday" ng-model="delivery_window.active_days[1]" />
+              <label for="weekday-mon">M</label>
+              <input type="checkbox" id="weekday-tue" class="weekday" ng-model="delivery_window.active_days[2]" />
+              <label for="weekday-tue">T</label>
+              <input type="checkbox" id="weekday-wed" class="weekday" ng-model="delivery_window.active_days[3]" />
+              <label for="weekday-wed">W</label>
+              <input type="checkbox" id="weekday-thu" class="weekday" ng-model="delivery_window.active_days[4]" />
+              <label for="weekday-thu">T</label>
+              <input type="checkbox" id="weekday-fri" class="weekday" ng-model="delivery_window.active_days[5]" />
+              <label for="weekday-fri">F</label>
+              <input type="checkbox" id="weekday-sat" class="weekday" ng-model="delivery_window.active_days[6]" />
+              <label for="weekday-sat">S</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="popup">
+              Popup Message*
+            </label>
+            <textarea class="form-control" id="popup" name="popup" ng-model="delivery_window.popup" placeholder="Popup Message" required="">
+            </textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <button class="btn btn-primary" type="submit">
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

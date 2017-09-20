@@ -1,0 +1,68 @@
+<div class="horizontal-scroll">
+  <div class="add-row-editable-table">
+    <button class="btn btn-primary" ng-click="addDeliveryWindow()">Add a New Delivery Window</button>
+  </div>
+  <div class="form-group select-page-size-wrap ">
+    <label>Rows per page
+      <select class="form-control selectpicker show-tick" title="Rows on page" selectpicker
+              ng-model="pagination.perPage" ng-options="i for i in pagination.perPagePresets">
+      </select>
+    </label>
+  </div>
+  <table class="table">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" >#</th>
+      <th>Key</th>
+      <th>Text</th>
+      <th>Price</th>
+      <th>CutOff</th>
+      <th>Threshold</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Active Days</th>
+      <th></th>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>
+        <input ng-model="pagination.urlParams.query" placeholder="Search Text" class="input-sm form-control search-input" type="search"/>
+      </th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="delivery_window in pagination.items" ng-click="viewDeliveryWindow(delivery_window.id)" class="table-row-clickable">
+      <td class="table-id">{{delivery_window.id}}</td>
+      <td>{{delivery_window.key}}</td>
+      <td>{{delivery_window.text}}</td>
+      <td>{{delivery_window.price | currency}}</td>
+      <td>{{delivery_window.cutoff}}</td>
+      <td>{{delivery_window.threshold}}</td>
+      <td>{{delivery_window.slot_from}}</td>
+      <td>{{delivery_window.slot_to}}</td>
+      <td>{{delivery_window.active_days | DeliveryWindowActiveDays}}</td>
+      <td>
+        <div class="buttons" ng-show="!rowform.$visible">
+          <button class="btn btn-primary editable-table-button btn-xs" ng-click="editDeliveryWindow(delivery_window.id)">Edit</button>
+          <button class="btn btn-danger editable-table-button btn-xs" ng-click="deleteDeliveryWindow(delivery_window.id)">Delete</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="10" class="text-center">
+        <bgf-pagination url="pagination.apiUrl" url-params="pagination.urlParams" auto-presets="false" collection="pagination.items" page="pagination.page" per-page="pagination.perPage" per-page-presets="pagination.perPagePresets" link-group-size="2" template-url="app/pages/delivery_windows/paginate/paginate-delivery-windows.html"></bgf-pagination>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>
