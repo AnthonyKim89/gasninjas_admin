@@ -12,7 +12,7 @@
   /** @ngInject */
   function DeliveryWindowService($resource, SERVER_URL) {
     return $resource(SERVER_URL + '/api/delivery_windows/:id', { id: '@id' }, {
-      getDeliveryWindowList: { method: 'GET', url: SERVER_URL + '/api/delivery_windows/list_delivery_windows' },
+      getDeliveryWindowList: { method: 'GET', isArray: true, url: SERVER_URL + '/api/delivery_windows/list_delivery_windows' },
       getDeliveryWindowInfo: { method: 'GET', url: SERVER_URL + '/api/delivery_windows/get_info/:id' },
       deleteDeliveryWindow: { method: 'POST', url: SERVER_URL + '/api/delivery_windows/delete_delivery_window/:id' },
       addDeliveryWindow: { method: 'POST', url: SERVER_URL + '/api/delivery_windows/add' },
