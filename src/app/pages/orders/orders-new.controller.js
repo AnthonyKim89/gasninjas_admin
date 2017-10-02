@@ -16,6 +16,8 @@
     $scope.initGoogleMap = fnInitGoogleMap;
     $scope.initScheduler = fnInitScheduler;
 
+    $scope.isSubmitting = false;
+
     $scope.organizations = {
       list: [],
       page: 1,
@@ -53,7 +55,8 @@
       gas_type: '',
       gallons: 0,
       price: 0,
-      to_deliver_on: '',
+      delivery_window_id: '',
+      day_interval: 0,
       delivered_on: '',
       notes: '',
       status: '',
@@ -133,7 +136,8 @@
 
       $scope.order.user_id = $scope.users.selected.id;
       $scope.order.vehicle_id = $scope.vehicles.selected.id;
-      $scope.order.to_deliver_on = $scope.delivery_windows.selected.key;
+      $scope.order.delivery_window_id = $scope.delivery_windows.selected.id;
+      $scope.order.day_interval = $scope.delivery_windows.selected.day_interval;
       $scope.order.gas_type = $scope.prices.selected.gas_type;
       $scope.order.price = $scope.prices.selected.price;
 
@@ -144,7 +148,8 @@
         parking_address: $scope.order.parking_address,
         gas_type: $scope.order.gas_type,
         price_per_gallon: $scope.order.price,
-        to_deliver_on: $scope.order.to_deliver_on,
+        delivery_window_id: $scope.order.delivery_window_id,
+        day_interval: $scope.order.day_interval,
         notes: $scope.order.notes,
 
         zip: $scope.order.zip,
@@ -154,18 +159,14 @@
         street_name: $scope.order.street_name ? $scope.order.street_name : ' ',
         street_number: $scope.order.street_number ? $scope.order.street_number : ' ',
 
-        repeat: {
-          startDateTime: new Date(scheduler.startDateTime).getTime() / 1000 + 12 * 3600,
-          timeZone: scheduler.timeZone.offset,
-          recurrencePattern: scheduler.recurrencePattern
-        }
+        recurrencePattern: scheduler.recurrencePattern !== 'FREQ=DAILY;INTERVAL=1;COUNT=1' ? scheduler.recurrencePattern : '',
+
+        no_onfleet: !$scope.order.send_to_onfleet ? 1 : 0
       };
 
-      if ($scope.order.send_to_onfleet) {
-        OrderService.addNewOrderWithOnfleet(data, fnCallbackAddNew);
-      } else {
-        OrderService.addNewOrder(data, fnCallbackAddNew);
-      }
+      $scope.isSubmitting = true;
+      OrderService.addNewOrder(data, fnCallbackAddNew);
+      
       return false;
     }
 
@@ -245,6 +246,8 @@
     }
 
     function fnCallbackAddNew(result) {
+      $scope.isSubmitting = false;
+
       if (result.success) {
         toastr.info('Successfully added a new order!');
         $state.go('orders.list');

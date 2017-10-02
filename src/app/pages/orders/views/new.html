@@ -1,127 +1,127 @@
 <div class="widgets">
-    <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="ADD NEW">
-        <form name="orderForm" ng-submit="addOrder()">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="organizations">
-                            Organization
-                        </label>
-                        <ui-select ng-model="organizations.selected" theme="bootstrap">
-                            <ui-select-match placeholder="Type to search for organizations...">
-                                {{$select.selected.name}}
-                            </ui-select-match>
-                            <ui-select-choices refresh="fetchOrganizations($select)" refresh-delay="300" repeat="organization in organizations.list | filter: $select.search">
-                                {{organization.name}}
-                                <div ng-if="$index == $select.items.length-1 && organizations.hasMore">
-                                    <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="organizations.loading" ng-mouseover="fetchOrganizations($select, $event);" style="width: 100%; margin-top: 5px;">
-                                        Load more...
-                                    </button>
-                                </div>
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    <div class="form-group">
-                        <label for="users">
-                            User*
-                        </label>
-                        <ui-select ng-model="users.selected" theme="bootstrap">
-                            <ui-select-match placeholder="Type to search for users...">
-                                {{$select.selected.email}}
-                            </ui-select-match>
-                            <ui-select-choices refresh="fetchUsers($select)" refresh-delay="300" repeat="user in users.list | filter: $select.search">
-                                {{user.email}}
-                                <div ng-if="$index == $select.items.length-1 && users.hasMore">
-                                    <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="users.loading" ng-mouseover="fetchUsers($select, $event);" style="width: 100%; margin-top: 5px;">
-                                        Load more...
-                                    </button>
-                                </div>
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    <div class="form-group">
-                        <label for="vehicles">
-                            Vehicle*
-                        </label>
-                        <ui-select ng-model="vehicles.selected" theme="bootstrap">
-                            <ui-select-match placeholder="Type to search for vehicles...">
-                                {{$select.selected.name}}
-                            </ui-select-match>
-                            <ui-select-choices refresh-delay="300" repeat="vehicle in vehicles.list | filter: $select.search">
-                                {{vehicle.name}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    <div class="form-group">
-                        <label for="parking_address">
-                            Parking Address*
-                        </label>
-                        <input class="form-control" id="parking_address" ng-model="order.parking_address" placeholder="Parking Address" required="" type="text">
-                        </input>
-                    </div>
-                    <div class="form-group">
-                        <label for="to_deliver_on">
-                            Price Per Gallon*
-                        </label>
-                        <ui-select ng-model="prices.selected" theme="bootstrap">
-                            <ui-select-match placeholder="Type to search...">
-                                {{$select.selected.text}}
-                            </ui-select-match>
-                            <ui-select-choices refresh-delay="300" repeat="price in prices.list | filter: $select.search">
-                                {{price.text}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    <div class="form-group">
-                        <label for="to_deliver_on">
-                            To Deliver On*
-                        </label>
-                        <ui-select ng-model="delivery_windows.selected" theme="bootstrap">
-                            <ui-select-match placeholder="Type to search...">
-                                {{$select.selected.text}}
-                            </ui-select-match>
-                            <ui-select-choices refresh-delay="300" repeat="delivery_window in delivery_windows.list | filter: $select.search">
-                                {{delivery_window.text}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">
-                            Notes (Optional)
-                        </label>
-                        <textarea class="form-control" id="notes" name="notes" ng-model="order.notes" placeholder="Notes">
-                        </textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="send_to_onfleet">
-                            Send to Onfleet
-                        </label>
-                        <div class="switches clearfix">
-                            <switch name="send_to_onfleet" color="success" ng-model="order.send_to_onfleet"></switch>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="scheduler">
-                            Repeat Schedule
-                        </label>
-                        <div class="fuelux">
-                            <div include-with-scope="app/pages/orders/widgets/repeat-order.html"></div>
-                        </div>
-                    </div>
+  <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="ADD NEW">
+    <form name="orderForm" ng-submit="addOrder()">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="organizations">
+              Organization
+            </label>
+            <ui-select ng-model="organizations.selected" theme="bootstrap">
+              <ui-select-match placeholder="Type to search for organizations...">
+                {{$select.selected.name}}
+              </ui-select-match>
+              <ui-select-choices refresh="fetchOrganizations($select)" refresh-delay="300" repeat="organization in organizations.list | filter: $select.search">
+                {{organization.name}}
+                <div ng-if="$index == $select.items.length-1 && organizations.hasMore">
+                  <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="organizations.loading" ng-mouseover="fetchOrganizations($select, $event);" style="width: 100%; margin-top: 5px;">
+                    Load more...
+                  </button>
                 </div>
-                <div class="col-md-6">
-                    <div id="google-maps" style="height: 500px"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div class="form-group">
+            <label for="users">
+              User*
+            </label>
+            <ui-select ng-model="users.selected" theme="bootstrap">
+              <ui-select-match placeholder="Type to search for users...">
+                {{$select.selected.email}}
+              </ui-select-match>
+              <ui-select-choices refresh="fetchUsers($select)" refresh-delay="300" repeat="user in users.list | filter: $select.search">
+                {{user.email}}
+                <div ng-if="$index == $select.items.length-1 && users.hasMore">
+                  <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="users.loading" ng-mouseover="fetchUsers($select, $event);" style="width: 100%; margin-top: 5px;">
+                    Load more...
+                  </button>
                 </div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div class="form-group">
+            <label for="vehicles">
+              Vehicle*
+            </label>
+            <ui-select ng-model="vehicles.selected" theme="bootstrap">
+              <ui-select-match placeholder="Type to search for vehicles...">
+                {{$select.selected.name}}
+              </ui-select-match>
+              <ui-select-choices refresh-delay="300" repeat="vehicle in vehicles.list | filter: $select.search">
+                {{vehicle.name}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div class="form-group">
+            <label for="parking_address">
+              Parking Address*
+            </label>
+            <input class="form-control" id="parking_address" ng-model="order.parking_address" placeholder="Parking Address" required="" type="text">
+            </input>
+          </div>
+          <div class="form-group">
+            <label for="to_deliver_on">
+              Price Per Gallon*
+            </label>
+            <ui-select ng-model="prices.selected" theme="bootstrap">
+              <ui-select-match placeholder="Type to search...">
+                {{$select.selected.text}}
+              </ui-select-match>
+              <ui-select-choices refresh-delay="300" repeat="price in prices.list | filter: $select.search">
+                {{price.text}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div class="form-group">
+            <label for="to_deliver_on">
+              To Deliver On*
+            </label>
+            <ui-select ng-model="delivery_windows.selected" theme="bootstrap">
+              <ui-select-match placeholder="Type to search...">
+                {{$select.selected.text}}
+              </ui-select-match>
+              <ui-select-choices refresh-delay="300" repeat="delivery_window in delivery_windows.list | filter: $select.search track by delivery_window.key">
+                {{delivery_window.text}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div class="form-group">
+            <label for="notes">
+              Notes (Optional)
+            </label>
+            <textarea class="form-control" id="notes" name="notes" ng-model="order.notes" placeholder="Notes">
+            </textarea>
+          </div>
+          <div class="form-group">
+            <label for="send_to_onfleet">
+              Send to Onfleet
+            </label>
+            <div class="switches clearfix">
+              <switch name="send_to_onfleet" color="success" ng-model="order.send_to_onfleet"></switch>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <button class="btn btn-primary" type="submit">
-                            Add a New Order
-                        </button>
-                    </div>
-                </div>
+          </div>
+          <div class="form-group">
+            <label for="scheduler">
+              Repeat Schedule
+            </label>
+            <div class="fuelux">
+              <div include-with-scope="app/pages/orders/widgets/repeat-order.html"></div>
             </div>
-        </form>
-    </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="google-maps" style="height: 500px"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <button class="btn btn-primary" type="submit" ng-disabled="isSubmitting">
+              Add a New Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
