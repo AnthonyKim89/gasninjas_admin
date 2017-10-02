@@ -9,12 +9,12 @@
         .controller('UserEditCtrl', UserEditCtrl);
     
     /** @ngInject */
-    function UserListCtrl($scope, $state, SERVER_URL) {
+    function UserListCtrl($scope, $state, appConfig) {
         $scope.viewUser = fnViewUser;
 
         $scope.init = function() {
             $scope.pagination = {
-                apiUrl: SERVER_URL + '/api/users/list_users',
+                apiUrl: appConfig.API_URL + '/users/list_users',
                 urlParams: {
                     sort: 'id',
                     direction: 'asc',

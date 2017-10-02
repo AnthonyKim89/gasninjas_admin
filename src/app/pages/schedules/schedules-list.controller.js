@@ -8,9 +8,9 @@
         .controller('ScheduleListCtrl', ScheduleListCtrl);
 
     /** @ngInject */
-    function ScheduleListCtrl($scope, $state, $ngBootbox, toastr, SERVER_URL, OrderService) {
+    function ScheduleListCtrl($scope, $state, $ngBootbox, toastr, appConfig, OrderService) {
         $scope.pagination = {
-            apiUrl: SERVER_URL + '/api/refills/list_orders/schedule',
+            apiUrl: appConfig.API_URL + '/refills/list_orders/schedule',
             urlParams: {
                 sort: 'created',
                 direction: 'desc',

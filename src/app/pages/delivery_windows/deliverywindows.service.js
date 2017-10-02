@@ -10,13 +10,13 @@
     .factory('DeliveryWindowUtil', DeliveryWindowUtil);
 
   /** @ngInject */
-  function DeliveryWindowService($resource, SERVER_URL) {
-    return $resource(SERVER_URL + '/api/delivery_windows/:id', { id: '@id' }, {
-      getDeliveryWindowList: { method: 'GET', isArray: true, url: SERVER_URL + '/api/delivery_windows/list_delivery_windows' },
-      getDeliveryWindowInfo: { method: 'GET', url: SERVER_URL + '/api/delivery_windows/get_info/:id' },
-      deleteDeliveryWindow: { method: 'POST', url: SERVER_URL + '/api/delivery_windows/delete_delivery_window/:id' },
-      addDeliveryWindow: { method: 'POST', url: SERVER_URL + '/api/delivery_windows/add' },
-      editDeliveryWindow: { method: 'POST', url: SERVER_URL + '/api/delivery_windows/edit/:id' },
+  function DeliveryWindowService($resource, appConfig) {
+    return $resource(appConfig.API_URL + '/delivery_windows/:id', { id: '@id' }, {
+      getDeliveryWindowList: { method: 'GET', isArray: true, url: appConfig.API_URL + '/delivery_windows/list_delivery_windows' },
+      getDeliveryWindowInfo: { method: 'GET', url: appConfig.API_URL + '/delivery_windows/get_info/:id' },
+      deleteDeliveryWindow: { method: 'POST', url: appConfig.API_URL + '/delivery_windows/delete_delivery_window/:id' },
+      addDeliveryWindow: { method: 'POST', url: appConfig.API_URL + '/delivery_windows/add' },
+      editDeliveryWindow: { method: 'POST', url: appConfig.API_URL + '/delivery_windows/edit/:id' },
     });
   }
 

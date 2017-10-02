@@ -9,9 +9,9 @@
         .controller('BizOrderListCtrl', BizOrderListCtrl);
 
     /** @ngInject */
-    function OrderListCtrl($scope, $state, $ngBootbox, toastr, SERVER_URL, OrderService) {
+    function OrderListCtrl($scope, $state, $ngBootbox, toastr, appConfig, OrderService) {
         $scope.pagination = {
-            apiUrl: SERVER_URL + '/api/refills/list_orders',
+            apiUrl: appConfig.API_URL + '/refills/list_orders',
             urlParams: {
                 sort: 'created',
                 direction: 'desc',
@@ -65,9 +65,9 @@
         }
     }
 
-    function BizOrderListCtrl($scope, $state, $ngBootbox, toastr, SERVER_URL, OrderService) {
+    function BizOrderListCtrl($scope, $state, $ngBootbox, toastr, appConfig, OrderService) {
         $scope.pagination = {
-            apiUrl: SERVER_URL + '/api/refills/list_orders/biz',
+            apiUrl: appConfig.API_URL + '/refills/list_orders/biz',
             urlParams: {
                 sort: 'created',
                 direction: 'desc',

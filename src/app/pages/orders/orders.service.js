@@ -9,16 +9,16 @@
     .factory('OrderService', OrderService);
 
   /** @ngInject */
-  function OrderService($resource, SERVER_URL) {
-    return $resource(SERVER_URL + '/api/refills/:id', {id: '@id', zip: '@zip'}, {
-    	addNewOrder: {method: 'POST', url: SERVER_URL + '/api/refills/add_order'},
-    	addNewOrderWithOnfleet: {method: 'POST', url: SERVER_URL + '/api/refills/add_order/onfleet'},
-      getOrderInfo: {method: 'GET', url: SERVER_URL + '/api/refills/get_info/:id'},
-    	editOrder: {method: 'PUT', url: SERVER_URL + '/api/refills/edit_order/:id'},
-      completeOrder: {method: 'PUT', url: SERVER_URL + '/api/refills/complete_order/:id'},
-      deleteOrder: {method: 'POST', url: SERVER_URL + '/api/refills/delete_order/:id'},
-      getPrices: {method: 'POST', url: SERVER_URL + '/api/prices/find_new/:zip'},
-      deleteSchedule: {method: 'POST', url: SERVER_URL + '/api/refills/delete_schedule/:id'},
+  function OrderService($resource, appConfig) {
+    return $resource(appConfig.API_URL + '/refills/:id', {id: '@id', zip: '@zip'}, {
+    	addNewOrder: {method: 'POST', url: appConfig.API_URL + '/refills/add_order'},
+    	addNewOrderWithOnfleet: {method: 'POST', url: appConfig.API_URL + '/refills/add_order/onfleet'},
+      getOrderInfo: {method: 'GET', url: appConfig.API_URL + '/refills/get_info/:id'},
+    	editOrder: {method: 'PUT', url: appConfig.API_URL + '/refills/edit_order/:id'},
+      completeOrder: {method: 'PUT', url: appConfig.API_URL + '/refills/complete_order/:id'},
+      deleteOrder: {method: 'POST', url: appConfig.API_URL + '/refills/delete_order/:id'},
+      getPrices: {method: 'POST', url: appConfig.API_URL + '/prices/find_new/:zip'},
+      deleteSchedule: {method: 'POST', url: appConfig.API_URL + '/refills/delete_schedule/:id'},
     });
   }
 

@@ -6,7 +6,9 @@
       "guest",
       "user",
       "admin"
-    ]
+    ],
+    "SERVER_URL": window.SERVER_URL,
+    "API_URL": window.API_URL,
   });
 
 })(angular);

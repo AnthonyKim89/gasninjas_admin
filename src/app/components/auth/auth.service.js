@@ -2,7 +2,7 @@
 
 (function() {
 
-    function AuthService($location, $http, $cookies, $q, appConfig, Util, UserService, SERVER_URL) {
+    function AuthService($location, $http, $cookies, $q, appConfig, Util, UserService) {
         var safeCb = Util.safeCb;
         var currentUser = {};
         var userRoles = appConfig.userRoles || [];
@@ -21,7 +21,7 @@
              * @return {Promise}
              */
             login: function(user, callback) {
-                return $http.post(SERVER_URL + '/api/users/login', {
+                return $http.post(appConfig.API_URL + '/users/login', {
                         email: user.email,
                         password: user.password
                     })

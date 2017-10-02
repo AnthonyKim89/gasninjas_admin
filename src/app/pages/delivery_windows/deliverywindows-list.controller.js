@@ -8,7 +8,7 @@
     .controller('DeliveryWindowListCtrl', DeliveryWindowListCtrl);
 
   /** @ngInject */
-  function DeliveryWindowListCtrl($scope, $state, $ngBootbox, toastr, lodash, SERVER_URL, DeliveryWindowService) {
+  function DeliveryWindowListCtrl($scope, $state, $ngBootbox, toastr, lodash, appConfig, DeliveryWindowService) {
     $scope.addDeliveryWindow = fnAddDeliveryWindow;
     $scope.editDeliveryWindow = fnEditDeliveryWindow;
     $scope.deleteDeliveryWindow = fnDeleteDeliveryWindow;
@@ -16,7 +16,7 @@
 
     $scope.init = function() {
       $scope.pagination = {
-        apiUrl: SERVER_URL + '/api/delivery_windows/list_delivery_windows',
+        apiUrl: appConfig.API_URL + '/delivery_windows/list_delivery_windows',
         urlParams: {
           sort: 'id',
           direction: 'asc',

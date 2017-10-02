@@ -27,8 +27,7 @@
       shade: function(color, weight) {
         return mix('#000000', color, weight);
       },
-    })
-    .constant('SERVER_URL', window.SERVER_URL);
+    });
 
   function shade(color, weight) {
     return mix('#000000', color, weight);

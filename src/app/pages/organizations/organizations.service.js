@@ -9,14 +9,14 @@
     .factory('OrganizationService', OrganizationService);
 
   /** @ngInject */
-  function OrganizationService($resource, SERVER_URL) {
-    return $resource(SERVER_URL + '/api/organizations/:id', {id: '@id'}, {
-    	getOrganizationList: {method: 'GET', url: SERVER_URL + '/api/organizations/list_organizations/all'},
-      getOrganizationInfo: {method: 'GET', url: SERVER_URL + '/api/organizations/get_info/:id'},
-      deleteOrganization: {method: 'POST', url: SERVER_URL + '/api/organizations/delete_organization/:id'},
-      addOrganization: {method: 'POST', url: SERVER_URL + '/api/organizations/add'},
-      editOrganization: {method: 'POST', url: SERVER_URL + '/api/organizations/edit/:id'},
-      completeOrganization: {method: 'POST', url: SERVER_URL + '/api/organizations/complete/:id'}
+  function OrganizationService($resource, appConfig) {
+    return $resource(appConfig.API_URL + '/organizations/:id', {id: '@id'}, {
+    	getOrganizationList: {method: 'GET', url: appConfig.API_URL + '/organizations/list_organizations/all'},
+      getOrganizationInfo: {method: 'GET', url: appConfig.API_URL + '/organizations/get_info/:id'},
+      deleteOrganization: {method: 'POST', url: appConfig.API_URL + '/organizations/delete_organization/:id'},
+      addOrganization: {method: 'POST', url: appConfig.API_URL + '/organizations/add'},
+      editOrganization: {method: 'POST', url: appConfig.API_URL + '/organizations/edit/:id'},
+      completeOrganization: {method: 'POST', url: appConfig.API_URL + '/organizations/complete/:id'}
     });
   }
 

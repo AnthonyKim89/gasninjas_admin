@@ -9,11 +9,11 @@
     .factory('UserService', UserService);
 
   /** @ngInject */
-  function UserService($resource, SERVER_URL) {
-    return $resource(SERVER_URL + '/api/users/:id', {id: '@id'}, {
-    	getUserList: {method: 'GET', url: SERVER_URL + '/api/users/list_users/all'},
-      getUserInfo: {method: 'GET', url: SERVER_URL + '/api/users/get_info/:id'},
-      getAvailableUsers: {method: 'GET', isArray:true, url: SERVER_URL + '/api/users/list_available_users'},
+  function UserService($resource, appConfig) {
+    return $resource(appConfig.API_URL + '/users/:id', {id: '@id'}, {
+    	getUserList: {method: 'GET', url: appConfig.API_URL + '/users/list_users/all'},
+      getUserInfo: {method: 'GET', url: appConfig.API_URL + '/users/get_info/:id'},
+      getAvailableUsers: {method: 'GET', isArray:true, url: appConfig.API_URL + '/users/list_available_users'},
     });
   }
 

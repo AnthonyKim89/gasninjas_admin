@@ -7,7 +7,7 @@
     angular.module('GasNinjasAdmin.pages.orders')
         .controller('OrderEditCtrl', OrderEditCtrl);
 
-    function OrderEditCtrl($scope, $state, $http, $timeout, $ngBootbox, toastr, lodash, UserService, OrderService, data) {
+    function OrderEditCtrl($scope, $state, $http, $timeout, $ngBootbox, toastr, lodash, appConfig, UserService, OrderService, data) {
         $scope.order = {};
 
         $scope.editOrder = fnEditOrder;
@@ -262,7 +262,7 @@
 
             $http({
                 method: 'GET',
-                url: SERVER_URL + '/api/users/list_users/' + organization_id,
+                url: appConfig.API_URL + '/users/list_users/' + organization_id,
                 params: {
                     query_email: $select.search,
                     page: $scope.users.page
@@ -300,7 +300,7 @@
 
             $http({
                 method: 'GET',
-                url: SERVER_URL + '/api/organizations/list_organizations',
+                url: appConfig.API_URL + '/organizations/list_organizations',
                 params: {
                     query: $select.search,
                     page: $scope.organizations.page,

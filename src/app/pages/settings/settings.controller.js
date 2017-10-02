@@ -8,7 +8,7 @@
         .controller('SettingsNotificationCtrl', SettingsNotificationCtrl);
     
     /** @ngInject */
-    function SettingsNotificationCtrl($scope, $state, $http, $ngBootbox, toastr) {
+    function SettingsNotificationCtrl($scope, $state, $http, $ngBootbox, toastr, appConfig) {
         $scope.pushNotification = fnPushNotification;
 
         $scope.notification = {
@@ -23,7 +23,7 @@
 
                     $http({
                         method: 'POST',
-                        url: SERVER_URL + '/api/notification/send',
+                        url: appConfig.API_URL + '/notification/send',
                         data: {
                             title: $scope.notification.title,
                             message: $scope.notification.message

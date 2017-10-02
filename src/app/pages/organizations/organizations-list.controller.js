@@ -8,7 +8,7 @@
         .controller('OrganizationListCtrl', OrganizationListCtrl);
     
     /** @ngInject */
-    function OrganizationListCtrl($scope, $state, $ngBootbox, toastr, lodash, SERVER_URL, OrganizationService) {
+    function OrganizationListCtrl($scope, $state, $ngBootbox, toastr, lodash, appConfig, OrganizationService) {
         $scope.addOrganization = fnAddOrganization;
         $scope.editOrganization = fnEditOrganization;
         $scope.deleteOrganization = fnDeleteOrganization;
@@ -16,7 +16,7 @@
 
         $scope.init = function() {
             $scope.pagination = {
-                apiUrl: SERVER_URL + '/api/organizations/list_organizations',
+                apiUrl: appConfig.API_URL + '/organizations/list_organizations',
                 urlParams: {
                     sort: 'id',
                     direction: 'asc',
