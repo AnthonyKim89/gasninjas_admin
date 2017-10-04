@@ -10,8 +10,8 @@
 
   /** @ngInject */
   function OrderService($resource, appConfig) {
-    return $resource(appConfig.API_URL + '/refills/:id', {id: '@id', zip: '@zip', no_onfleet: '@no_onfleet'}, {
-    	addNewOrder: {method: 'POST', url: appConfig.API_URL + '/refills/add/:no_onfleet'},
+    return $resource(appConfig.API_URL + '/refills/:id', {id: '@id', zip: '@zip', skip_onfleet: '@skip_onfleet'}, {
+    	addNewOrder: {method: 'POST', url: appConfig.API_URL + '/refills/add/:skip_onfleet'},
       getOrderInfo: {method: 'GET', url: appConfig.API_URL + '/refills/get_info/:id'},
     	editOrder: {method: 'PUT', url: appConfig.API_URL + '/refills/edit_order/:id'},
       completeOrder: {method: 'PUT', url: appConfig.API_URL + '/refills/complete_order/:id'},

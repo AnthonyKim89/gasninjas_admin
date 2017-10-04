@@ -161,7 +161,7 @@
 
         recurrencePattern: scheduler.recurrencePattern !== 'FREQ=DAILY;INTERVAL=1;COUNT=1' ? scheduler.recurrencePattern : '',
 
-        no_onfleet: !$scope.order.send_to_onfleet ? 1 : 0
+        skip_onfleet: !$scope.order.send_to_onfleet ? 1 : 0
       };
 
       $scope.isSubmitting = true;
