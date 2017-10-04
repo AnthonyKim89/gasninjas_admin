@@ -242,6 +242,7 @@
         success: $scope.order.complete
       };
 
+      $scope.isSubmitting = true;
       OrderService.completeOrder({ id: $scope.order.id }, data, fnCallbackCompleteOrder);
       return false;
     }
@@ -337,6 +338,8 @@
     }
 
     function fnCallbackCompleteOrder(result) {
+      $scope.isSubmitting = false;
+
       switch (result.success) {
         case 1:
           toastr.info('Successfully completed the order!');
