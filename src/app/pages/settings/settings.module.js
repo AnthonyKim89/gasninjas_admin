@@ -26,6 +26,20 @@
         order: 0,
       },
       authenticate: true
+    }).state('settings.app-version', {
+      url: '/app-version',
+      templateUrl: 'app/pages/settings/views/app-version.html',
+      controller: 'AppVersionCtrl',
+      title: 'App Version',
+      sidebarMeta: {
+        order: 100,
+      },
+      resolve: {
+        data: function(VersionService) {
+          return VersionService.getVersionInfo().$promise;
+        }
+      },
+      authenticate: true
     });
     $urlRouterProvider.when('/settings', '/settings/notification');
   }

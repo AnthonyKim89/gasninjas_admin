@@ -1,0 +1,90 @@
+<div class="widgets">
+  <div class="row">
+    <div class="col-md-12 hide-nav">
+      <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="App Version">
+        <ba-wizard>
+          <ba-wizard-step form="iosAppVersionForm" title="iOS Version">
+            <form name="iosAppVersionForm" ng-submit="updateAppVersion('ios')">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="ios_current_version">
+                      Current Version
+                    </label>
+                    <input class="form-control" id="ios_current_version" ng-model="version_info.ios.current_version" placeholder="Current Version (e.g. 1.0.0)" required="" type="text">
+                    </input>
+                  </div>
+                  <div class="form-group">
+                    <label for="ios_min_version">
+                      Min Version
+                    </label>
+                    <input class="form-control" id="ios_min_version" ng-model="version_info.ios.min_version" placeholder="Min Version (e.g. 1.0.0)" required="" type="text">
+                    </input>
+                  </div>
+                  <div class="form-group">
+                    <label for="ios_force_update">
+                      Force Update
+                    </label>
+                    <div class="switches clearfix">
+                      <switch color="success" id="ios_force_update" name="ios_force_update" ng-model="version_info.ios.force_update">
+                      </switch>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group pull-right">
+                    <button class="btn btn-primary" type="submit" ng-disabled="isSubmitting">
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ba-wizard-step>
+          <ba-wizard-step form="androidAppVersionForm" title="Android Version">
+            <form name="androidAppVersionForm" ng-submit="updateAppVersion('android')">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="android_current_version">
+                      Current Version
+                    </label>
+                    <input class="form-control" id="android_current_version" ng-model="version_info.android.current_version" placeholder="Current Version (e.g. 1.0.0)" required="" type="text">
+                    </input>
+                  </div>
+                  <div class="form-group">
+                    <label for="android_min_version">
+                      Min Version
+                    </label>
+                    <input class="form-control" id="android_min_version" ng-model="version_info.android.min_version" placeholder="Min Version (e.g. 1.0.0)" required="" type="text">
+                    </input>
+                  </div>
+                  <div class="form-group">
+                    <label for="android_force_update">
+                      Force Update
+                    </label>
+                    <div class="switches clearfix">
+                      <switch color="success" id="android_force_update" name="android_force_update" ng-model="version_info.android.force_update">
+                      </switch>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group pull-right">
+                    <button class="btn btn-primary" type="submit" ng-disabled="isSubmitting">
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ba-wizard-step>
+        </ba-wizard>
+      </div>
+    </div>
+  </div>
+</div>
