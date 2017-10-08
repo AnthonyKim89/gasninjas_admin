@@ -1,1 +1,18 @@
+<div class="row">
+  <div class="pull-right zipcode-selector">
+    <ui-select ng-model="zipcodes.selected" theme="bootstrap">
+      <ui-select-match placeholder="Type to search for zipcodes...">
+        Zipcode - {{$select.selected.zipcode}}
+      </ui-select-match>
+      <ui-select-choices refresh="fetchZipcodes($select)" refresh-delay="300" repeat="zipcode in zipcodes.list | filter: $select.search">
+        {{zipcode.zipcode}}
+        <div ng-if="$index == $select.items.length-1 && zipcodes.hasMore">
+          <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="zipcodes.loading" ng-mouseover="fetchZipcodes($select, $event);" style="width: 100%; margin-top: 5px;">
+            Load more...
+          </button>
+        </div>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+</div>
 <div id="amchart"></div>

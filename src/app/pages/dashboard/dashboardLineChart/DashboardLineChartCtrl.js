@@ -1,126 +1,176 @@
 /**
  * @author v.lugovksy
  * created on 16.12.2015
+ *
+ * Modified by Anthony on Oct 7, 2017
  */
-(function () {
+(function() {
   'use strict';
 
   angular.module('GasNinjasAdmin.pages.dashboard')
-      .controller('DashboardLineChartCtrl', DashboardLineChartCtrl);
+    .controller('DashboardLineChartCtrl', DashboardLineChartCtrl);
 
   /** @ngInject */
-  function DashboardLineChartCtrl(baConfig, layoutPaths, baUtil) {
+  function DashboardLineChartCtrl($scope, $http, appConfig, baConfig, layoutPaths, baUtil) {
     var layoutColors = baConfig.colors;
     var graphColor = baConfig.theme.blur ? '#000000' : layoutColors.primary;
-    var chartData = [
-      { date: new Date(2012, 11), value: 0, value0: 0 },
-      { date: new Date(2013, 0), value: 15000, value0: 19000},
-      { date: new Date(2013, 1), value: 30000, value0: 20000},
 
-      { date: new Date(2013, 2), value: 25000, value0: 22000},
-      { date: new Date(2013, 3), value: 21000, value0: 25000},
-      { date: new Date(2013, 4), value: 24000, value0: 29000},
-      { date: new Date(2013, 5), value: 31000, value0: 26000},
-      { date: new Date(2013, 6), value: 40000, value0: 25000},
-      { date: new Date(2013, 7), value: 37000, value0: 20000},
-      { date: new Date(2013, 8), value: 18000, value0: 22000},
-      { date: new Date(2013, 9), value: 5000, value0: 26000},
-      { date: new Date(2013, 10), value: 40000, value0: 30000},
-      { date: new Date(2013, 11), value: 20000, value0: 25000},
-      { date: new Date(2014, 0), value: 5000, value0: 13000},
+    $scope.fetchZipcodes = fnFetchZipcodes;
 
-      { date: new Date(2014, 1), value: 3000, value0: 13000},
-      { date: new Date(2014, 2), value: 1800, value0: 13000},
-      { date: new Date(2014, 3), value: 10400, value0: 13000},
-      { date: new Date(2014, 4), value: 25500, value0: 13000},
-      { date: new Date(2014, 5), value: 2100, value0: 13000},
-      { date: new Date(2014, 6), value: 6500, value0: 13000},
-      { date: new Date(2014, 7), value: 1100, value0: 13000},
-      { date: new Date(2014, 8), value: 17200, value0: 13000},
-      { date: new Date(2014, 9), value: 26900, value0: 13000},
-      { date: new Date(2014, 10), value: 14100, value0: 13000},
-      { date: new Date(2014, 11), value: 35300, value0: 13000},
-      { date: new Date(2015, 0), value: 54800, value0: 13000},
-      { date: new Date(2015, 1), value: 49800, value0: 13000}
-    ];
+    $scope.zipcodes = {
+      list: [],
+      page: 1,
+      selected: null,
+      loading: false,
+      hasMore: true,
+    };
 
-    var chart = AmCharts.makeChart('amchart', {
-      type: 'serial',
-      theme: 'blur',
-      marginTop: 15,
-      marginRight: 15,
-      dataProvider: chartData,
-      categoryField: 'date',
-      categoryAxis: {
-        parseDates: true,
-        gridAlpha: 0,
-        color: layoutColors.defaultText,
-        axisColor: layoutColors.defaultText
-      },
-      valueAxes: [
-        {
-          minVerticalGap: 50,
-          gridAlpha: 0,
-          color: layoutColors.defaultText,
-          axisColor: layoutColors.defaultText
+    $scope.chartData = [];
+
+    // function zoomChart() {
+    //   $scope.chart.zoomToDates(new Date(2012, 11), new Date(2013, 1));
+    // }
+
+
+
+    // zoomChart();
+    // if ($scope.chart.zoomChart) {
+    //   $scope.chart.zoomChart();
+    // }
+    // 
+    
+    $scope.$watch('zipcodes.list', function(newVal, oldVal) {
+      if (newVal == oldVal || $scope.zipcodes.selected) return;
+
+      $scope.zipcodes.selected = newVal[0];
+    })
+
+    $scope.$watch('zipcodes.selected', function(newVal, oldVal) {
+      $http({
+        method: 'GET',
+        url: appConfig.API_URL + '/prices/get_records_by_zipcode/' + (newVal ? newVal.zipcode : ''),
+      }).then(function(response) {
+        $scope.chartData = [];
+
+        var data = response.data;
+        if (data && data.success && data.prices) {
+          for (var i = 0, len = data.prices.length; i < len; i++) {
+            $scope.chartData.push({
+              date: new Date(data.prices[i].created_et),
+              price_87: parseFloat(data.prices[i].price_87).toFixed(3),
+              price_93: parseFloat(data.prices[i].price_93).toFixed(3),
+            });
+          }
+
+          console.log('xx', $scope.chartData);
+
+          $scope.chart = AmCharts.makeChart('amchart', {
+            type: 'serial',
+            theme: 'blur',
+            marginTop: 15,
+            marginRight: 15,
+            dataProvider: $scope.chartData,
+            categoryField: 'date',
+            categoryAxis: {
+              parseDates: true,
+              gridAlpha: 0,
+              color: layoutColors.defaultText,
+              axisColor: layoutColors.defaultText
+            },
+            valueAxes: [{
+              minVerticalGap: 50,
+              gridAlpha: 0,
+              color: layoutColors.defaultText,
+              axisColor: layoutColors.defaultText
+            }],
+            graphs: [{
+                id: 'g0',
+                bullet: 'none',
+                useLineColorForBulletBorder: true,
+                lineColor: baUtil.hexToRGB(graphColor, 0.3),
+                lineThickness: 1,
+                negativeLineColor: layoutColors.danger,
+                type: 'smoothedLine',
+                valueField: 'price_87',
+                fillAlphas: 1,
+                fillColorsField: 'lineColor',
+                balloonText: "Regular: [[price_87]]",
+              },
+              {
+                id: 'g1',
+                bullet: 'none',
+                useLineColorForBulletBorder: true,
+                lineColor: baUtil.hexToRGB(graphColor, 0.5),
+                lineThickness: 1,
+                negativeLineColor: layoutColors.danger,
+                type: 'smoothedLine',
+                valueField: 'price_93',
+                fillAlphas: 1,
+                fillColorsField: 'lineColor',
+                balloonText: "Premium: [[price_93]]",
+              }
+            ],
+            chartCursor: {
+              categoryBalloonDateFormat: 'MMM DD',
+              categoryBalloonColor: '#4285F4',
+              categoryBalloonAlpha: 0.7,
+              cursorAlpha: 0,
+              valueLineEnabled: true,
+              valueLineBalloonEnabled: true,
+              valueLineAlpha: 0.5
+            },
+            dataDateFormat: 'DD MM',
+            export: {
+              enabled: true
+            },
+            creditsPosition: 'bottom-right',
+            zoomOutButton: {
+              backgroundColor: '#fff',
+              backgroundAlpha: 0
+            },
+            zoomOutText: '',
+            pathToImages: layoutPaths.images.amChart
+          });
+
+          // $scope.chart.addListener('rendered', zoomChart);
         }
-      ],
-      graphs: [
-        {
-          id: 'g0',
-          bullet: 'none',
-          useLineColorForBulletBorder: true,
-          lineColor: baUtil.hexToRGB(graphColor, 0.3),
-          lineThickness: 1,
-          negativeLineColor: layoutColors.danger,
-          type: 'smoothedLine',
-          valueField: 'value0',
-          fillAlphas: 1,
-          fillColorsField: 'lineColor'
-        },
-        {
-          id: 'g1',
-          bullet: 'none',
-          useLineColorForBulletBorder: true,
-          lineColor: baUtil.hexToRGB(graphColor, 0.5),
-          lineThickness: 1,
-          negativeLineColor: layoutColors.danger,
-          type: 'smoothedLine',
-          valueField: 'value',
-          fillAlphas: 1,
-          fillColorsField: 'lineColor'
-        }
-      ],
-      chartCursor: {
-        categoryBalloonDateFormat: 'MM YYYY',
-        categoryBalloonColor: '#4285F4',
-        categoryBalloonAlpha: 0.7,
-        cursorAlpha: 0,
-        valueLineEnabled: true,
-        valueLineBalloonEnabled: true,
-        valueLineAlpha: 0.5
-      },
-      dataDateFormat: 'MM YYYY',
-      export: {
-        enabled: true
-      },
-      creditsPosition: 'bottom-right',
-      zoomOutButton: {
-        backgroundColor: '#fff',
-        backgroundAlpha: 0
-      },
-      zoomOutText: '',
-      pathToImages: layoutPaths.images.amChart
+      });
     });
 
-    function zoomChart() {
-      chart.zoomToDates(new Date(2013, 3), new Date(2014, 0));
-    }
+    function fnFetchZipcodes($select, $event) {
+      // no event means first load!
+      if (!$event) {
+        $scope.zipcodes.page = 1;
+        $scope.zipcodes.list = [];
+      } else {
+        $event.stopPropagation();
+        $event.preventDefault();
+      }
 
-    chart.addListener('rendered', zoomChart);
-    zoomChart();
-    if (chart.zoomChart) {
-      chart.zoomChart();
+      $scope.zipcodes.loading = true;
+
+      $http({
+        method: 'GET',
+        url: appConfig.API_URL + '/zipcodes/list_zipcodes/',
+        params: {
+          query_zipcode: $select ? $select.search : '',
+          page: $scope.zipcodes.page,
+          limit: 10
+        }
+      }).then(function(response) {
+        $scope.zipcodes.page++;
+        $scope.zipcodes.list = $scope.zipcodes.list.concat(response.data);
+        if (response.data.length < 10)
+          $scope.zipcodes.hasMore = false;
+        else
+          $scope.zipcodes.hasMore = true;
+      }, function(response) {
+        if (response.status === 404) {
+          $scope.zipcodes.hasMore = false;
+        }
+      })['finally'](function() {
+        $scope.zipcodes.loading = false;
+      });
     }
   }
 })();
