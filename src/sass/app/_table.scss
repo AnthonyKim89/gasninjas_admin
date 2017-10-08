@@ -5,3 +5,7 @@
 .table-row-clickable {
 	cursor: pointer;
 }
+
+td.active {
+	color: $success;
+}

@@ -28,7 +28,7 @@
         var result = [];
 
         for (var i = 0; i < 7; i++) {
-          if (strActiveDays && strActiveDays.length > i && strActiveDays.substr(i, 1))
+          if (strActiveDays && strActiveDays.length > i && strActiveDays.substr(i, 1) === "1")
             result[i] = true;
           else
             result[i] = false;

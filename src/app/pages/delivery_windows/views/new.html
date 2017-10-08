@@ -38,6 +38,14 @@
             <input class="form-control" id="threshold" ng-model="delivery_window.threshold" placeholder="Threshold" required="" type="number" step="1">
             </input>
           </div>
+          <div class="form-group">
+            <label for="is_active">
+              Set Active
+            </label>
+            <div class="switches clearfix">
+              <switch name="is_active" color="success" ng-model="delivery_window.is_active"></switch>
+            </div>
+          </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
@@ -91,14 +99,17 @@
             <label for="popup">
               Popup Message*
             </label>
-            <textarea class="form-control" id="popup" name="popup" ng-model="delivery_window.popup" placeholder="Popup Message" required="">
+            <textarea class="form-control" id="popup" name="popup" ng-model="delivery_window.popup" placeholder="Popup Message">
             </textarea>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12">
-          <div class="form-group">
+          <div class="form-group pull-right">
+            <a class="btn btn-default" type="submit" ui-sref="delivery_windows.list">
+              Cancel
+            </a>
             <button class="btn btn-primary" type="submit">
               Add New
             </button>

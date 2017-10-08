@@ -23,6 +23,7 @@
         popup: data.delivery_window.popup,
         slot_from: data.delivery_window.slot_from,
         slot_to: data.delivery_window.slot_to,
+        is_active: data.delivery_window.is_active,
         active_days: DeliveryWindowUtil.convertActiveDaysFromDBStringToArray(data.delivery_window.active_days)
       };
 
@@ -67,6 +68,7 @@
         popup: $scope.delivery_window.popup,
         slot_from: $("#from").val(),
         slot_to: $("#to").val(),
+        is_active: $scope.delivery_window.is_active,
         active_days: DeliveryWindowUtil.convertActiveDaysFromArrayToDBString($scope.delivery_window.active_days)
       };
 

@@ -48,7 +48,7 @@
       <td>{{delivery_window.threshold}}</td>
       <td>{{delivery_window.slot_from}}</td>
       <td>{{delivery_window.slot_to}}</td>
-      <td>{{delivery_window.active_days | DeliveryWindowActiveDays}}</td>
+      <td ng-class="{active: delivery_window.is_active && delivery_window.active_days != '0000000'}">{{delivery_window.active_days | DeliveryWindowActiveDays}}</td>
       <td>
         <div class="buttons" ng-show="!rowform.$visible">
           <button class="btn btn-primary editable-table-button btn-xs" ng-click="editDeliveryWindow(delivery_window.id)">Edit</button>
