@@ -94,7 +94,7 @@
                 valueField: 'price_87',
                 fillAlphas: 1,
                 fillColorsField: 'lineColor',
-                balloonText: "Regular: [[price_87]]",
+                balloonText: "Regular: $[[price_87]]",
               },
               {
                 id: 'g1',
@@ -107,7 +107,7 @@
                 valueField: 'price_93',
                 fillAlphas: 1,
                 fillColorsField: 'lineColor',
-                balloonText: "Premium: [[price_93]]",
+                balloonText: "Premium: $[[price_93]]",
               }
             ],
             chartCursor: {
