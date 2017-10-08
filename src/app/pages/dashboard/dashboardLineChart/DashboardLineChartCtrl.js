@@ -62,8 +62,6 @@
             });
           }
 
-          console.log('xx', $scope.chartData);
-
           $scope.chart = AmCharts.makeChart('amchart', {
             type: 'serial',
             theme: 'blur',

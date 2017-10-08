@@ -13,7 +13,9 @@ var gutil = require('gulp-util');
  */
 exports.paths = {
   src: 'src',
-  dist: '../gn_api/admin',
+  dist: 'dist',
+  distStaging: '../admin',
+  distProduction: '~/htdocs/admin',
   devDist: 'dev-release',
   tmp: '.tmp',
   e2e: 'e2e'
