@@ -120,7 +120,7 @@ gulp.task('production:miami', ['build'], function() {
       conf.paths.dist + '/index.html',
       conf.paths.dist + '/auth.html'
     ])
-    .pipe(inject.replace('http://localhost/gn_api', 'http://api-miami.gasninjas.com/gn_api'))
+    .pipe(inject.replace('http://localhost/gn_api', 'https://api-miami.gasninjas.com/gn_api'))
     .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
 });
 
