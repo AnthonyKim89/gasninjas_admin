@@ -8,7 +8,7 @@
     var userRoles = appConfig.userRoles || [];
 
     if ($cookies.get('token') && $location.path() !== '/logout') {
-      currentUser = UserService.getUserInfo({ id: 'me' });
+      currentUser = UserService.getCurrent();
     }
 
     var Auth = {
@@ -21,15 +21,20 @@
        * @return {Promise}
        */
       login: function(user, callback) {
-        return $http.post(appConfig.API_URL + '/users/login', {
-            email: user.email,
-            password: user.password
-          })
-          .then(function(res) {
-            if (res.data && res.data.data)
-              $cookies.put('token', res.data.data.token);
-            currentUser = UserService.getUserInfo({ id: 'me' });
-            return currentUser.$promise;
+        var login_promise = UserService.login({}, {
+          email: user.email,
+          password: user.password
+        }).$promise;
+
+        return login_promise.then(function(response) {
+            if (!response.success) {
+              throw (response);
+            } else {
+              if (response && response.data)
+                $cookies.put('token', response.data.token);
+              currentUser = UserService.getCurrent();
+              return currentUser.$promise;
+            }
           })
           .then(function(user) {
             safeCb(callback)(null, user);
@@ -161,12 +166,12 @@
        */
       isLoggedIn: function(callback) {
         if (arguments.length === 0) {
-          return currentUser.hasOwnProperty('user');
+          return currentUser.hasOwnProperty('data') && currentUser.data && currentUser.data.id;
         }
 
         return Auth.getCurrentUser(null)
           .then(function(user) {
-            var is = user.hasOwnProperty('user');
+            var is = user.hasOwnProperty('data') && user.data && user.data.id;
             safeCb(callback)(is);
             return is;
           });
