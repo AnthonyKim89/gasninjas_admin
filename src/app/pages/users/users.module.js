@@ -6,16 +6,15 @@
 (function() {
   'use strict';
 
-  var $stateProviderRef = null;
-  var $urlRouterProviderRef = null;
+  var app = app || {};
 
   angular.module('GasNinjasAdmin.pages.users', [])
     .config(routeConfig)
     .run(moduleRun);
   /** @ngInject */
   function routeConfig($stateProvider, $urlRouterProvider) {
-    $stateProviderRef = $stateProvider;
-    $urlRouterProviderRef = $urlRouterProvider;
+    app.$stateProviderRef = $stateProvider;
+    app.$urlRouterProviderRef = $urlRouterProvider;
   }
 
   function moduleRun($q, $urlRouter, Auth, DynamicState) {
@@ -47,13 +46,6 @@
             url: '/edit/:id',
             templateUrl: 'app/pages/users/views/edit.html',
             controller: 'UserEditCtrl',
-            resolve: {
-              data: function(UserService, $stateParams) {
-                return UserService.getUserInfo({
-                  id: $stateParams.id
-                }).$promise;
-              }
-            },
             authenticate: true
           });
         }
@@ -69,19 +61,9 @@
             },
             authenticate: 'superadmin'
           }).state('users.roles-edit', {
-            url: '/roles-edit/:id',
+            url: '/role-edit/:id',
             templateUrl: 'app/pages/users/views/roles-edit.html',
             controller: 'UserRolesEditCtrl',
-            resolve: {
-              data: function(UserService, $stateParams) {
-                return UserService.getRoleInfo({
-                  id: $stateParams.id
-                }).$promise;
-              },
-              available_users: function(UserService, $stateParams) {
-                return UserService.getAvailableUsers({}, { purpose: 'role', id: $stateParams.id }).$promise;
-              }
-            },
             authenticate: 'superadmin'
           });
         }
@@ -89,10 +71,10 @@
         var states = dynamic_state.getAll();
         if (states.length > 0) {
           angular.forEach(states, function(state, index) {
-            $stateProviderRef.state(state.name, state.options);
+            app.$stateProviderRef.state(state.name, state.options);
           });
 
-          $urlRouterProviderRef.when('/users', '/users/list');
+          app.$urlRouterProviderRef.when('/users', '/users/list');
 
           $urlRouter.sync();
           $urlRouter.listen();

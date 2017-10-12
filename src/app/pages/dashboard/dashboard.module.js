@@ -7,8 +7,7 @@
 (function() {
   'use strict';
 
-  var $stateProviderRef = null;
-  var $urlRouterProviderRef = null;
+  var app = app || {};
 
   angular.module('GasNinjasAdmin.pages.dashboard', [])
     .config(routeConfig)
@@ -16,8 +15,8 @@
 
   /** @ngInject */
   function routeConfig($stateProvider, $urlRouterProvider) {
-    $stateProviderRef = $stateProvider;
-    $urlRouterProviderRef = $urlRouterProvider;
+    app.$stateProviderRef = $stateProvider;
+    app.$urlRouterProviderRef = $urlRouterProvider;
   }
 
   function moduleRun($q, $urlRouter, Auth, DynamicState) {
@@ -41,7 +40,7 @@
         var states = dynamic_state.getAll();
         if (states.length > 0) {
           angular.forEach(states, function(state, index) {
-            $stateProviderRef.state(state.name, state.options);
+            app.$stateProviderRef.state(state.name, state.options);
           });
 
           $urlRouter.sync();

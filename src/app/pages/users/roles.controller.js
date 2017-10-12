@@ -35,28 +35,36 @@
     }
   }
 
-  function UserRolesEditCtrl($scope, $state, $timeout, toastr, lodash, UserService, data, available_users) {
+  function UserRolesEditCtrl($scope, $state, $timeout, $stateParams, $q, toastr, lodash, UserService) {
     $scope.initMultiSelect = fnInitMultiSelect;
     $scope.assignUserRoles = fnAssignUserRoles;
 
-    $scope.available_users = available_users;
+    $scope.onDataLoaded = fnOnDataLoaded;
 
     $scope.role = {};
-
     $scope.isSubmitting = false;
 
-    if (data && data.role) {
-      $scope.role = {
-        id: data.role.id,
-        name: data.role.name,
-        description: data.role.description,
-        users: data.role.users
-      }
+    $q.all([
+      UserService.getRoleInfo({ id: $stateParams.id }).$promise,
+      UserService.getAvailableUsers({}, { purpose: 'role', id: $stateParams.id }).$promise
+    ]).then($scope.onDataLoaded);
 
-      $scope.initMultiSelect();
-    } else {
-      toastr.error('Failed to load the Role Info from the API Server');
-      $state.go('users.roles-list');
+    function fnOnDataLoaded(data) {
+      $scope.available_users = data[1];
+
+      if (data[0] && data[0].role) {
+        $scope.role = {
+          id: data[0].role.id,
+          name: data[0].role.name,
+          description: data[0].role.description,
+          users: data[0].role.users
+        }
+
+        $scope.initMultiSelect();
+      } else {
+        toastr.error('Failed to load the Role Info from the API Server');
+        $state.go('users.roles-list');
+      }
     }
 
     function fnInitMultiSelect() {
@@ -92,7 +100,7 @@
 
     function fnCallback(result) {
       $scope.isSubmitting = false;
-      
+
       switch (result.success) {
         case 1:
           toastr.info('Successfully updated the user roles!');

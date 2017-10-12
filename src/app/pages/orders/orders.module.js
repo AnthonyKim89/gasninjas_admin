@@ -6,8 +6,7 @@
 (function() {
   'use strict';
 
-  var $stateProviderRef = null;
-  var $urlRouterProviderRef = null;
+  var app = app || {};
 
   angular.module('GasNinjasAdmin.pages.orders', [])
     .config(routeConfig)
@@ -15,8 +14,8 @@
 
   /** @ngInject */
   function routeConfig($stateProvider, $urlRouterProvider) {
-    $stateProviderRef = $stateProvider;
-    $urlRouterProviderRef = $urlRouterProvider;
+    app.$stateProviderRef = $stateProvider;
+    app.$urlRouterProviderRef = $urlRouterProvider;
   }
 
   function moduleRun($q, $urlRouter, Auth, DynamicState) {
@@ -67,13 +66,6 @@
             templateUrl: 'app/pages/orders/views/edit.html',
             controller: 'OrderEditCtrl',
             title: 'Manage Orders',
-            resolve: {
-              data: function(OrderService, $stateParams) {
-                return OrderService.getOrderInfo({
-                  id: $stateParams.id
-                }).$promise;
-              }
-            },
             authenticate: true
           }).state('orders.list_schedules', {
             url: '/list_schedules',
@@ -99,10 +91,10 @@
         var states = dynamic_state.getAll();
         if (states.length > 0) {
           angular.forEach(states, function(state, index) {
-            $stateProviderRef.state(state.name, state.options);
+            app.$stateProviderRef.state(state.name, state.options);
           });
 
-          $urlRouterProviderRef.when('/orders', '/orderss/list');
+          app.$urlRouterProviderRef.when('/orders', '/orderss/list');
 
           $urlRouter.sync();
           $urlRouter.listen();

@@ -7,7 +7,7 @@
   angular.module('GasNinjasAdmin.pages.orders')
     .controller('OrderEditCtrl', OrderEditCtrl);
 
-  function OrderEditCtrl($scope, $state, $http, $timeout, $ngBootbox, toastr, lodash, appConfig, UserService, OrderService, data) {
+  function OrderEditCtrl($scope, $state, $http, $timeout, $ngBootbox, $stateParams, toastr, lodash, appConfig, UserService, OrderService) {
     $scope.order = {};
 
     $scope.editOrder = fnEditOrder;
@@ -22,88 +22,105 @@
     $scope.centerChanged = fnHandlerOnCenterChanged;
     $scope.isOrderPending = fnIsOrderPending;
 
+    $scope.onDataLoaded = fnOnDataLoaded;
+    $scope.onOrganizationSelected = fnOnOrganizationSelected;
+    $scope.onUserSelected = fnOnUserSelected;
+    $scope.onVehicleSelected = fnOnVehicleSelected;
+
     $scope.isSubmitting = false;
 
-    if (!data || !data.id) {
-      $state.go('orders.list');
-    } else {
-      var dateScheduledAt = new Date(data.scheduled_at);
+    OrderService.getOrderInfo({
+      id: $stateParams.id
+    }).$promise.then($scope.onDataLoaded);
 
-      $scope.order = {
-        id: data.id,
-        user_id: data.user_id,
-        vehicle_id: data.vehicle_id,
-        parking_address: data.parking_address,
-        gas_type: parseInt(data.gas_type),
-        gallons: data.gallons,
-        price_per_gallon: data.price_per_gallon,
-        delivery_window_id: data.delivery_window_id,
-        delivered_on: data.delivered_on,
-        notes: data.notes,
-        completion_notes: '',
-        status: data.status,
-        organization: data.organization,
-        user: data.user,
-        task_id: data.task_id,
-        send_to_onfleet: data.task_id ? true : false,
+    $scope.$watch('organizations.selected', $scope.onOrganizationSelected);
 
-        zip: data.zip,
-        latlong: data.latlong,
-        country: data.country,
-        city: data.city,
-        street_name: data.street_name,
-        street_number: data.street_number,
+    $scope.$watch('users.selected', $scope.onUserSelected);
 
-        refill_schedule: data.refill_schedule,
+    $scope.$watch('vehicles.selected', $scope.onVehicleSelected);
 
-        scheduled_at: "After " + dateScheduledAt.toLocaleTimeString() + ", on " + dateScheduledAt.toLocaleDateString(),
+    function fnOnDataLoaded(data) {
+      if (!data || !data.id) {
+        $state.go('orders.list');
+      } else {
+        var dateScheduledAt = new Date(data.scheduled_at);
+
+        $scope.order = {
+          id: data.id,
+          user_id: data.user_id,
+          vehicle_id: data.vehicle_id,
+          parking_address: data.parking_address,
+          gas_type: parseInt(data.gas_type),
+          gallons: data.gallons,
+          price_per_gallon: data.price_per_gallon,
+          delivery_window_id: data.delivery_window_id,
+          delivered_on: data.delivered_on,
+          notes: data.notes,
+          completion_notes: '',
+          status: data.status,
+          organization: data.organization,
+          user: data.user,
+          task_id: data.task_id,
+          send_to_onfleet: data.task_id ? true : false,
+
+          zip: data.zip,
+          latlong: data.latlong,
+          country: data.country,
+          city: data.city,
+          street_name: data.street_name,
+          street_number: data.street_number,
+
+          refill_schedule: data.refill_schedule,
+
+          scheduled_at: "After " + dateScheduledAt.toLocaleTimeString() + ", on " + dateScheduledAt.toLocaleDateString(),
+        };
+
+        $scope.initDateTimePicker();
+      }
+
+      if ($scope.order && typeof $scope.order.complete === 'undefined') {
+        $scope.order.complete = true;
+      }
+
+      $scope.organizations = {
+        list: [],
+        page: 1,
+        selected: $scope.order ? $scope.order.organization : null,
+        loading: false,
+        hasMore: true
       };
+      $scope.users = {
+        list: [],
+        page: 1,
+        selected: $scope.order ? $scope.order.user : null,
+        loading: false,
+        hasMore: true
+      };
+      $scope.vehicles = {
+        list: [],
+        page: 1,
+        selected: null,
+        loading: false
+      };
+      $scope.delivery_windows = {
+        list: [],
+        page: 1,
+        selected: null,
+        loading: false
+      };
+      $scope.prices = {
+        list: [],
+        page: 1,
+        selected: null,
+        loading: false,
+      };
+      $scope.marker = null;
 
-      $scope.initDateTimePicker();
+      $timeout($scope.initGoogleMap, 100);
+      $timeout($scope.initScheduler, 100);
     }
 
-    if ($scope.order && typeof $scope.order.complete === 'undefined') {
-      $scope.order.complete = true;
-    }
-
-    $scope.organizations = {
-      list: [],
-      page: 1,
-      selected: $scope.order ? $scope.order.organization : null,
-      loading: false,
-      hasMore: true
-    };
-    $scope.users = {
-      list: [],
-      page: 1,
-      selected: $scope.order ? $scope.order.user : null,
-      loading: false,
-      hasMore: true
-    };
-    $scope.vehicles = {
-      list: [],
-      page: 1,
-      selected: null,
-      loading: false
-    };
-    $scope.delivery_windows = {
-      list: [],
-      page: 1,
-      selected: null,
-      loading: false
-    };
-    $scope.prices = {
-      list: [],
-      page: 1,
-      selected: null,
-      loading: false,
-    };
-    $scope.marker = null;
-
-    $timeout($scope.initGoogleMap, 500);
-    $timeout($scope.initScheduler, 1000);
-
-    $scope.$watch('organizations.selected', function(newVal, oldVal) {
+    function fnOnOrganizationSelected(newVal, oldVal) {
       if (newVal === oldVal) return;
 
       $scope.users.selected = null;
@@ -114,9 +131,9 @@
       }
 
       $scope.fetchUsers(null);
-    });
+    }
 
-    $scope.$watch('users.selected', function(newVal, oldVal) {
+    function fnOnUserSelected(newVal, oldVal) {
       if (!newVal) return;
 
       $scope.vehicles.selected = null;
@@ -138,13 +155,14 @@
           toastr.error('Failed to Load User Info from the API Server');
         });
       }
-    });
-    $scope.$watch('vehicles.selected', function(newVal, oldVal) {
+    }
+
+    function fnOnVehicleSelected(newVal, oldVal) {
       if (newVal === oldVal || newVal == null) return;
       $scope.order.gas_type = parseInt(newVal.gas_type);
 
       $scope.prices.selected = lodash.find($scope.prices.list, { gas_type: $scope.order.gas_type });
-    });
+    }
 
     function fnInitDateTimePicker() {
       var is_loaded = $('#delivered_on').attr('date-format');
@@ -544,7 +562,7 @@
     }
 
     function fnIsOrderPending() {
-      return $scope.order.status != 10 && $scope.order.status !=5;
+      return $scope.order.status != 10 && $scope.order.status != 5;
     }
   }
 })();

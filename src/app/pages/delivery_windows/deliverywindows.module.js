@@ -6,8 +6,7 @@
 (function() {
   'use strict';
 
-  var $stateProviderRef = null;
-  var $urlRouterProviderRef = null;
+  var app = app || {};
 
   angular.module('GasNinjasAdmin.pages.delivery_windows', [])
     .config(routeConfig)
@@ -15,8 +14,8 @@
 
   /** @ngInject */
   function routeConfig($stateProvider, $urlRouterProvider) {
-    $stateProviderRef = $stateProvider;
-    $urlRouterProviderRef = $urlRouterProvider;
+    app.$stateProviderRef = $stateProvider;
+    app.$urlRouterProviderRef = $urlRouterProvider;
   }
 
   function moduleRun($q, $urlRouter, Auth, DynamicState) {
@@ -57,13 +56,6 @@
             url: '/edit/:id',
             templateUrl: 'app/pages/delivery_windows/views/edit.html',
             controller: 'DeliveryWindowEditCtrl',
-            resolve: {
-              data: function(DeliveryWindowService, $stateParams) {
-                return DeliveryWindowService.getDeliveryWindowInfo({
-                  id: $stateParams.id
-                }).$promise;
-              }
-            },
             authenticate: true
           });
         }
@@ -71,10 +63,10 @@
         var states = dynamic_state.getAll();
         if (states.length > 0) {
           angular.forEach(states, function(state, index) {
-            $stateProviderRef.state(state.name, state.options);
+            app.$stateProviderRef.state(state.name, state.options);
           });
 
-          $urlRouterProviderRef.when('/delivery_windows', '/delivery_windows/list');
+          app.$urlRouterProviderRef.when('/delivery_windows', '/delivery_windows/list');
 
           $urlRouter.sync();
           $urlRouter.listen();

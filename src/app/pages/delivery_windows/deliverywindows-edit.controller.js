@@ -8,29 +8,37 @@
     .controller('DeliveryWindowEditCtrl', DeliveryWindowEditCtrl);
 
   /** @ngInject */
-  function DeliveryWindowEditCtrl($scope, $state, $ngBootbox, $timeout, toastr, lodash, DeliveryWindowService, DeliveryWindowUtil, data) {
+  function DeliveryWindowEditCtrl($scope, $state, $ngBootbox, $timeout, $stateParams, toastr, lodash, DeliveryWindowService, DeliveryWindowUtil) {
     $scope.editDeliveryWindow = fnEditDeliveryWindow;
     $scope.initDateTimePicker = fnInitDateTimePicker;
 
-    if (data) {
-      $scope.delivery_window = {
-        id: data.delivery_window.id,
-        key: data.delivery_window.key,
-        text: data.delivery_window.text,
-        price: data.delivery_window.price,
-        cutoff: data.delivery_window.cutoff,
-        threshold: data.delivery_window.threshold,
-        popup: data.delivery_window.popup,
-        slot_from: data.delivery_window.slot_from,
-        slot_to: data.delivery_window.slot_to,
-        is_active: data.delivery_window.is_active,
-        active_days: DeliveryWindowUtil.convertActiveDaysFromDBStringToArray(data.delivery_window.active_days)
-      };
+    $scope.onDataLoaded = fnOnDataLoaded;
 
-      $scope.initDateTimePicker();
-    } else {
-      toastr.error('Failed to load the DeliveryWindow Info from the API Server');
-      $state.go('delivery_windows.list');
+    DeliveryWindowService.getDeliveryWindowInfo({
+      id: $stateParams.id
+    }).$promise.then($scope.onDataLoaded);
+
+    function fnOnDataLoaded(data) {
+      if (data) {
+        $scope.delivery_window = {
+          id: data.delivery_window.id,
+          key: data.delivery_window.key,
+          text: data.delivery_window.text,
+          price: data.delivery_window.price,
+          cutoff: data.delivery_window.cutoff,
+          threshold: data.delivery_window.threshold,
+          popup: data.delivery_window.popup,
+          slot_from: data.delivery_window.slot_from,
+          slot_to: data.delivery_window.slot_to,
+          is_active: data.delivery_window.is_active,
+          active_days: DeliveryWindowUtil.convertActiveDaysFromDBStringToArray(data.delivery_window.active_days)
+        };
+
+        $scope.initDateTimePicker();
+      } else {
+        toastr.error('Failed to load the DeliveryWindow Info from the API Server');
+        $state.go('delivery_windows.list');
+      }
     }
 
     function fnInitDateTimePicker() {

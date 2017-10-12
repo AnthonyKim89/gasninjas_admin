@@ -8,11 +8,13 @@
     .controller('OrganizationEditCtrl', OrganizationEditCtrl);
 
   /** @ngInject */
-  function OrganizationEditCtrl($scope, $state, $ngBootbox, $timeout, toastr, lodash, OrganizationService, DeliveryWindowService, data, available_users) {
+  function OrganizationEditCtrl($scope, $state, $ngBootbox, $timeout, $stateParams, $q, toastr, lodash, OrganizationService, DeliveryWindowService, UserService) {
     $scope.editOrganization = fnEditOrganization;
     $scope.completeOrganization = fnCompleteOrganization;
     $scope.deleteOrganization = fnDeleteOrganization;
     $scope.initMultiSelect = fnInitMultiSelect;
+
+    $scope.onDataLoaded = fnOnDataLoaded;
 
     $scope.delivery_windows = {
       list: DeliveryWindowService.getDeliveryWindowList(),
@@ -21,29 +23,36 @@
       loading: false,
     };
 
-    $scope.available_users = available_users;
+    $q.all([
+      OrganizationService.getOrganizationInfo({ id: $stateParams.id }).$promise,
+      UserService.getAvailableUsers({}, { purpose: 'organization' }).$promise
+    ]).then($scope.onDataLoaded);
 
-    if (data && data.organization) {
-      $scope.organization = {
-        id: data.organization.id,
-        name: data.organization.name,
-        margin: data.organization.margin,
-        textToConfirm: data.organization.textToConfirm === true || data.organization.textToConfirm === '1' ? true : false,
-        users: data.organization.users
-      };
+    function fnOnDataLoaded(data) {
+      $scope.available_users = data[1];
 
-      $scope.delivery_windows.list.$promise.then(function(result) {
-        var ids = lodash.map(data.organization.delivery_windows, 'id');
-        $scope.delivery_windows.selected = [];
-        for (var i = 0; i < ids.length; i++) {
-          $scope.delivery_windows.selected[i] = lodash.find(result, { id: ids[i] });
-        }
-      });
+      if (data[0] && data[0].organization) {
+        $scope.organization = {
+          id: data[0].organization.id,
+          name: data[0].organization.name,
+          margin: data[0].organization.margin,
+          textToConfirm: data[0].organization.textToConfirm === true || data[0].organization.textToConfirm === '1' ? true : false,
+          users: data[0].organization.users
+        };
 
-      $scope.initMultiSelect();
-    } else {
-      toastr.error('Failed to load the Organization Info from the API Server');
-      $state.go('organizations.list');
+        $scope.delivery_windows.list.$promise.then(function(result) {
+          var ids = lodash.map(data[0].organization.delivery_windows, 'id');
+          $scope.delivery_windows.selected = [];
+          for (var i = 0; i < ids.length; i++) {
+            $scope.delivery_windows.selected[i] = lodash.find(result, { id: ids[i] });
+          }
+        });
+
+        $scope.initMultiSelect();
+      } else {
+        toastr.error('Failed to load the Organization Info from the API Server');
+        $state.go('organizations.list');
+      }
     }
 
     function fnInitMultiSelect() {

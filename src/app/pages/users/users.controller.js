@@ -36,32 +36,40 @@
     }
   }
 
-  function UserEditCtrl($scope, $state, toastr, UserService, data) {
-    if (data && data.user) {
-      $scope.personalInfo = {
-        fullname: data.user.fullname,
-        email: data.user.email,
-        phone: data.user.phone,
-        device: data.user.device,
-      };
+  function UserEditCtrl($scope, $state, $stateParams, toastr, UserService) {
+    $scope.onDataLoaded = fnOnDataLoaded;
 
-      $scope.paymentInfo = {
-        payments: data.user.payments,
-        smartTablePageSize: 10
-      };
+    UserService.getUserInfo({
+      id: $stateParams.id
+    }).$promise.then($scope.onDataLoaded);
 
-      $scope.vehicleInfo = {
-        vehicles: data.user.vehicles,
-        smartTablePageSize: 10
-      };
+    function fnOnDataLoaded(data) {
+      if (data && data.user) {
+        $scope.personalInfo = {
+          fullname: data.user.fullname,
+          email: data.user.email,
+          phone: data.user.phone,
+          device: data.user.device,
+        };
 
-      $scope.orderInfo = {
-        orders: data.user.refills,
-        smartTablePageSize: 10
-      };
-    } else {
-      toastr.error('Failed to load the User Info from the API Server');
-      $state.go('users.list');
+        $scope.paymentInfo = {
+          payments: data.user.payments,
+          smartTablePageSize: 10
+        };
+
+        $scope.vehicleInfo = {
+          vehicles: data.user.vehicles,
+          smartTablePageSize: 10
+        };
+
+        $scope.orderInfo = {
+          orders: data.user.refills,
+          smartTablePageSize: 10
+        };
+      } else {
+        toastr.error('Failed to load the User Info from the API Server');
+        $state.go('users.list');
+      }
     }
 
     // function fnLoadUserInfo() {

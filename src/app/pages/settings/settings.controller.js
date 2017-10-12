@@ -42,8 +42,10 @@
     }
   }
 
-  function AppVersionCtrl($scope, $state, $http, $ngBootbox, toastr, appConfig, VersionService, data) {
+  function AppVersionCtrl($scope, $state, $http, $ngBootbox, toastr, appConfig, VersionService) {
     $scope.updateAppVersion = fnUpdateAppVersion;
+
+    $scope.onDataLoaded = fnOnDataLoaded;
 
     $scope.version_info = {
       ios: {
@@ -56,25 +58,7 @@
 
     $scope.isSubmitting = false;
 
-    if (data.success) {
-      for (var i = 0; i < data.versions.length; i++) {
-        if (data.versions[i].device === 'ios') {
-          $scope.version_info.ios = {
-            device: data.versions[i].device,
-            current_version: data.versions[i].current_version,
-            min_version: data.versions[i].min_version,
-            force_update: data.versions[i].force_update,
-          };
-        } else if (data.versions[i].device === 'android') {
-          $scope.version_info.android = {
-            device: data.versions[i].device,
-            current_version: data.versions[i].current_version,
-            min_version: data.versions[i].min_version,
-            force_update: data.versions[i].force_update,
-          };
-        }
-      }
-    }
+    VersionService.getVersionInfo().$promise.then($scope.onDataLoaded);
 
     function fnUpdateAppVersion(device) {
       $scope.isSubmitting = true;
@@ -87,6 +71,28 @@
           toastr.error('Failed to update the version!');
         }
       });
+    }
+
+    function fnOnDataLoaded(data) {
+      if (data.success) {
+        for (var i = 0; i < data.versions.length; i++) {
+          if (data.versions[i].device === 'ios') {
+            $scope.version_info.ios = {
+              device: data.versions[i].device,
+              current_version: data.versions[i].current_version,
+              min_version: data.versions[i].min_version,
+              force_update: data.versions[i].force_update,
+            };
+          } else if (data.versions[i].device === 'android') {
+            $scope.version_info.android = {
+              device: data.versions[i].device,
+              current_version: data.versions[i].current_version,
+              min_version: data.versions[i].min_version,
+              force_update: data.versions[i].force_update,
+            };
+          }
+        }
+      }
     }
   }
 })();
