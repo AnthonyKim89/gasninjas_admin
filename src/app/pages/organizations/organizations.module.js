@@ -46,7 +46,7 @@
           }).$promise;
         },
         available_users: function(UserService) {
-          return UserService.getAvailableUsers().$promise;
+          return UserService.getAvailableUsers({}, {purpose: 'organization'}).$promise;
         }
       },
       authenticate: true

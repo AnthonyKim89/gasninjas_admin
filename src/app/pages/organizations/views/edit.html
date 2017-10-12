@@ -1,113 +1,113 @@
 <div class="widgets">
-    <div class="row">
-        <div class="col-md-12 hide-nav">
-            <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="Edit Organization">
-                <ba-wizard>
-                    <ba-wizard-step form="basicForm" title="Basic Info">
-                        <form name="basicForm" ng-submit="editOrganization()">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="name">
-                                            Name*
-                                        </label>
-                                        <input class="form-control" id="name" ng-model="organization.name" placeholder="Name" required="" type="text">
-                                        </input>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="to_deliver_on">
-                                            Allowed Delivery Windows*
-                                        </label>
-                                        <ui-select multiple ng-model="delivery_windows.selected" theme="bootstrap" close-on-select="true">
-                                            <ui-select-match placeholder="Type to search...">
-                                                {{$item? $item.text : ''}}
-                                            </ui-select-match>
-                                            <ui-select-choices refresh-delay="300" repeat="delivery_window in delivery_windows.list | filter: $select.search">
-                                                {{delivery_window.text}}
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="margin">
-                                            Margin Price*
-                                        </label>
-                                        <input class="form-control" id="margin" ng-model="organization.margin" placeholder="Margin Price" required="" type="number" step="0.01">
-                                        </input>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="send_to_onfleet">
-                                            Send SMS to Confirm a Refill Schedule
-                                        </label>
-                                        <div class="switches clearfix">
-                                            <switch name="text_to_confirm" color="success" ng-model="organization.textToConfirm"></switch>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <hr/>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group pull-right">
-                                        <button class="btn btn-danger" type="button" ng-click="deleteOrganization()">
-                                            Delete Organization
-                                        </button>
-                                        <button class="btn btn-primary">
-                                            Edit Organization
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </ba-wizard-step>
-                    <ba-wizard-step form="userForm" title="Users in the Organization">
-                        <form name="userForm" ng-submit="completeOrganization()" novalidate>
-                            <div class="row">
-                                <div class="col-sm-5">
-                                    <label for="from">
-                                        Available Users
-                                    </label>
-                                    <select name="from[]" class="multiselect form-control" size="12" multiple="multiple" data-right="#multiselect_to_1" data-right-all="#right_All_1" data-right-selected="#right_Selected_1" data-left-all="#left_All_1" data-left-selected="#left_Selected_1">
-                                        <option ng-repeat="option in available_users" value="{{option.id}}">{{option.email}}</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-2">
-                                    <label for="from">
-                                    </label>
-                                    <button type="button" id="right_All_1" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
-                                    <button type="button" id="right_Selected_1" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
-                                    <button type="button" id="left_Selected_1" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                                    <button type="button" id="left_All_1" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
-                                </div>
-                                <div class="col-sm-5">
-                                    <label for="from">
-                                        Assigned Users
-                                    </label>
-                                    <select name="to[]" id="multiselect_to_1" class="form-control" size="12" multiple="multiple">
-                                        <option ng-repeat="option in organization.users" value="{{option.id}}">{{option.email}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <hr/>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group pull-right">
-                                        <button class="btn btn-danger" type="button" ng-click="deleteOrganization()">
-                                            Delete Organization
-                                        </button>
-                                        <button class="btn btn-primary" type="submit">
-                                            Complete Organization
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </ba-wizard-step>
-                </ba-wizard>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-md-12 hide-nav">
+      <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="Edit Organization">
+        <ba-wizard>
+          <ba-wizard-step form="basicForm" title="Basic Info">
+            <form name="basicForm" ng-submit="editOrganization()">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="name">
+                      Name*
+                    </label>
+                    <input class="form-control" id="name" ng-model="organization.name" placeholder="Name" required="" type="text">
+                    </input>
+                  </div>
+                  <div class="form-group">
+                    <label for="to_deliver_on">
+                      Allowed Delivery Windows*
+                    </label>
+                    <ui-select multiple ng-model="delivery_windows.selected" theme="bootstrap" close-on-select="true">
+                      <ui-select-match placeholder="Type to search...">
+                        {{$item? $item.text : ''}}
+                      </ui-select-match>
+                      <ui-select-choices refresh-delay="300" repeat="delivery_window in delivery_windows.list | filter: $select.search">
+                        {{delivery_window.text}}
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                  <div class="form-group">
+                    <label for="margin">
+                      Margin Price*
+                    </label>
+                    <input class="form-control" id="margin" ng-model="organization.margin" placeholder="Margin Price" required="" type="number" step="0.01">
+                    </input>
+                  </div>
+                  <div class="form-group">
+                    <label for="send_to_onfleet">
+                      Send SMS to Confirm a Refill Schedule
+                    </label>
+                    <div class="switches clearfix">
+                      <switch name="text_to_confirm" color="success" ng-model="organization.textToConfirm"></switch>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <hr/>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group pull-right">
+                    <button class="btn btn-danger" type="button" ng-click="deleteOrganization()">
+                      Delete Organization
+                    </button>
+                    <button class="btn btn-primary">
+                      Edit Organization
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ba-wizard-step>
+          <ba-wizard-step form="userForm" title="Users in the Organization">
+            <form name="userForm" ng-submit="completeOrganization()" novalidate>
+              <div class="row">
+                <div class="col-sm-5">
+                  <label for="from">
+                    Available Users
+                  </label>
+                  <select name="from[]" class="multiselect form-control" size="12" multiple="multiple" data-right="#multiselect_to_1" data-right-all="#right_All_1" data-right-selected="#right_Selected_1" data-left-all="#left_All_1" data-left-selected="#left_Selected_1">
+                    <option ng-repeat="option in available_users" value="{{option.id}}">{{option.email}}</option>
+                  </select>
+                </div>
+                <div class="col-sm-2">
+                  <label for="from">
+                  </label>
+                  <button type="button" id="right_All_1" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+                  <button type="button" id="right_Selected_1" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                  <button type="button" id="left_Selected_1" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                  <button type="button" id="left_All_1" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+                </div>
+                <div class="col-sm-5">
+                  <label for="from">
+                    Assigned Users
+                  </label>
+                  <select name="to[]" id="multiselect_to_1" class="form-control" size="12" multiple="multiple">
+                    <option ng-repeat="option in organization.users" value="{{option.id}}">{{option.email}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <hr/>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group pull-right">
+                    <button class="btn btn-danger" type="button" ng-click="deleteOrganization()">
+                      Delete Organization
+                    </button>
+                    <button class="btn btn-primary" type="submit">
+                      Complete Organization
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ba-wizard-step>
+        </ba-wizard>
+      </div>
     </div>
+  </div>
 </div>
