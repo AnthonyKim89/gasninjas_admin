@@ -2,10 +2,13 @@
 
 (function() {
 
+  angular.module('GasNinjasAdmin.components.auth')
+    .factory('Auth', AuthService);
+
   function AuthService($location, $http, $cookies, $q, appConfig, Util, UserService) {
     var safeCb = Util.safeCb;
     var currentUser = {};
-    var userRoles = appConfig.userRoles || [];
+    // var userRoles = appConfig.userRoles || [];
 
     if ($cookies.get('token') && $location.path() !== '/logout') {
       currentUser = UserService.getCurrent();
@@ -187,7 +190,7 @@
        */
       hasRole: function(role, callback) {
         var hasRole = function(r, h) {
-          return userRoles.indexOf(r) >= userRoles.indexOf(h);
+          return r && r.indexOf(h) !== -1;
         };
 
         if (arguments.length < 2) {
@@ -236,7 +239,4 @@
 
     return Auth;
   }
-
-  angular.module('GasNinjasAdmin.components.auth')
-    .factory('Auth', AuthService);
 })();

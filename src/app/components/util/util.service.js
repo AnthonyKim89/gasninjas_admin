@@ -1,6 +1,9 @@
 'use strict';
 
 (function() {
+  angular.module('GasNinjasAdmin.components.util')
+    .factory('Util', UtilService)
+    .service('DynamicState', DynamicStateService);
 
   /**
    * The Util service is for thin, globally reusable, utility functions
@@ -65,6 +68,22 @@
     return Util;
   }
 
-  angular.module('GasNinjasAdmin.components.util')
-    .factory('Util', UtilService);
+  function DynamicStateService() {
+    this.init = function() {
+      this.arrDynamicStates = [];
+    };
+
+    this.init.prototype.state = function(name, options) {
+      this.arrDynamicStates.push({
+        name: name,
+        options: options
+      });
+
+      return this;
+    };
+
+    this.init.prototype.getAll = function() {
+      return this.arrDynamicStates;
+    };
+  }
 })();

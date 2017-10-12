@@ -3,9 +3,9 @@
 
   .constant("appConfig", {
     "userRoles": [
-      "guest",
-      "user",
-      "admin"
+      "driver",
+      "admin",
+      "superadmin"
     ],
     "SERVER_URL": window.SERVER_URL,
     "API_URL": window.API_URL,

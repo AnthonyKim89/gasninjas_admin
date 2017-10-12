@@ -1,0 +1,48 @@
+<div class="horizontal-scroll">
+  <div class="form-group select-page-size-wrap ">
+    <label>Items per page
+      <select class="form-control selectpicker show-tick" title="Rows on page" selectpicker
+              ng-model="pagination.perPage" ng-options="i for i in pagination.perPagePresets">
+      </select>
+    </label>
+  </div>
+  <table class="table">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" >#</th>
+      <th >Name</th>
+      <th >Description</th>
+      <th >Assigned Users</th>
+      <th >Action</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><input ng-model="pagination.urlParams.query_name" placeholder="Search Name" class="input-sm form-control search-input"
+                 type="search"/></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="role in pagination.items" ng-click="viewUser(role.id)" class="table-row-clickable">
+      <td class="table-id">{{role.id}}</td>
+      <td>{{role.name}}</td>
+      <td>{{role.description}}</td>
+      <td>{{role.assigned_users}}</td>
+      <td>
+        <div class="buttons" ng-show="!rowform.$visible">
+          <button class="btn btn-primary editable-table-button btn-xs" ng-click="editRole(role.id)">Edit</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="5" class="text-center">
+        <bgf-pagination url="pagination.apiUrl" url-params="pagination.urlParams" auto-presets="false" collection="pagination.items" page="pagination.page" per-page="pagination.perPage" per-page-presets="pagination.perPagePresets" link-group-size="2" template-url="app/pages/users/paginate/paginate-users.html"></bgf-pagination>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

@@ -1,78 +1,73 @@
 <div class="widgets">
-
-    <div class="row">
-        <div class="col-md-12">
-            <div ba-panel ba-panel-title="Edit User" ba-panel-class="with-scroll">
-                <ba-wizard>
-                    <ba-wizard-step title="Personal info" form="personalInfoForm">
-                        <form name="personalInfoForm" novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group has-feedback"
-                                         ng-class="{'has-error': personalInfoForm.username.$invalid && (personalInfoForm.username.$dirty || personalInfoForm.$submitted)}">
-                                        <label for="fullname">Full Name</label>
-                                        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" ng-model="personalInfo.fullname" required>
-                                        <span class="help-block error-block basic-block">Required</span>
-                                    </div>
-                                    <div class="form-group" ng-class="{'has-error': personalInfoForm.email.$invalid && (personalInfoForm.email.$dirty || personalInfoForm.$submitted)}">
-                                        <label for="email">Email address</label>
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" ng-model="personalInfo.email" required>
-                                        <span class="help-block error-block basic-block">Proper email required</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group has-feedback"
-                                         ng-class="{'has-error': personalInfoForm.phone.$invalid && (personalInfoForm.phone.$dirty || personalInfoForm.$submitted)}">
-                                        <label for="phone">Phone</label>
-                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" ng-model="personalInfo.phone" required>
-                                        <span class="help-block error-block basic-block">Required</span>
-                                    </div>
-                                    <div class="form-group has-feedback"
-                                         ng-class="{'has-error': personalInfoForm.device.$invalid && (personalInfoForm.device.$dirty || personalInfoForm.$submitted)}">
-                                        <label for="device">Device</label>
-                                        <input type="text" class="form-control" id="device" name="device" placeholder="Device" ng-model="personalInfo.device" required>
-                                        <span class="help-block error-block basic-block">Required</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </ba-wizard-step>
-                    <ba-wizard-step title="Payments" form="productInfoForm">
-                        <form name="productInfoForm" novalidate>
-                            <div class="row">
-							    <div class="col-md-12">
-							      	<div ba-panel ba-panel-title="" ba-panel-class="with-scroll">
-							        	<div include-with-scope="app/pages/users/widgets/smarttable-payments.html"></div>
-							      	</div>
-							    </div>
-							</div>
-                        </form>
-                    </ba-wizard-step>
-                    <ba-wizard-step title="Vehicles"  form="vehicleInfoForm">
-                        <form name="vehicleInfoForm" novalidate>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div ba-panel ba-panel-title="" ba-panel-class="with-scroll">
-                                        <div include-with-scope="app/pages/users/widgets/smarttable-vehicles.html"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </ba-wizard-step>
-                    <ba-wizard-step title="Orders"  form="orderInfoForm">
-                        <form name="orderInfoForm" novalidate>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div ba-panel ba-panel-title="" ba-panel-class="with-scroll">
-                                        <div include-with-scope="app/pages/users/widgets/smarttable-orders.html"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </ba-wizard-step>
-                </ba-wizard>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div ba-panel ba-panel-title="Edit User" ba-panel-class="with-scroll">
+        <ba-wizard>
+          <ba-wizard-step title="Personal info" form="personalInfoForm">
+            <form name="personalInfoForm" novalidate>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group has-feedback" ng-class="{'has-error': personalInfoForm.username.$invalid && (personalInfoForm.username.$dirty || personalInfoForm.$submitted)}">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" ng-model="personalInfo.fullname" required>
+                    <span class="help-block error-block basic-block">Required</span>
+                  </div>
+                  <div class="form-group" ng-class="{'has-error': personalInfoForm.email.$invalid && (personalInfoForm.email.$dirty || personalInfoForm.$submitted)}">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" ng-model="personalInfo.email" required>
+                    <span class="help-block error-block basic-block">Proper email required</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group has-feedback" ng-class="{'has-error': personalInfoForm.phone.$invalid && (personalInfoForm.phone.$dirty || personalInfoForm.$submitted)}">
+                    <label for="phone">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" ng-model="personalInfo.phone" required>
+                    <span class="help-block error-block basic-block">Required</span>
+                  </div>
+                  <div class="form-group has-feedback" ng-class="{'has-error': personalInfoForm.device.$invalid && (personalInfoForm.device.$dirty || personalInfoForm.$submitted)}">
+                    <label for="device">Device</label>
+                    <input type="text" class="form-control" id="device" name="device" placeholder="Device" ng-model="personalInfo.device" required>
+                    <span class="help-block error-block basic-block">Required</span>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ba-wizard-step>
+          <ba-wizard-step title="Payments" form="productInfoForm">
+            <form name="productInfoForm" novalidate>
+              <div class="row">
+                <div class="col-md-12">
+                  <div ba-panel ba-panel-title="" ba-panel-class="with-scroll">
+                    <div include-with-scope="app/pages/users/widgets/smarttable-payments.html"></div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ba-wizard-step>
+          <ba-wizard-step title="Vehicles" form="vehicleInfoForm">
+            <form name="vehicleInfoForm" novalidate>
+              <div class="row">
+                <div class="col-md-12">
+                  <div ba-panel ba-panel-title="" ba-panel-class="with-scroll">
+                    <div include-with-scope="app/pages/users/widgets/smarttable-vehicles.html"></div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ba-wizard-step>
+          <ba-wizard-step title="Orders" form="orderInfoForm">
+            <form name="orderInfoForm" novalidate>
+              <div class="row">
+                <div class="col-md-12">
+                  <div ba-panel ba-panel-title="" ba-panel-class="with-scroll">
+                    <div include-with-scope="app/pages/users/widgets/smarttable-orders.html"></div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ba-wizard-step>
+        </ba-wizard>
+      </div>
     </div>
-
+  </div>
 </div>

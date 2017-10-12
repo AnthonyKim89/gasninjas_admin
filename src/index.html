@@ -33,7 +33,7 @@
 </head>
 <body>
 <div class="body-bg"></div>
-<main ng-if="$pageFinishedLoading" ng-class="{ 'menu-collapsed': $baSidebarService.isMenuCollapsed() }">
+<main ng-if="$pageFinishedLoading && $appFinishedLoading" ng-class="{ 'menu-collapsed': $baSidebarService.isMenuCollapsed() }">
 
   <ba-sidebar></ba-sidebar>
   <page-top></page-top>
@@ -48,7 +48,7 @@
   <footer class="al-footer clearfix">
     <div class="al-footer-right">Created with <i class="ion-heart"></i></div>
     <div class="al-footer-main clearfix">
-      <div class="al-copy">GasNinjas Admin 2016</div>
+      <div class="al-copy">GasNinjas Admin 2017</div>
       <ul class="al-share clearfix">
         <li><i class="socicon socicon-facebook"></i></li>
         <li><i class="socicon socicon-twitter"></i></li>
@@ -61,7 +61,7 @@
   <back-top></back-top>
 </main>
 
-<div id="preloader" ng-show="!$pageFinishedLoading">
+<div id="preloader" ng-show="!$pageFinishedLoading || !$appFinishedLoading">
   <div></div>
 </div>
 

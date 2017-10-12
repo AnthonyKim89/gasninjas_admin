@@ -13,33 +13,38 @@
         }
 
         if (typeof next.authenticate === 'string') {
-          Auth.hasRole(next.authenticate, _.noop)
-            .then(function(has) {
-              if (has) {
-                return;
-              }
+          Auth.isLoggedIn(_.noop)
+            .then(function(is) {
+              if (is) {
+                Auth.hasRole(next.authenticate, _.noop)
+                  .then(function(has) {
+                    if (has) {
+                      return;
+                    }
 
-              event.preventDefault();
-              return Auth.isLoggedIn(_.noop)
-                .then(function(is) {
-                  if (is) {
+                    event.preventDefault();
                     $state.go('dashboard');
-                  }else {
-                    location.href = 'auth.html';
-                  }
-                });
+                  });
+              } else {
+                fnForceLogin(event);
+              }
             });
+
         } else {
           Auth.isLoggedIn(_.noop)
             .then(function(is) {
               if (is) {
                 return;
+              } else {
+                fnForceLogin(event);
               }
-
-              event.preventDefault();
-              location.href = 'auth.html';
             });
         }
       });
+
+      function fnForceLogin(event) {
+        event.preventDefault();
+        location.href = 'auth.html';
+      }
     });
 })();
