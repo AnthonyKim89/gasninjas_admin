@@ -1,0 +1,7 @@
+<button ng-repeat="role in value" class="btn btn-xs btn-noscale {{arr_usertype_styles[role.alias]}}"
+ ui-sref="users.roles-edit({id: role.id})">
+	{{role.alias}}
+</button>
+<button class="btn btn-xs btn-noscale btn-default" ui-sref="users.roles-list">
+	<i class="ion-plus font-x2"></i>
+</button>

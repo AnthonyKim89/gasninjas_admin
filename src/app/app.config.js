@@ -3,6 +3,8 @@
 
   .constant("appConfig", {
     "userRoles": [
+      "user",
+      "B2B",
       "driver",
       "admin",
       "superadmin"

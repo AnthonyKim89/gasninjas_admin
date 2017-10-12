@@ -11,8 +11,11 @@
   /** @ngInject */
   function UserListCtrl($scope, $state, appConfig) {
     $scope.viewUser = fnViewUser;
+    $scope.init = fnInit;
 
-    $scope.init = function() {
+    $scope.init();
+
+    function fnInit() {
       $scope.pagination = {
         apiUrl: appConfig.API_URL + '/users/list_users',
         urlParams: {
@@ -27,9 +30,7 @@
         perPagePresets: [5, 10, 20, 50, 100],
         items: [],
       };
-    };
-
-    $scope.init();
+    }
 
     function fnViewUser(id) {
       $state.go('users.edit', { id: id });
