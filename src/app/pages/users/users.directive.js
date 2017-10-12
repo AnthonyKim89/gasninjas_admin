@@ -22,7 +22,7 @@
       templateUrl: "app/pages/users/widgets/directive-userrole.html",
       controller: function($scope) {
         $scope.arr_usertype_styles = {
-          'B2B': 'btn-warning',
+          'b2b': 'btn-warning',
           'driver': 'btn-info',
           'admin': 'btn-primary',
           'superadmin': 'btn-danger'
