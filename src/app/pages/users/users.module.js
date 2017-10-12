@@ -1,6 +1,7 @@
 /**
  * @author Anthony
  * created on 06.08.2016
+ * modified on the Oct 12, 2017 - User Role
  */
 (function() {
   'use strict';
