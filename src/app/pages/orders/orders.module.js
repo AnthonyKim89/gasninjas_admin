@@ -90,7 +90,7 @@
             controller: 'ScheduleEditCtrl',
             title: 'Manage Schedules',
             params: {
-              order: null
+              schedule: null
             },
             authenticate: true
           });

@@ -17,6 +17,7 @@
       completeOrder: {method: 'PUT', url: appConfig.API_URL + '/refills/complete/:id'},
       deleteOrder: {method: 'POST', url: appConfig.API_URL + '/refills/delete/:id'},
       getPrices: {method: 'POST', url: appConfig.API_URL + '/prices/find_new/:zip'},
+      editSchedule: {method: 'PUT', url: appConfig.API_URL + '/refills/edit_schedule/:id'},
       deleteSchedule: {method: 'POST', url: appConfig.API_URL + '/refills/delete_schedule/:id'},
     });
   }
