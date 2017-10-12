@@ -2,21 +2,28 @@
  * @author Anthony
  * created on the Oct 12, 2017
  */
-(function () {
+(function() {
   'use strict';
 
   angular.module('GasNinjasAdmin')
     .run(appRun);
 
   /** @ngInject */
-  function appRun($rootScope, $q, $timeout, Auth) {
-    var whatToWait = [
-      Auth.isLoggedIn(_.noop)
-    ];
+  function appRun($rootScope, $q, $timeout, $location, $state, Auth) {
+    var whatToWait = [];
 
-    $q.all(whatToWait).then(function () {
-      $rootScope.$appFinishedLoading = true;
-    });
+    if ($location.absUrl().indexOf('auth.html') == -1) {
+      whatToWait.push(Auth.isLoggedIn(_.noop));
+      $q.all(whatToWait).then(function() {
+        if (Auth.isLoggedIn()) {
+          $rootScope.$appFinishedLoading = true;
+          
+          if (!$location.url())
+            $state.go('dashboard');
+        } else
+          location.href = 'auth.html';
+      });
+    }
   }
 
 })();
