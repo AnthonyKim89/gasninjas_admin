@@ -2,33 +2,70 @@
   <div ba-panel ba-panel-title="Push notification to Users" ba-panel-class="with-scroll">
     <form name="notificationForm" ng-submit="pushNotification()">
       <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="title">
-              Title
-            </label>
-            <input class="form-control" id="parking_address" ng-model="notification.title" placeholder="Title" type="text">
-            </input>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-sm-5">
+              <label for="from">
+                Available Users
+              </label>
+              <select name="from[]" class="multiselect form-control" size="12" multiple="multiple" data-right="#multiselect_to_1" data-right-all="#right_All_1" data-right-selected="#right_Selected_1" data-left-all="#left_All_1" data-left-selected="#left_Selected_1">
+                <option ng-repeat="option in available_users" value="{{option.id}}">{{option.email}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2">
+              <label for="from">
+              </label>
+              <button type="button" id="right_All_1" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+              <button type="button" id="right_Selected_1" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+              <button type="button" id="left_Selected_1" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+              <button type="button" id="left_All_1" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+            </div>
+            <div class="col-sm-5">
+              <label for="from">
+                Users to be notified
+              </label>
+              <select name="to[]" id="multiselect_to_1" class="form-control" size="12" multiple="multiple">
+                <option ng-repeat="option in assigned_users" value="{{option.id}}">{{option.email}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <hr/>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="message">
-              Message*
-            </label>
-            <textarea class="form-control" id="message" name="message" ng-model="notification.message" placeholder="Message to be sent" required="">
-            </textarea>
+
+
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="title">
+                  Title
+                </label>
+                <input class="form-control" id="parking_address" ng-model="notification.title" placeholder="Title" type="text">
+                </input>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
-            <button class="btn btn-primary" type="submit" ng-disabled="isSending">
-              Send
-            </button>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="message">
+                  Message*
+                </label>
+                <textarea class="form-control push-message" id="message" name="message" ng-model="notification.message" placeholder="Message to be sent" required="">
+                </textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <button class="btn btn-primary pull-right" type="submit" ng-disabled="isSending">
+                  Send
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
