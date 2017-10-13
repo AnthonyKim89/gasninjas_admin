@@ -11,7 +11,6 @@
   function DeliveryWindowEditCtrl($scope, $state, $ngBootbox, $timeout, $stateParams, toastr, lodash, DeliveryWindowService, DeliveryWindowUtil) {
     $scope.editDeliveryWindow = fnEditDeliveryWindow;
     $scope.initDateTimePicker = fnInitDateTimePicker;
-
     $scope.onDataLoaded = fnOnDataLoaded;
 
     DeliveryWindowService.getDeliveryWindowInfo({

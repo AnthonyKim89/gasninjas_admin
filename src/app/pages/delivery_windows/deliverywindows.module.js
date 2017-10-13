@@ -30,7 +30,7 @@
             abstract: true,
             title: 'Delivery Windows',
             sidebarMeta: {
-              icon: 'ion-person-stalker',
+              icon: 'ion-clock',
               order: 400,
             },
             authenticate: true
