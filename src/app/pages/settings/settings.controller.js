@@ -10,7 +10,6 @@
   /** @ngInject */
   function AppVersionCtrl($scope, $state, $http, $ngBootbox, toastr, appConfig, VersionService) {
     $scope.updateAppVersion = fnUpdateAppVersion;
-
     $scope.onDataLoaded = fnOnDataLoaded;
 
     $scope.version_info = {
@@ -19,7 +18,8 @@
       },
       android: {
         device: 'android'
-      }
+      },
+      loaded: false
     };
 
     $scope.isSubmitting = false;
@@ -58,6 +58,7 @@
             };
           }
         }
+        $scope.version_info.loaded = true;
       }
     }
   }

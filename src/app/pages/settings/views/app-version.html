@@ -25,7 +25,7 @@
                     <label for="ios_force_update">
                       Force Update
                     </label>
-                    <div class="switches clearfix">
+                    <div class="switches clearfix" ng-if="version_info.loaded">
                       <switch color="success" id="ios_force_update" name="ios_force_update" ng-model="version_info.ios.force_update">
                       </switch>
                     </div>
@@ -65,7 +65,7 @@
                     <label for="android_force_update">
                       Force Update
                     </label>
-                    <div class="switches clearfix">
+                    <div class="switches clearfix" ng-if="version_info.loaded">
                       <switch color="success" id="android_force_update" name="android_force_update" ng-model="version_info.android.force_update">
                       </switch>
                     </div>
