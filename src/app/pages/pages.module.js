@@ -20,6 +20,7 @@
       'GasNinjasAdmin.pages.orders',
       'GasNinjasAdmin.pages.b2bfuel',
       'GasNinjasAdmin.pages.delivery_windows',
+      'GasNinjasAdmin.pages.customercare',
       'GasNinjasAdmin.pages.settings',
     ])
     .config(routeConfig);

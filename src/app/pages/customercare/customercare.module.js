@@ -8,7 +8,7 @@
 
   var app = app || {};
 
-  angular.module('GasNinjasAdmin.pages.settings', [])
+  angular.module('GasNinjasAdmin.pages.customercare', [])
     .config(routeConfig)
     .run(moduleRun);
 
@@ -23,24 +23,24 @@
       .then(function(is) {
         var dynamic_state = new DynamicState.init();
 
-        if (Auth.hasRole('admin') || Auth.hasRole('superadmin')) {
-          dynamic_state.state('settings', {
-            url: '/settings',
+        if (Auth.isAdmin() || Auth.isSuperadmin()) {
+          dynamic_state.state('customercare', {
+            url: '/customer-interaction',
             template: '<ui-view></ui-view>',
             abstract: true,
-            title: 'Settings',
+            title: 'Customer Care',
             sidebarMeta: {
-              icon: 'ion-android-settings',
-              order: 999,
+              icon: 'ion-chatbubble-working',
+              order: 900,
             },
             authenticate: true
-          }).state('settings.app-version', {
-            url: '/app-version',
-            templateUrl: 'app/pages/settings/views/app-version.html',
-            controller: 'AppVersionCtrl',
-            title: 'App Version',
+          }).state('customercare.notification', {
+            url: '/notification',
+            templateUrl: 'app/pages/customercare/views/notification.html',
+            controller: 'PushNotificationCtrl',
+            title: 'Push Notification',
             sidebarMeta: {
-              order: 100,
+              order: 1,
             },
             authenticate: true
           });
