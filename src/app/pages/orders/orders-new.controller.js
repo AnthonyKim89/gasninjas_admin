@@ -166,7 +166,7 @@
 
       $scope.isSubmitting = true;
       OrderService.addNewOrder(data, fnCallbackAddNew);
-      
+
       return false;
     }
 
@@ -188,24 +188,18 @@
         organization_id = $scope.organizations.selected.id;
       }
 
-      $http({
-        method: 'GET',
-        url: appConfig.API_URL + '/users/list_users/' + organization_id,
-        params: {
-          query_email: $select ? $select.search : '',
-          page: $scope.users.page,
-          limit: 10
-        }
-      }).then(function(response) {
+      UserService.getUserList({ organization_id: organization_id }, {
+        query_email: $select ? $select.search : '',
+        page: $scope.users.page,
+        limit: 10
+      }).$promise.then(function(response) {
         $scope.users.page++;
-        $scope.users.list = $scope.users.list.concat(response.data);
-        if (response.data.length < 10)
+        $scope.users.list = $scope.users.list.concat(response);
+        if (response.length < 10)
           $scope.users.hasMore = false;
-      }, function(response) {
-        if (response.status === 404) {
-          $scope.users.hasMore = false;
-        }
-      })['finally'](function() {
+        $scope.users.loading = false;
+      }).catch(function(response) {
+        $scope.users.hasMore = false;
         $scope.users.loading = false;
       });
     }

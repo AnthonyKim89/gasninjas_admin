@@ -11,7 +11,7 @@
               <ui-select-match placeholder="Type to search for organizations...">
                 {{$select.selected.name}}
               </ui-select-match>
-              <ui-select-choices refresh="fetchOrganizations($select)" refresh-delay="300" repeat="organization in organizations.list | filter: $select.search">
+              <ui-select-choices refresh="fetchOrganizations($select)" repeat="organization in organizations.list | filter: $select.search">
                 {{organization.name}}
                 <div ng-if="$index == $select.items.length-1 && organizations.hasMore">
                   <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="organizations.loading" ng-mouseover="fetchOrganizations($select, $event);" style="width: 100%; margin-top: 5px;">

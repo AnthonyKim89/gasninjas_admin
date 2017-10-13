@@ -30,7 +30,7 @@
             abstract: true,
             title: 'Orders',
             sidebarMeta: {
-              icon: 'ion-pull-request',
+              icon: 'ion-flame',
               order: 300,
             },
             authenticate: true
