@@ -18,6 +18,7 @@
       'GasNinjasAdmin.pages.organizations',
       'GasNinjasAdmin.pages.users',
       'GasNinjasAdmin.pages.orders',
+      'GasNinjasAdmin.pages.b2bfuel',
       'GasNinjasAdmin.pages.delivery_windows',
       'GasNinjasAdmin.pages.settings',
     ])

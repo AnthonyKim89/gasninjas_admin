@@ -1,0 +1,79 @@
+<div class="widgets">
+  <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="B2b New Assignment">
+    <form name="b2bAssignmentForm" ng-submit="addB2bAssignment()">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group" ng-show="isAdmin">
+            <label for="driver">
+              Driver*
+            </label>
+            <ui-select ng-model="drivers.selected" theme="bootstrap" ng-if="drivers.list && drivers.list.length > 1">
+              <ui-select-match placeholder="Driver..">
+                {{$select.selected.fullname}}
+              </ui-select-match>
+              <ui-select-choices repeat="item in drivers.list | filter: $select.search">
+                {{item.fullname}}
+                <div ng-if="$index == $select.items.length-1 && b2b_customers.hasMore">
+                  <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="b2b_customers.loading" ng-mouseover="fetchDrivers($select, $event);" style="width: 100%; margin-top: 5px;">
+                    Load more...
+                  </button>
+                </div>
+              </ui-select-choices>
+            </ui-select>
+            <span class="form-control" type="text" ng-show="drivers.list && drivers.list.length == 1">{{drivers.list[0].fullname}}</span>
+          </div>
+          <div class="form-group">
+            <label for="customers">
+              B2B Customer*
+            </label>
+            <ui-select ng-model="b2b_customers.selected" theme="bootstrap">
+              <ui-select-match placeholder="Search for B2B customers...">
+                {{$select.selected.email}}
+              </ui-select-match>
+              <ui-select-choices refresh="fetchB2BCustomers($select)" repeat="item in b2b_customers.list | filter: $select.search">
+                {{item.email}}
+                <div ng-if="$index == $select.items.length-1 && b2b_customers.hasMore">
+                  <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="b2b_customers.loading" ng-mouseover="fetchB2BCustomers($select, $event);" style="width: 100%; margin-top: 5px;">
+                    Load more...
+                  </button>
+                </div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div class="form-group">
+            <label for="parking_address">
+              Parking Address*
+            </label>
+            <input class="form-control" id="parking_address" ng-model="b2b_assignment.parking_address" placeholder="Parking Address" required="" type="text">
+            </input>
+          </div>
+          <div class="form-group">
+            <label for="to_deliver_on">
+              To Deliver On*
+            </label>
+            <ui-select ng-model="delivery_windows.selected" theme="bootstrap">
+              <ui-select-match placeholder="Type to search...">
+                {{$select.selected.text}}
+              </ui-select-match>
+              <ui-select-choices refresh-delay="300" repeat="delivery_window in delivery_windows.list | filter: $select.search track by delivery_window.key">
+                {{delivery_window.text}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="google-maps" style="height: 500px"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <button class="btn btn-primary" type="submit" ng-disabled="isSubmitting">
+              Add New
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

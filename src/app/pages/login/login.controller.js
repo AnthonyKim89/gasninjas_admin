@@ -8,7 +8,7 @@
     .controller('LoginCtrl', LoginCtrl);
 
   /** @ngInject */
-  function LoginCtrl($scope, $state, toastr, Auth) {
+  function LoginCtrl($scope, $state, toastr, Auth, appConfig) {
     $scope.login = fnLogin;
 
     $scope.user = {};
@@ -17,10 +17,9 @@
       Auth.login({
         email: $scope.user.email,
         password: $scope.user.password
-      }).then(function(){
+      }).then(function(currentUser) {
         location.href = 'index.html';
-      }).catch(function(error){
-        console.error('Failed to log in', error);
+      }).catch(function(error) {
         if (error && error.message) {
           toastr.error(error.message);
         } else {

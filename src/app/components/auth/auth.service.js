@@ -32,21 +32,33 @@
         return login_promise.then(function(response) {
             if (!response.success) {
               throw (response);
-            } else {
-              if (response && response.data)
-                $cookies.put('token', response.data.token);
+            } else if (response && response.data){
+              $cookies.put('token', response.data.token);
               currentUser = UserService.getCurrent();
               return currentUser.$promise;
+            } else {
+              throw ('Unknown Response');
             }
           })
           .then(function(user) {
-            safeCb(callback)(null, user);
-            return user;
+            var isAllowed = false;
+
+            angular.forEach(user.role, function(role, index) {
+              if (appConfig.userRoles.indexOf(role) !== -1)
+                isAllowed = true;
+            });
+
+            if (isAllowed) {
+              safeCb(callback)(null, user);
+              return user;
+            } else {
+              throw({message: 'You are not authorized!'})
+            }
           })
           .catch(function(err) {
             Auth.logout();
-            safeCb(callback)(err.data);
-            return $q.reject(err.data);
+            safeCb(callback)(err.data ? err.data : err);
+            return $q.reject(err.data ? err.data : err);
           });
       },
 
@@ -204,6 +216,16 @@
             return has;
           });
       },
+      /**
+       * Check if a user is a driver
+       *   (synchronous|asynchronous)
+       *
+       * @param  {Function|*} callback - optional, function(is)
+       * @return {Bool|Promise}
+       */
+      isDriver: function() {
+        return Auth.hasRole.apply(Auth, [].concat.apply(['driver'], arguments));
+      },
 
       /**
        * Check if a user is an admin
@@ -223,8 +245,8 @@
        * @param  {Function|*} callback - optional, function(is)
        * @return {Bool|Promise}
        */
-      isManager: function() {
-        return Auth.hasRole.apply(Auth, [].concat.apply(['manager'], arguments));
+      isSuperadmin: function() {
+        return Auth.hasRole.apply(Auth, [].concat.apply(['superadmin'], arguments));
       },
 
       /**

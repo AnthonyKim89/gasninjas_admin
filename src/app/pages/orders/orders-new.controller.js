@@ -188,7 +188,8 @@
         organization_id = $scope.organizations.selected.id;
       }
 
-      UserService.getUserList({ organization_id: organization_id }, {
+      UserService.getUserList({
+        organization_id: organization_id,
         query_email: $select ? $select.search : '',
         page: $scope.users.page,
         limit: 10
