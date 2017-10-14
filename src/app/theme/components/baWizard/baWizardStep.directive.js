@@ -11,7 +11,7 @@
       transclude: true,
       require: '^baWizard',
       scope: {
-        form: '='
+        form: '=',
       },
       templateUrl:  'app/theme/components/baWizard/baWizardStep.html',
       link: function($scope, $element, $attrs, wizard) {
@@ -19,6 +19,7 @@
 
         var tab = {
           title: $attrs.title,
+          bMuteTitle: $attrs.hasOwnProperty("muteTitle") ? true : false,
           select: select,
           submit: submit,
           isComplete: isComplete,

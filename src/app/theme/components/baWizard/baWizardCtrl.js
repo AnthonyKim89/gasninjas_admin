@@ -46,6 +46,14 @@
       vm.selectTab(vm.tabNum - 1)
     };
 
+    $scope.$on('ba-wizard-next-step', function(){
+      vm.selectTab(vm.tabNum + 1);
+    });
+
+    $scope.$on('ba-wizard-prev-step', function(){
+      vm.selectTab(vm.tabNum - 1);
+    });
+
     function calcProgress() {
       vm.progress = ((vm.tabNum + 1) / vm.tabs.length) * 100;
     }
