@@ -17,7 +17,8 @@
       getCurrent: {method: 'GET', url: appConfig.API_URL + '/users/current'},
       getAvailableUsers: {method: 'GET', isArray:true, url: appConfig.API_URL + '/users/list_available_users'},
       login: {method: 'POST', url: appConfig.API_URL + '/users/login/'},
-      assignUserRoles: {method: 'PUT', url: appConfig.API_URL + '/users/assign_roles/:id'}
+      assignUserRoles: {method: 'PUT', url: appConfig.API_URL + '/users/assign_roles/:id'},
+      giveCredits: {method: 'POST', url: appConfig.API_URL + '/users/give_credits/'},
     });
   }
 

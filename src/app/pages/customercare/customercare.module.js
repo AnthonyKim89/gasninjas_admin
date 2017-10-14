@@ -43,6 +43,15 @@
               order: 1,
             },
             authenticate: true
+          }).state('customercare.add-balance', {
+            url: '/add-balance',
+            templateUrl: 'app/pages/customercare/views/add-balance.html',
+            controller: 'AddBalanceCtrl',
+            title: 'Give Credits',
+            sidebarMeta: {
+              order: 2,
+            },
+            authenticate: true
           });
         }
 

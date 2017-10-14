@@ -5,7 +5,8 @@
 (function() {
   'use strict';
   angular.module('GasNinjasAdmin.pages.settings')
-    .controller('PushNotificationCtrl', PushNotificationCtrl);
+    .controller('PushNotificationCtrl', PushNotificationCtrl)
+    .controller('AddBalanceCtrl', AddBalanceCtrl);
 
   /** @ngInject */
   function PushNotificationCtrl($scope, $state, $timeout, $q, $http, $ngBootbox, toastr, lodash, UserService, appConfig) {
@@ -15,19 +16,13 @@
     $scope.onDataLoaded = fnOnDataLoaded;
 
     $scope.notification = {
+      title: '',
       message: ''
     };
-    $scope.role = {
-      id: 1,
-      users: []
-    }
 
     $scope.isSending = false;
 
-    $q.all([
-      UserService.getRoleInfo({ id: $scope.role.id }).$promise,
-      UserService.getAvailableUsers({}, { purpose: 'role', id: $scope.role.id }).$promise
-    ]).then($scope.onDataLoaded);
+    UserService.getAvailableUsers({}).$promise.then($scope.onDataLoaded);
 
     function fnPushNotification() {
       var assigned_users = [];
@@ -64,7 +59,82 @@
     }
 
     function fnOnDataLoaded(data) {
-      $scope.available_users = data[1];
+      $scope.available_users = data;
+      $scope.initMultiSelect();
+    }
+
+    function fnInitMultiSelect() {
+      var elements = $('.multiselect');
+
+      if (elements.length) {
+        $('.multiselect').multiselect({
+          search: {
+            left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+            right: '<input type="text" name="q" class="form-control" placeholder="Search..." />'
+          }
+        });
+      } else {
+        $timeout(fnInitMultiSelect, 500);
+      }
+    }
+  }
+
+  function AddBalanceCtrl($scope, $state, $timeout, $q, $http, $ngBootbox, toastr, lodash, UserService, appConfig) {
+    $scope.submit = fnSubmit;
+
+    $scope.initMultiSelect = fnInitMultiSelect;
+    $scope.onDataLoaded = fnOnDataLoaded;
+
+    $scope.credit = {
+      amount: 0,
+      reason: ''
+    };
+
+    $scope.isSending = false;
+
+    UserService.getAvailableUsers({}).$promise.then($scope.onDataLoaded);
+
+    function fnSubmit() {
+      var assigned_users = [];
+      $("#multiselect_to_1 option").each(function() {
+        assigned_users.push($(this).val());
+      });
+
+      if (!assigned_users || !assigned_users.length) {
+        toastr.error('You need to select the users to be credited!');
+      } else if (!$scope.credit.amount) {
+        toastr.error('Please enter the amount to give credits.');
+      } else {
+        $ngBootbox.confirm('Are you sure you want to give credits to the selected users?')
+          .then(function() {
+            $scope.isSending = true;
+
+            var data = {
+              amount: $scope.credit.amount,
+              reason: $scope.credit.reason,
+              assigned_users: lodash.join(assigned_users, ',')
+            };
+
+            UserService.giveCredits({}, data).$promise
+              .then(function(response) {
+                $scope.isSending = false;
+                if (response.success) {
+                  toastr.info('Successfully added credits!');
+                  $state.go('users.list');
+                } else {
+                  toastr.error('Failed to add credits!');
+                }
+              }).catch(function() {
+                $scope.isSending = false;
+                toastr.error('Failed to add credits!');
+              });
+
+          });
+      }
+    }
+
+    function fnOnDataLoaded(data) {
+      $scope.available_users = data;
       $scope.initMultiSelect();
     }
 
