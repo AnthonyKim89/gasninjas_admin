@@ -1,11 +1,20 @@
 .table-panel {
-	height: 295px;
+  height: 295px;
 }
 
 .table-row-clickable {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 td.active {
-	color: $success;
+  color: $success;
+}
+
+td.currency.none {
+	color: transparent;
+
+  &:before {
+    content: "-";
+    color: $default-text;
+  }
 }
