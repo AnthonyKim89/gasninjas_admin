@@ -158,7 +158,7 @@
        */
       getCurrentUser: function(callback) {
         if (arguments.length === 0) {
-          return currentUser;
+          return currentUser.data;
         }
 
         var value = currentUser.hasOwnProperty('$promise') ? currentUser.$promise : currentUser;

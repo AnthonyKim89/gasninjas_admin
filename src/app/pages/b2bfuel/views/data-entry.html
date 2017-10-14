@@ -1,88 +1,18 @@
 <div class="widgets">
-  <div ba-panel ba-panel-title="B2B Data Entry" ba-panel-class="col-eq-height">
-    <form name="dataEntryForm" ng-submit="submit()">
-      <div class="row">
-        <div class="col-md-6 form-group" ng-show="isAdmin">
-          <label for="driver">
-            Driver*
-          </label>
-          <ui-select ng-model="drivers.selected" theme="bootstrap">
-            <ui-select-match placeholder="Driver..">
-              {{$select.selected.fullname}}
-            </ui-select-match>
-            <ui-select-choices repeat="item in drivers.list | filter: $select.search">
-              {{item.fullname}}
-              <div ng-if="$index == $select.items.length-1 && b2b_customers.hasMore">
-                <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="b2b_customers.loading" ng-mouseover="fetchDrivers($select, $event);" style="width: 100%; margin-top: 5px;">
-                  Load more...
-                </button>
-              </div>
-            </ui-select-choices>
-          </ui-select>
-        </div>
-        <div class="col-md-6 form-group" ng-show="!isAdmin || drivers.selected">
-          <label>B2B Assignment</label>
-          <p>
-            <b>Customer Name - </b> <span>{{b2b_data.user.fullname}}</span>
-          </p>
-          <p>
-            <b>Email Address - </b> <span>{{b2b_data.user.email}}</span>
-          </p>
-          <p>
-            <b>Location - </b> <span>{{b2b_data.parking_address}}</span>
-          </p>
-        </div>
+  <div class="row">
+    <div class="col-md-12 hide-nav">
+      <div ba-panel ba-panel-title="B2B Data Entry" ba-panel-class="col-eq-height">
+        <ba-wizard>
+          <ba-wizard-step title="Report Form" form="dataEntryForm" mute-title>
+            <form name="dataEntryForm" ng-submit="next()">
+              <div include-with-scope="app/pages/b2bfuel/widgets/form-dataentry.html"></div>
+            </form>
+          </ba-wizard-step>
+          <ba-wizard-step title="Review Page" form="reviewForm" mute-title>
+            <div include-with-scope="app/pages/b2bfuel/widgets/form-review.html"></div>
+          </ba-wizard-step>
+        </ba-wizard>
       </div>
-      <div class="row">
-        <hr/>
-      </div>
-      <div class="row" ng-show="!isAdmin || drivers.selected" ng-repeat="refill in b2b_refills track by $index">
-        <div class="col-md-4">
-          <div class="form-group">
-            <ui-select ng-model="refill.selected" theme="bootstrap" ng-hide="refill.selected && !refill.selected.tag">
-              <ui-select-match placeholder="Plate Number..">
-                {{$select.selected.tag}}
-              </ui-select-match>
-              <ui-select-choices repeat="vehicle in getVehiclesUnfilled(refill.selected) | filter: $select.search">
-                {{vehicle.tag}}
-                <div ng-if="$index == $select.items.length-1">
-                  <button class="btn btn-xs btn-danger btn-noscale" ng-click="fetchOrganizations($select, $event);" style="width: 100%; margin-top: 5px;">
-                    Add New...
-                  </button>
-                </div>
-              </ui-select-choices>
-            </ui-select>
-            <input class="form-control" type="text" ng-model="refill.tag" placeholder="New Plate Number" ng-show="refill.selected && !refill.selected.tag" ng-required="refill.selected && !refill.selected.tag">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <input class="form-control" type="number" ng-model="refill.gallon" placeholder="Gallons" required="" step="0.01">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label class="radio-inline custom-radio nowrap gas-type">
-              <input type="radio" name="gas_type_{{$index}}" ng-model="refill.gas_type" value="87">
-              <span>87</span>
-            </label>
-            <label class="radio-inline custom-radio nowrap gas-type">
-              <input type="radio" name="gas_type_{{$index}}" ng-model="refill.gas_type" value="93">
-              <span>93 (Gas Type)</span>
-            </label>
-          </div>
-        </div>
-        <hr />
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
-            <button class="btn btn-primary" type="submit" ng-disabled="isSumitting">
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

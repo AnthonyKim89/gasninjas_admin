@@ -6,49 +6,56 @@
   'use strict';
   angular.module('GasNinjasAdmin.pages.b2bfuel')
     .controller('B2BNewLocationCtrl', B2BNewLocationCtrl)
-    .controller('B2BDataEntryCtrl', B2BDataEntryCtrl)
-    .controller('B2BDataReviewCtrl', B2BDataReviewCtrl);
+    .controller('B2BDataEntryCtrl', B2BDataEntryCtrl);
 
   /** @ngInject */
-  function B2BDataEntryCtrl($scope, $state, $ngBootbox, $timeout, toastr, lodash, B2BService, UserService, Auth) {
+  function B2BDataEntryCtrl($scope, $state, $ngBootbox, $timeout, toastr, lodash, B2BService, UserService, OrderService, Auth) {
     $scope.onAssignmentLoaded = fnOnAssignmentLoaded;
-    $scope.submit = fnSubmit;
     $scope.getVehiclesUnfilled = fnGetVehiclesUnfilled;
     $scope.onB2BRefillsChanged = fnOnB2bRefillsChanged;
     $scope.fetchDrivers = fnFetchDrivers;
+    $scope.next = fnNext;
+    $scope.previous = fnPrevious;
+    $scope.submit = fnSubmit;
+    $scope.init = fnInit;
 
-    $scope.isAdmin = Auth.isAdmin() || Auth.isSuperadmin();
-
-    $scope.drivers = {
-      list: [],
-      page: 1,
-      selected: null,
-      loading: false,
-      hasMore: true,
-    };
-
-    $scope.b2b_customer = {};
-    $scope.b2b_vehicles = [];
-    $scope.b2b_vehicles_unfilled = []
-    $scope.isSumitting = false;
-
-    if ($scope.isAdmin) {
-      $scope.fetchDrivers();
-
-      $scope.$watch('drivers.selected', function(newVal, oldVal) {
-        if (newVal === oldVal) return;
-
-        B2BService.getAssignmentByDriverId({
-          driver_id: $scope.drivers.selected.id
-        }).$promise.then($scope.onAssignmentLoaded).catch($scope.onAssignmentLoaded);
-      });
-    } else {
-      B2BService.getAssignmentByDriverId({
-        driver_id: Auth.getCurrentUser().data.id
-      }).$promise.then($scope.onAssignmentLoaded).catch($scope.onAssignmentLoaded);
-    }
+    $scope.init();
 
     $scope.$watch('b2b_refills', $scope.onB2BRefillsChanged, true);
+
+    $scope.$watch('drivers.selected', function(newVal, oldVal) {
+      if (newVal === oldVal || !newVal || !newVal.id) return;
+
+      B2BService.getAssignmentByDriverId({
+        driver_id: newVal.id
+      }).$promise.then($scope.onAssignmentLoaded).catch($scope.onAssignmentLoaded);
+    }, true);
+
+    function fnInit() {
+      $scope.isAdmin = Auth.isAdmin() || Auth.isSuperadmin();
+      $scope.isValidatingForm = false;
+      $scope.isSubmitting = false;
+
+      $scope.drivers = {
+        list: [],
+        page: 1,
+        selected: null,
+        loading: false,
+        hasMore: true,
+      };
+
+      $scope.b2b_customer = {};
+      $scope.b2b_vehicles = [];
+      $scope.b2b_vehicles_unfilled = []
+
+      if ($scope.isAdmin) {
+        $scope.fetchDrivers();
+      } else {
+        B2BService.getAssignmentByDriverId({
+          driver_id: Auth.getCurrentUser().id
+        }).$promise.then($scope.onAssignmentLoaded).catch($scope.onAssignmentLoaded);
+      }
+    }
 
     function fnOnB2bRefillsChanged(newVal, oldVal) {
       if (newVal == oldVal) return;
@@ -57,6 +64,8 @@
       angular.forEach(newVal, function(item, index) {
         if (!item.selected)
           bHasUnfilledRow = true;
+        else if (item.selected.tag)
+          item.tag = item.selected.tag;
       });
 
       if (!bHasUnfilledRow) {
@@ -87,7 +96,6 @@
         $state.go('b2bfuel.new-location');
       } else {
         $scope.b2b_data = data.data;
-        console.log($scope.b2b_data);
         $scope.b2b_vehicles = data.vehicles;
 
         $scope.b2b_vehicles.push({
@@ -133,9 +141,123 @@
       });
     }
 
-    function fnSubmit() {
-      $scope.isSumitting = true;
+    function fnNext() {
+      /*var data = {
+        user_id: $scope.b2b_data.user_id,
+        delivery_window_id: $scope.b2b_data.delivery_window_id,
+        parking_address: $scope.b2b_data.parking_address,
+        latlong: $scope.b2b_data.lat + "," + $scope.b2b_data.lng,
+      };*/
 
+      $scope.isValidatingForm = true;
+
+      var geocoder = new google.maps.Geocoder;
+      geocoder.geocode({ latLng: new google.maps.LatLng($scope.b2b_data.lat, $scope.b2b_data.lng) }, function(results, status) {
+        if (status === google.maps.GeocoderStatus.OK) {
+          if (results[0]) {
+            var objZip = lodash.find(results[0].address_components, { types: ['postal_code'] });
+            var objCountry = lodash.find(results[0].address_components, { types: ['country'] });
+            var objCity = lodash.find(results[0].address_components, { types: ['locality'] });
+            var objStreetName = lodash.find(results[0].address_components, { types: ['route'] });
+            var objStreetNumber = lodash.find(results[0].address_components, { types: ['street_number'] });
+
+            $scope.b2b_data.zip = objZip ? objZip['long_name'] : '';
+            $scope.b2b_data.country = objCountry ? objCountry['long_name'] : '';
+            $scope.b2b_data.city = objCity ? objCity['long_name'] : '';
+            $scope.b2b_data.street_name = objStreetName ? objStreetName['long_name'] : '';
+            $scope.b2b_data.street_number = objStreetNumber ? objStreetNumber['long_name'] : '';
+
+            var data = {
+              zip: $scope.b2b_data.zip,
+              lat: $scope.b2b_data.lat,
+              lng: $scope.b2b_data.lng
+            };
+
+            OrderService.getPrices(data, fnCallbackGetPrices);
+          } else {
+            toastr.error('Could not parse the location.');
+            $scope.isValidatingForm = false;
+          }
+        }
+      });
+    }
+
+    function fnCallbackGetPrices(result) {
+      if (result && result.success) {
+        $scope.b2b_data.price_87 = result.prices['87'];
+        $scope.b2b_data.price_93 = result.prices['93']
+        $scope.b2b_data['87_id'] = result.prices['87_id'];
+        $scope.b2b_data['93_id'] = result.prices['93_id']
+
+        $scope.isValidatingForm = false;
+
+        $scope.b2b_data.gallons_87 = 0;
+        $scope.b2b_data.gallons_93 = 0;
+        $scope.b2b_data.total_gallons = 0;
+        $scope.b2b_data.average_gallons = 0;
+        $scope.b2b_data.total_fee = 0;
+        $scope.b2b_data.total_price = 0;
+
+        angular.forEach($scope.b2b_refills, function(refill, index) {
+          if (refill.tag) {
+            if (refill.gas_type == 87) {
+              $scope.b2b_data.gallons_87 += refill.gallon;
+              $scope.b2b_data.total_price += refill.gallon * $scope.b2b_data.price_87;
+            } else if (refill.gas_type == 93) {
+              $scope.b2b_data.gallons_93 += refill.gallon;
+              $scope.b2b_data.total_price += refill.gallon * $scope.b2b_data.price_93;
+            }
+            $scope.b2b_data.total_gallons += refill.gallon;
+          }
+        });
+
+        $scope.b2b_data.total_fee = $scope.b2b_data.delivery_window.price * ($scope.b2b_refills.length - 1);
+        $scope.b2b_data.average_gallons = parseFloat($scope.b2b_data.total_gallons / ($scope.b2b_refills.length - 1)).toFixed(2);
+
+        $scope.$broadcast('ba-wizard-next-step');
+      } else {
+        toastr.error('Failed to download the price for the area.');
+        $scope.isValidatingForm = false;
+      }
+    }
+
+    function fnPrevious() {
+      $scope.$broadcast('ba-wizard-prev-step');
+    }
+
+    function fnSubmit() {
+      $scope.isSubmitting = true;
+
+      delete $scope.b2b_data.id;
+      delete $scope.b2b_data.user;
+      delete $scope.b2b_data.delivery_window;
+      delete $scope.b2b_data.created_et;
+      delete $scope.b2b_data.modified_et;
+
+      $scope.b2b_refills.splice($scope.b2b_refills.length - 1, 1);
+
+      angular.forEach($scope.b2b_refills, function(item, index) {
+        delete $scope.b2b_refills[index].selected;
+      });
+
+      $scope.b2b_data.latlong = $scope.b2b_data.lat + "," + $scope.b2b_data.lng;
+
+      OrderService.registerB2BRefills({ b2b_data: $scope.b2b_data, b2b_refills: $scope.b2b_refills }).$promise
+      .then(fnSubmitCallback)
+      .catch(fnSubmitCallback);
+    }
+
+    function fnSubmitCallback(result) {
+      console.log(result);
+
+      if (result.success) {
+        toastr.info('Successfully reported the B2B refills.');
+      } else {
+        toastr.error(result.message ? result.message : 'Failed to report the B2B refills!');
+      }
+
+      $scope.$broadcast('ba-wizard-prev-step');
+      $scope.init();
     }
   }
 
@@ -170,7 +292,7 @@
       lng: 0,
     };
 
-    $scope.isSumitting = false;
+    $scope.isSubmitting = false;
 
     $scope.init = fnInit;
     $scope.fetchDrivers = fnFetchDrivers;
@@ -228,7 +350,7 @@
       } else {
         $scope.drivers.loading = false;
         $scope.drivers.hasMore = false;
-        $scope.drivers.list = [Auth.getCurrentUser().data];
+        $scope.drivers.list = [Auth.getCurrentUser()];
       }
 
       if (!$scope.drivers.list || !$scope.drivers.list.length) {
@@ -332,7 +454,7 @@
         return;
       }
 
-      $scope.isSumitting = true;
+      $scope.isSubmitting = true;
 
       $scope.b2b_assignment.driver_id = $scope.drivers.list.length === 1 ? $scope.drivers.list[0].id : $scope.drivers.selected.id;
       $scope.b2b_assignment.user_id = $scope.b2b_customers.selected.id;
@@ -342,7 +464,7 @@
     }
 
     function fnCallbackAddNew(result) {
-      $scope.isSubmitting = false;
+      $scope.isValidatingForm = false;
 
       if (result.success) {
         toastr.info('Successfully added a new B2B assignment!');
@@ -457,7 +579,4 @@
       });
     }
   }
-
-  function B2BDataReviewCtrl($scope, $state, $ngBootbox, $timeout, toastr, lodash, OrderService, Auth) {}
-
 })();

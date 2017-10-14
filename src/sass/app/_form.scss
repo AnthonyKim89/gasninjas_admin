@@ -600,3 +600,9 @@ label.gas-type {
     font-size: 18px;
   }
 }
+
+label.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

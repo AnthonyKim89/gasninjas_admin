@@ -51,12 +51,6 @@
               order: 100,
             },
             authenticate: true
-          }).state('b2bfuel.data-review', {
-            url: '/data-review',
-            templateUrl: 'app/pages/b2bfuel/views/data-review.html',
-            controller: 'B2BDataReviewCtrl',
-            title: 'Data Review',
-            authenticate: true
           });
         }
 

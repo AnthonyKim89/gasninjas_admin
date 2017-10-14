@@ -1,0 +1,122 @@
+<div class="row">
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="truncate">
+        Cars Filled
+      </label>
+      <span class="form-control">{{b2b_refills.length - 1}}</span>
+    </div>
+    <div class="form-group">
+      <label class="truncate">
+        Total 87 Gallons
+      </label>
+      <span class="form-control">{{b2b_data.gallons_87}}</span>
+    </div>
+    <div class="form-group">
+      <label class="truncate">
+        Total 93 Gallons
+      </label>
+      <span class="form-control">{{b2b_data.gallons_93}}</span>
+    </div>
+    <div class="form-group">
+      <label class="truncate">
+        Total Gallons Pumped
+      </label>
+      <span class="form-control">{{b2b_data.total_gallons}}</span>
+    </div>
+    <div class="form-group">
+      <label class="truncate hidden-xs">
+        Average Gallons Per Vehicle
+      </label>
+      <label class="truncate visible-xs">
+        Avg gal Per Vehicle
+      </label>
+      <span class="form-control">{{b2b_data.average_gallons}}</span>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="form-group">
+      <label class="truncate">
+        Price 87
+      </label>
+      <span class="form-control">{{b2b_data.price_87 | currency}}</span>
+    </div>
+    <div class="form-group">
+      <label class="truncate">
+        Price 93
+      </label>
+      <span class="form-control">{{b2b_data.price_93 | currency}}</span>
+    </div>
+    <div class="form-group">
+      <label class="truncate">
+        Total Price
+      </label>
+      <span class="form-control">{{b2b_data.total_price | currency}}</span>
+    </div>
+    <div class="form-group">
+      <label class="truncate">
+        Order Fee Total
+      </label>
+      <span class="form-control">{{b2b_data.total_fee | currency}}</span>
+    </div>
+    <div class="form-group">
+      <label class="truncate">
+        Grand Total Price
+      </label>
+      <span class="form-control">{{b2b_data.total_price + b2b_data.total_fee | currency}}</span>
+    </div>
+  </div>
+</div>
+<div class="row">
+	<hr />
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="horizontal-scroll">
+      <div class="form-group select-page-size-wrap ">
+        <label>
+        	List of refills
+        </label>
+      </div>
+      <table class="table">
+        <thead>
+          <tr class="sortable ">
+            <th class="table-id">#</th>
+            <th class="hidden-xs">Vehicle Tag</th>
+            <th class="visible-xs">Tag</th>
+            <th class="hidden-xs">Gallons</th>
+            <th class="visible-xs">Gal</th>
+            <th>Gas Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="refill in b2b_refills" ng-hide="!refill.tag">
+            <td class="table-id">{{$index + 1}}</td>
+            <td>{{refill.tag}}</td>
+            <td>{{refill.gallon}}</td>
+            <td>{{refill.gas_type}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <hr/>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group pull-left">
+      <button class="btn btn-secondary" ng-click="previous()">
+        Previous
+      </button>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group pull-right">
+      <button class="btn btn-primary" ng-click="submit()" ng-disabled="isSubmitting">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>
