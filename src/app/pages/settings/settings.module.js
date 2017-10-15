@@ -46,6 +46,19 @@
           });
         }
 
+        if (Auth.hasRole('superadmin')) {
+          dynamic_state.state('settings.zipcode-area', {
+            url: '/zipcode-area',
+            templateUrl: 'app/pages/settings/views/zipcode-area.html',
+            controller: 'ZipcodeAreaCtrl',
+            title: 'Zipcode Area',
+            sidebarMeta: {
+              order: 200,
+            },
+            authenticate: true
+          });
+        }
+
         var states = dynamic_state.getAll();
         if (states.length > 0) {
           angular.forEach(states, function(state, index) {

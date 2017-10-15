@@ -11,7 +11,7 @@
     .controller('DashboardLineChartCtrl', DashboardLineChartCtrl);
 
   /** @ngInject */
-  function DashboardLineChartCtrl($scope, $http, appConfig, baConfig, layoutPaths, baUtil) {
+  function DashboardLineChartCtrl($scope, $http, appConfig, baConfig, layoutPaths, baUtil, ZipcodeService) {
     var layoutColors = baConfig.colors;
     var graphColor = baConfig.theme.blur ? '#000000' : layoutColors.primary;
 
@@ -38,7 +38,7 @@
     //   $scope.chart.zoomChart();
     // }
     // 
-    
+
     $scope.$watch('zipcodes.list', function(newVal, oldVal) {
       if (newVal == oldVal || $scope.zipcodes.selected) return;
 
@@ -147,26 +147,20 @@
 
       $scope.zipcodes.loading = true;
 
-      $http({
-        method: 'GET',
-        url: appConfig.API_URL + '/zipcodes/list_zipcodes/',
-        params: {
-          query_zipcode: $select ? $select.search : '',
-          page: $scope.zipcodes.page,
-          limit: 10
-        }
-      }).then(function(response) {
+      ZipcodeService.getZipcodeList({
+        query_zipcode: $select ? $select.search : '',
+        page: $scope.zipcodes.page,
+        limit: 10
+      }).$promise.then(function(data) {
         $scope.zipcodes.page++;
-        $scope.zipcodes.list = $scope.zipcodes.list.concat(response.data);
-        if (response.data.length < 10)
+        $scope.zipcodes.list = $scope.zipcodes.list.concat(data);
+        $scope.zipcodes.loading = false;
+        if (data.length < 10)
           $scope.zipcodes.hasMore = false;
         else
           $scope.zipcodes.hasMore = true;
-      }, function(response) {
-        if (response.status === 404) {
-          $scope.zipcodes.hasMore = false;
-        }
-      })['finally'](function() {
+      }).catch(function() {
+        $scope.zipcodes.hasMore = false;
         $scope.zipcodes.loading = false;
       });
     }

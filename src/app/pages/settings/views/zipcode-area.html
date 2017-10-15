@@ -1,0 +1,43 @@
+<div class="widgets">
+  <div ba-panel="" ba-panel-class="col-eq-height" ba-panel-title="Update Zipcode Areas">
+    <form name="zipcodeAreaForm" ng-submit="submit()">
+      <div class="row" ng-repeat="item in area_updates track by $index">
+        <div class="col-xs-4 col-sm-4 col-md-3">
+          <div class="form-group">
+            <ui-select ng-model="item.selected" theme="bootstrap" ng-hide="item.selected && !item.selected.zipcode">
+              <ui-select-match placeholder="Zipcode..">
+                {{$select.selected.zipcode}}
+              </ui-select-match>
+              <ui-select-choices refresh="fetchZipcodes($select)" refresh-delay="300" repeat="zipcode in getZipcodesUnfilled(item.selected) | filter: $select.search">
+                {{zipcode.zipcode}}
+                <div ng-if="$index == $select.items.length-1">
+                  <button class="btn btn-xs btn-primary btn-noscale" style="width: 50%; margin-top: 5px;">
+                    Add New...
+                  </button>
+                  <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="zipcodes.loading" ng-mouseover="fetchZipcodes($select, $event);" style="width: 50%; margin-top: 5px;">
+                    Load more...
+                  </button>
+                </div>
+              </ui-select-choices>
+            </ui-select>
+            <input class="form-control" type="text" ng-model="item.zipcode" placeholder="New Zipcode" ng-show="item.selected && !item.selected.zipcode" ng-required="item.selected && !item.selected.zipcode">
+          </div>
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-9">
+          <div class="form-group">
+            <input class="form-control" type="text" ng-model="item.polygon" placeholder="Polygon" ng-required="$index < area_updates.length - 1">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group pull-right">
+            <button class="btn btn-primary" type="submit" ng-disabled="isSubmitting || !area_updates || area_updates.length <= 1">
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

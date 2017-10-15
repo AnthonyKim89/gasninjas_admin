@@ -43,7 +43,7 @@
         <ui-select-choices repeat="vehicle in getVehiclesUnfilled(refill.selected) | filter: $select.search">
           {{vehicle.tag}}
           <div ng-if="$index == $select.items.length-1">
-            <button class="btn btn-xs btn-danger btn-noscale" ng-click="fetchOrganizations($select, $event);" style="width: 100%; margin-top: 5px;">
+            <button class="btn btn-xs btn-danger btn-noscale" style="width: 100%; margin-top: 5px;">
               Add New...
             </button>
           </div>

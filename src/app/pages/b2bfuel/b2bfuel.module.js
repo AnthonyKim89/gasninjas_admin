@@ -30,7 +30,7 @@
             title: 'B2B Fuel',
             sidebarMeta: {
               icon: 'ion-model-s',
-              order: 999,
+              order: Auth.hasRole('driver') ? 1 : 900,
             },
             authenticate: true
           }).state('b2bfuel.data-entry', {
