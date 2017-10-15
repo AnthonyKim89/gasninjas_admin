@@ -19,10 +19,7 @@
           $rootScope.$appFinishedLoading = true;
 
           if (!$location.url()) {
-            if (Auth.hasRole('admin') || Auth.hasRole('superadmin'))
-              $state.go('dashboard');
-            else if (Auth.hasRole('driver'))
-              $state.go('b2bfuel.data-entry');
+            $state.go('dashboard');
           }
         } else
           location.href = 'auth.html';

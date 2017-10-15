@@ -27,6 +27,10 @@
           .go('login');
           // remove any stale tokens
           $cookies.remove('token');
+        } else if (response.status === 403) {
+          alert('You are not authorized to request this action.');
+          (state || (state = $injector.get('$state')))
+          .go('dashboard');
         }
         return $q.reject(response);
       }

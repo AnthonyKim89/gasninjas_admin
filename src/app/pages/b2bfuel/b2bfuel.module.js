@@ -54,6 +54,14 @@
           });
         }
 
+        if (Auth.hasRole('driver') && !Auth.hasRole('admin') && !Auth.hasRole('superadmin')) {
+          dynamic_state.state('dashboard', {
+            url: '/b2bfuel/data-entry',
+            template: '<ui-view></ui-view>',
+            redirectTo: 'b2bfuel.data-entry',
+          });
+        }
+
         var states = dynamic_state.getAll();
         if (states.length > 0) {
           angular.forEach(states, function(state, index) {
