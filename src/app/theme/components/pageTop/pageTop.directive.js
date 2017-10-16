@@ -12,7 +12,10 @@
   function pageTop() {
     return {
       restrict: 'E',
-      templateUrl: 'app/theme/components/pageTop/pageTop.html'
+      scope: {
+        currentUser: "="
+      },
+      templateUrl: 'app/theme/components/pageTop/pageTop.html',
     };
   }
 

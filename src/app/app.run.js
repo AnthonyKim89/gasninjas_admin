@@ -17,6 +17,7 @@
       $q.all(whatToWait).then(function() {
         if (Auth.isLoggedIn()) {
           $rootScope.$appFinishedLoading = true;
+          $rootScope.$currentUser = Auth.getCurrentUser();
 
           if (!$location.url()) {
             $state.go('dashboard');

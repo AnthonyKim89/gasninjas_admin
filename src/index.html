@@ -36,7 +36,7 @@
 <main ng-if="$pageFinishedLoading && $appFinishedLoading" ng-class="{ 'menu-collapsed': $baSidebarService.isMenuCollapsed() }">
 
   <ba-sidebar></ba-sidebar>
-  <page-top></page-top>
+  <page-top current-user="$currentUser"></page-top>
 
   <div class="al-main">
     <div class="al-content">
