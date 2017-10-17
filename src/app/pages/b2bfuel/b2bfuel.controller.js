@@ -96,7 +96,7 @@
       if ($scope.isAdmin) {
         $scope.fetchDrivers();
       } else {
-        B2BService.getAssignmentByDriverId({
+        B2BService.getAssignmentsByDriverId({
           driver_id: Auth.getCurrentUser().id
         }).$promise.then($scope.onAssignmentLoaded).catch($scope.onAssignmentLoaded);
       }
