@@ -9,8 +9,8 @@
       </ui-select-match>
       <ui-select-choices repeat="item in drivers.list | filter: $select.search">
         {{item.fullname}}
-        <div ng-if="$index == $select.items.length-1 && b2b_customers.hasMore">
-          <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="b2b_customers.loading" ng-mouseover="fetchDrivers($select, $event);" style="width: 100%; margin-top: 5px;">
+        <div ng-if="$index == $select.items.length-1 && drivers.hasMore">
+          <button class="btn btn-xs btn-danger btn-noscale" ng-disabled="drivers.loading" ng-mouseover="fetchDrivers($select, $event);" style="width: 100%; margin-top: 5px;">
             Load more...
           </button>
         </div>
@@ -18,16 +18,30 @@
     </ui-select>
   </div>
   <div class="col-sm-6 col-md-8 form-group" ng-show="!isAdmin || drivers.selected">
-    <label>B2B Assignment</label>
-    <p>
-      <b>Customer Name - </b> <span>{{b2b_data.user.fullname}}</span>
-    </p>
-    <p>
-      <b>Email Address - </b> <span>{{b2b_data.user.email}}</span>
-    </p>
-    <p>
-      <b>Location - </b> <span>{{b2b_data.parking_address}}</span>
-    </p>
+    <label>B2B Customer*</label>
+    <ui-select ng-model="b2b_customers.selected" theme="bootstrap" required="">
+      <ui-select-match placeholder="B2B Customer..">
+        {{$select.selected.fullname}}
+      </ui-select-match>
+      <ui-select-choices repeat="item in b2b_customers.list | filter: $select.search">
+        {{item.fullname}}({{item.email}})
+      </ui-select-choices>
+    </ui-select>
+    <br/>
+    <label>Location*</label>
+    <ui-select ng-model="b2b_assignments.selected" theme="bootstrap" required="">
+      <ui-select-match placeholder="Location of the Customer..">
+        {{$select.selected.parking_address}}
+      </ui-select-match>
+      <ui-select-choices repeat="item in b2b_assignments.list | filter: $select.search">
+        {{item.parking_address}}
+        <div ng-if="$index == $select.items.length-1">
+          <button class="btn btn-xs btn-primary btn-noscale" ui-sref="b2bfuel.new-location" style="width: 100%; margin-top: 5px;">
+            Add New...
+          </button>
+        </div>
+      </ui-select-choices>
+    </ui-select>
   </div>
 </div>
 <div class="row">

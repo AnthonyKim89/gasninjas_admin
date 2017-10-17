@@ -26,9 +26,37 @@
     $scope.$watch('drivers.selected', function(newVal, oldVal) {
       if (newVal === oldVal || !newVal || !newVal.id) return;
 
-      B2BService.getAssignmentByDriverId({
+      B2BService.getAssignmentsByDriverId({
         driver_id: newVal.id
       }).$promise.then($scope.onAssignmentLoaded).catch($scope.onAssignmentLoaded);
+    }, true);
+
+    $scope.$watch('b2b_customers.selected', function(newVal, oldVal) {
+      if (newVal == oldVal || !$scope.assignments_by_customer) return;
+
+      $scope.b2b_assignments.list = $scope.assignments_by_customer[newVal.id];
+
+      if ($scope.b2b_assignments.list && $scope.b2b_assignments.list.length)
+        $scope.b2b_assignments.selected = $scope.b2b_assignments.list[0];
+      else
+        $scope.b2b_assignments.selected = null;
+    }, true)
+
+    $scope.$watch('b2b_assignments.selected', function(newVal, oldVal) {
+      if (newVal == oldVal || !$scope.b2b_customers.selected || $scope.isValidatingForm) return;
+
+      $scope.b2b_data = newVal;
+      $scope.b2b_vehicles = $scope.b2b_customers.selected.vehicles;
+
+      $scope.b2b_vehicles.push({
+        tag: '',
+      });
+
+      $scope.b2b_refills = [{
+        selected: null,
+        gallon: '',
+        gas_type: 87
+      }];
     }, true);
 
     function fnInit() {
@@ -41,10 +69,27 @@
         page: 1,
         selected: null,
         loading: false,
-        hasMore: true,
+        hasMore: false,
       };
 
-      $scope.b2b_customer = {};
+      $scope.b2b_customers = {
+        list: [],
+        page: 1,
+        selected: null,
+        loading: false,
+        hasMore: false,
+      };
+
+      $scope.b2b_assignments = {
+        list: [],
+        page: 1,
+        selected: null,
+        loading: false,
+        hasMore: false,
+      };
+
+      $scope.assignments_by_customer = null;
+
       $scope.b2b_vehicles = [];
       $scope.b2b_vehicles_unfilled = []
 
@@ -90,23 +135,16 @@
       return b2b_vehicles_unfilled
     }
 
-    function fnOnAssignmentLoaded(data) {
-      if (!data.success) {
+    function fnOnAssignmentLoaded(response) {
+      if (!response.success) {
         toastr.error('You need to enter the B2B customer info first.');
         $state.go('b2bfuel.new-location');
       } else {
-        $scope.b2b_data = data.data;
-        $scope.b2b_vehicles = data.vehicles;
+        $scope.b2b_customers.list = response.customers;
+        $scope.assignments_by_customer = response.assignments;
 
-        $scope.b2b_vehicles.push({
-          tag: '',
-        });
-
-        $scope.b2b_refills = [{
-          selected: null,
-          gallon: '',
-          gas_type: 87
-        }];
+        if ($scope.b2b_customers.list && $scope.b2b_customers.list.length == 1)
+          $scope.b2b_customers.selected = $scope.b2b_customers.list[0];
       }
     }
 
@@ -189,7 +227,7 @@
         $scope.b2b_data['87_id'] = result.prices['87_id'];
         $scope.b2b_data['93_id'] = result.prices['93_id']
 
-        $scope.isValidatingForm = false;
+        $scope.isValidatingForm = true;
 
         $scope.b2b_data.gallons_87 = 0;
         $scope.b2b_data.gallons_93 = 0;
@@ -211,7 +249,8 @@
           }
         });
 
-        $scope.b2b_data.total_fee = $scope.b2b_data.delivery_window.price * ($scope.b2b_refills.length - 1);
+        // $scope.b2b_data.total_fee = $scope.b2b_data.delivery_window.price * ($scope.b2b_refills.length - 1);
+        $scope.b2b_data.total_fee = 0;
         $scope.b2b_data.average_gallons = parseFloat($scope.b2b_data.total_gallons / ($scope.b2b_refills.length - 1)).toFixed(2);
 
         $scope.$broadcast('ba-wizard-next-step');
@@ -222,6 +261,7 @@
     }
 
     function fnPrevious() {
+      $scope.isValidatingForm = false;
       $scope.$broadcast('ba-wizard-prev-step');
     }
 
@@ -230,7 +270,7 @@
 
       delete $scope.b2b_data.id;
       delete $scope.b2b_data.user;
-      delete $scope.b2b_data.delivery_window;
+      // delete $scope.b2b_data.delivery_window;
       delete $scope.b2b_data.created_et;
       delete $scope.b2b_data.modified_et;
 
@@ -243,8 +283,8 @@
       $scope.b2b_data.latlong = $scope.b2b_data.lat + "," + $scope.b2b_data.lng;
 
       OrderService.registerB2BRefills({ b2b_data: $scope.b2b_data, b2b_refills: $scope.b2b_refills }).$promise
-      .then(fnSubmitCallback)
-      .catch(fnSubmitCallback);
+        .then(fnSubmitCallback)
+        .catch(fnSubmitCallback);
     }
 
     function fnSubmitCallback(result) {
@@ -261,7 +301,7 @@
     }
   }
 
-  function B2BNewLocationCtrl($scope, $state, $ngBootbox, $timeout, $q, toastr, lodash, UserService, B2BService, DeliveryWindowService, Auth) {
+  function B2BNewLocationCtrl($scope, $state, $ngBootbox, $timeout, $q, toastr, lodash, UserService, B2BService, OrderService, Auth) {
     $scope.isAdmin = Auth.isAdmin() || Auth.isSuperadmin();
 
     $scope.drivers = {
@@ -279,17 +319,22 @@
       hasMore: true,
     };
 
-    $scope.delivery_windows = {
-      list: [],
-      page: 1,
-      selected: null,
-      loading: false,
-    };
+    // $scope.delivery_windows = {
+    //   list: [],
+    //   page: 1,
+    //   selected: null,
+    //   loading: false,
+    // };
 
     $scope.b2b_assignment = {
       parking_address: '',
       lat: 0,
       lng: 0,
+    };
+
+    $scope.prices = {
+      success: false,
+      message: '',
     };
 
     $scope.isSubmitting = false;
@@ -309,7 +354,7 @@
     function fnInit() {
       var whatToWait = [
         UserService.getUserList({ role: 'b2b', page: $scope.b2b_customers.page, limit: 10 }).$promise,
-        DeliveryWindowService.getDeliveryWindowList({ is_active: true }).$promise
+        // DeliveryWindowService.getDeliveryWindowList({ is_active: true }).$promise
       ];
 
       if (Auth.isAdmin() || Auth.isSuperadmin()) {
@@ -320,7 +365,7 @@
 
       $scope.drivers.loading = true;
       $scope.b2b_customers.loading = true;
-      $scope.delivery_windows.loading = true;
+      // $scope.delivery_windows.loading = true;
 
       $timeout($scope.initGoogleMap, 100);
 
@@ -337,15 +382,15 @@
       if (data[0].length < 10)
         $scope.b2b_customers.hasMore = false;
 
-      $scope.delivery_windows.list = data[1];
-      $scope.delivery_windows.loading = false;
+      // $scope.delivery_windows.list = data[1];
+      // $scope.delivery_windows.loading = false;
 
       //Drivers
-      if (data.length > 2) {
+      if (data.length > 1) {
         $scope.drivers.page++;
-        $scope.drivers.list = data[2];
+        $scope.drivers.list = data[1];
         $scope.drivers.loading = false;
-        if (data[2].length < 10)
+        if (data[1].length < 10)
           $scope.drivers.hasMore = false;
       } else {
         $scope.drivers.loading = false;
@@ -436,29 +481,34 @@
     function fnAddNew() {
       if ($scope.drivers.list.length > 1 && !$scope.drivers.selected) {
         alert("Please select a driver.");
-        return;
+        return false;
       }
 
       if (!$scope.b2b_customers.selected) {
         alert("Please select a B2B customer.");
-        return;
+        return false;
       }
 
       if (!$scope.b2b_assignment.parking_address) {
         alert("Please select a location of the B2B customer.");
-        return;
+        return false;
       }
 
-      if (!$scope.delivery_windows.selected) {
-        alert("Please select a delivery window.");
-        return;
+      if (!$scope.prices.success) {
+        toastr.error($scope.prices.message);
+        return false;
       }
+
+      // if (!$scope.delivery_windows.selected) {
+      //   alert("Please select a delivery window.");
+      //   return;
+      // }
 
       $scope.isSubmitting = true;
 
       $scope.b2b_assignment.driver_id = $scope.drivers.list.length === 1 ? $scope.drivers.list[0].id : $scope.drivers.selected.id;
       $scope.b2b_assignment.user_id = $scope.b2b_customers.selected.id;
-      $scope.b2b_assignment.delivery_window_id = $scope.delivery_windows.selected.id;
+      // $scope.b2b_assignment.delivery_window_id = $scope.delivery_windows.selected.id;
 
       B2BService.addAssignment($scope.b2b_assignment, fnCallbackAddNew);
     }
@@ -570,6 +620,14 @@
             $scope.b2b_assignment.lat = pos.lat();
             $scope.b2b_assignment.lng = pos.lng();
 
+            $scope.$apply();
+
+            var data = {
+              zip: objZip ? objZip['long_name'] : '',
+              lat: pos.lat(),
+              lng: pos.lng()
+            };
+            OrderService.getPrices(data, fnCallbackGetPrices);
           } else {
             $scope.b2b_assignment.parking_address = '';
             $scope.b2b_assignment.lat = 0;
@@ -577,6 +635,15 @@
           }
         }
       });
+    }
+
+    function fnCallbackGetPrices(result) {
+      if (result && result.success) {
+        $scope.prices.success = true;
+      } else {
+        $scope.prices.success = false;
+        $scope.prices.message = result.message ? result.message : 'Could not get the gas prices for this area!'
+      }
     }
   }
 })();

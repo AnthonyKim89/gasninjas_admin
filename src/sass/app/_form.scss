@@ -601,7 +601,8 @@ label.gas-type {
   }
 }
 
-label.truncate {
+label.truncate,
+span.truncate {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

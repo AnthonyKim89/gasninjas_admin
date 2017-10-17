@@ -12,7 +12,7 @@
   /** @ngInject */
   function B2BService($resource, appConfig) {
     return $resource(appConfig.API_URL + '/b2b/:id', {id: '@id'}, {
-      getAssignmentByDriverId: {method: 'GET', url: appConfig.API_URL + '/b2b/get_assignment'},
+      getAssignmentsByDriverId: {method: 'GET', url: appConfig.API_URL + '/b2b/get_assignments'},
       addAssignment: {method: 'POST', url: appConfig.API_URL + '/b2b/add_assignment'},
     });
   }
