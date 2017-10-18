@@ -85,6 +85,21 @@
               schedule: null
             },
             authenticate: true
+          }).state('orders.complete', {
+            url: '/complete/:order_id/:user_id',
+            templateUrl: 'app/pages/orders/views/complete.html',
+            controller: 'OrderCompleteCtrl',
+            title: 'Complete Order',
+            authenticate: true
+          });
+        } else if (Auth.isDriver()) {
+          //This page is invoked from the Onfleet
+          dynamic_state.state('orders-complete', {
+            url: '/orders/complete/:order_id/:user_id',
+            templateUrl: 'app/pages/orders/views/complete.html',
+            controller: 'OrderCompleteCtrl',
+            title: 'Complete Order',
+            authenticate: true
           });
         }
 
@@ -94,7 +109,7 @@
             app.$stateProviderRef.state(state.name, state.options);
           });
 
-          app.$urlRouterProviderRef.when('/orders', '/orderss/list');
+          app.$urlRouterProviderRef.when('/orders', '/orders/list');
 
           $urlRouter.sync();
           $urlRouter.listen();

@@ -1,0 +1,107 @@
+<div class="widgets row">
+  <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="ORDER #{{order.id}}" class="col-xs-12 col-md-6">
+    <form name="orderForm" ng-submit="next()">
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="form-group">
+            <label>
+              Date
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-8">
+          <div class="form-group">
+            <span>
+              {{today | date : 'd MMM, yyyy'}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="form-group">
+            <label>
+              Customer
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-8">
+          <div class="form-group">
+            <span class="truncate">{{user.fullname}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <hr/>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="form-group">
+            <label for="vehicles" class="with_input">
+              Vehicles
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-8">
+          <div class="form-group">
+            <ui-select ng-model="vehicles.selected" theme="bootstrap">
+              <ui-select-match placeholder="Search for vehicles...">
+                {{$select.selected.tag}}
+              </ui-select-match>
+              <ui-select-choices repeat="vehicle in vehicles.list | filter: $select.search">
+                {{vehicle.tag}}
+              </ui-select-choices>
+            </ui-select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="form-group">
+            <label for="vehicles" class="with_input">
+              Gas Type
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-8">
+          <div class="form-group">
+            <label class="radio-inline custom-radio nowrap gas-type">
+              <input type="radio" name="gas_type_87" ng-model="vehicles.selected.gas_type" value="87">
+              <span>87</span>
+            </label>
+            <label class="radio-inline custom-radio nowrap gas-type">
+              <input type="radio" name="gas_type_93" ng-model="vehicles.selected.gas_type" value="93">
+              <span>93</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="form-group">
+            <label for="vehicles" class="with_input">
+              Gallons
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-8">
+          <div class="form-group">
+            <input class="form-control" type="number" ng-model="vehicles.selected.gallon" placeholder="Gallons" required="" ng-required="true" step="0.01">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <hr/>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <button class="btn btn-primary pull-right" type="submit" ng-disabled="isSubmitting || !vehicles.selected">
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
