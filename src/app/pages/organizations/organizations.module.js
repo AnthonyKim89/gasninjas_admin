@@ -23,7 +23,7 @@
       .then(function(is) {
         var dynamic_state = new DynamicState.init();
 
-        if (Auth.hasRole('admin') || Auth.hasRole('superadmin')) {
+        if (Auth.isAdmin() || Auth.isSuperadmin()) {
           dynamic_state.state('organizations', {
             url: '/organizations',
             template: '<ui-view></ui-view>',

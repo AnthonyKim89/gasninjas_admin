@@ -23,7 +23,7 @@
       .then(function(is) {
         var dynamic_state = new DynamicState.init();
 
-        if (Auth.hasRole('admin') || Auth.hasRole('superadmin')) {
+        if (Auth.isAdmin() || Auth.isSuperadmin()) {
           dynamic_state.state('settings', {
             url: '/settings',
             template: '<ui-view></ui-view>',
@@ -46,7 +46,7 @@
           });
         }
 
-        if (Auth.hasRole('superadmin')) {
+        if (Auth.isSuperadmin()) {
           dynamic_state.state('settings.zipcode-area', {
             url: '/zipcode-area',
             templateUrl: 'app/pages/settings/views/zipcode-area.html',

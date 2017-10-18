@@ -22,7 +22,7 @@
       .then(function(is) {
         var dynamic_state = new DynamicState.init();
 
-        if (Auth.hasRole('driver') || Auth.hasRole('admin') || Auth.hasRole('superadmin')) {
+        if (Auth.isDriver() || Auth.isAdmin() || Auth.isSuperadmin()) {
           dynamic_state.state('b2bfuel', {
             url: '/b2bfuel',
             template: '<ui-view></ui-view>',
@@ -30,7 +30,7 @@
             title: 'B2B Fuel',
             sidebarMeta: {
               icon: 'ion-model-s',
-              order: Auth.hasRole('driver') ? 1 : 900,
+              order: Auth.isDriver() ? 1 : 900,
             },
             authenticate: true
           }).state('b2bfuel.data-entry', {
@@ -54,7 +54,7 @@
           });
         }
 
-        if (Auth.hasRole('driver') && !Auth.hasRole('admin') && !Auth.hasRole('superadmin')) {
+        if (Auth.isDriver() && !Auth.isAdmin() && !Auth.isSuperadmin()) {
           dynamic_state.state('dashboard', {
             url: '/b2bfuel/data-entry',
             template: '<ui-view></ui-view>',

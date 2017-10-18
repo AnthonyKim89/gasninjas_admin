@@ -23,7 +23,7 @@
       .then(function(is) {
         var dynamic_state = new DynamicState.init();
 
-        if (Auth.hasRole('admin') || Auth.hasRole('superadmin')) {
+        if (Auth.isAdmin() || Auth.isSuperadmin()) {
           dynamic_state.state('delivery_windows', {
             url: '/delivery_windows',
             template: '<ui-view></ui-view>',

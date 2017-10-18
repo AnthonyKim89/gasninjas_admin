@@ -22,7 +22,7 @@
       .then(function(is) {
         var dynamic_state = new DynamicState.init();
 
-        if (Auth.hasRole('admin') || Auth.hasRole('superadmin')) {
+        if (Auth.isAdmin() || Auth.isSuperadmin()) {
           dynamic_state.state('users', {
             url: '/users',
             template: '<ui-view></ui-view>',
@@ -50,7 +50,7 @@
           });
         }
 
-        if (Auth.hasRole('superadmin')) {
+        if (Auth.isSuperadmin()) {
           dynamic_state.state('users.roles-list', {
             url: '/role-list',
             templateUrl: 'app/pages/users/views/roles-list.html',
