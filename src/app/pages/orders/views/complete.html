@@ -94,7 +94,14 @@
         <hr/>
       </div>
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <a class="btn btn-warning pull-left" ng-disabled="isSubmitting" ng-click="suspend()">
+              Suspend
+            </a>
+          </div>
+        </div>
+        <div class="col-xs-6">
           <div class="form-group">
             <button class="btn btn-primary pull-right" type="submit" ng-disabled="isSubmitting || !vehicles.selected">
               Submit

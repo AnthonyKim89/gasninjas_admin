@@ -95,7 +95,12 @@
     }
 
     function fnSuspend() {
+      $ngBootbox.confirm('Are you sure you want to suspend this task on the Onfleet?')
+          .then(function() {
+            $scope.isSubmitting = true;
 
+            OrderService.suspendOrder({ id: $scope.order.id }, fnCallbackSuspendOrder);
+          });
     }
 
     function fnCompleteRefill() {
@@ -149,6 +154,17 @@
           });
         });
         toastr.error(result.message ? result.message : 'Failed to complete the order!');
+      }
+    }
+
+    function fnCallbackSuspendOrder(result) {
+      $scope.isSubmitting = false;
+
+      if (result.success == 1) {
+        toastr.info('Successfully suspended the Onfleet Task!');
+        $state.go('dashboard');
+      } else {
+        toastr.error(result.message ? result.message : 'Failed to suspend the Onfleet task!');
       }
     }
   }
