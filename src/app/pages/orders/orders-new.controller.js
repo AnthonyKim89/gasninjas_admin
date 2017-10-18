@@ -148,6 +148,8 @@
         parking_address: $scope.order.parking_address,
         gas_type: $scope.order.gas_type,
         price_per_gallon: $scope.order.price,
+        "87_id": $scope.prices.list[0].id,
+        "93_id": $scope.prices.list[1].id,
         delivery_window_id: $scope.order.delivery_window_id,
         day_interval: $scope.order.day_interval,
         notes: $scope.order.notes,
@@ -379,11 +381,13 @@
           $scope.delivery_windows.list = result.prices.windows;
         $scope.prices.list = [];
         $scope.prices.list[0] = {
+          id: result.prices['87_id'],
           gas_type: 87,
           price: result.prices['87'],
           text: 'Regular - 87 $' + parseFloat(result.prices['87']).toFixed(2) + '/gal'
         };
-        $scope.prices.list[93] = {
+        $scope.prices.list[1] = {
+          id: result.prices['93_id'],
           gas_type: 93,
           price: result.prices['93'],
           text: 'Premium - 93 $' + parseFloat(result.prices['93']).toFixed(2) + '/gal'
