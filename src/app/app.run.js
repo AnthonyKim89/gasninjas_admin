@@ -22,8 +22,9 @@
           if (!$location.url()) {
             $state.go('dashboard');
           }
-        } else
-          location.href = 'auth.html';
+        } else {
+          location.href = 'auth.html#' + $location.url();
+        }
       });
     }
   }

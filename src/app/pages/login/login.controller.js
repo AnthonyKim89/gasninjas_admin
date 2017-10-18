@@ -8,17 +8,18 @@
     .controller('LoginCtrl', LoginCtrl);
 
   /** @ngInject */
-  function LoginCtrl($scope, $state, toastr, Auth, appConfig) {
+  function LoginCtrl($scope, $state, $location, toastr, Auth, appConfig) {
     $scope.login = fnLogin;
 
     $scope.user = {};
 
     function fnLogin(form) {
+
       Auth.login({
         email: $scope.user.email,
         password: $scope.user.password
       }).then(function(currentUser) {
-        location.href = 'index.html';
+        location.href = 'index.html#' + $location.url();
       }).catch(function(error) {
         if (error && error.message) {
           toastr.error(error.message);
