@@ -46,6 +46,11 @@
         return;
       }
 
+      $("input.numpad").numpad({
+        hidePlusMinusButton: true,
+        decimalSeparator: '.'
+      });
+
       $scope.$watch('refills', function(newVal, oldVal) {
         if (newVal == oldVal) return;
 
