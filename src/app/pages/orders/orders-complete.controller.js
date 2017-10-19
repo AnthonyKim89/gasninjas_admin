@@ -54,20 +54,23 @@
         position: 'absolute',
         textCancel: 'Close',
         onKeypadOpen: function() {
-          $timeout(function(){
+          $timeout(function() {
             $scope.isNumpadOpen = true;
             $scope.$apply();
           });
         },
         onKeypadClose: function() {
-          $timeout(function(){
+          $timeout(function() {
             $scope.isNumpadOpen = false;
             $scope.$apply();
           });
         },
         onChange: function(event, value) {
-          $timeout(function(){
-            $scope.vehicles.selected.gallon = parseFloat(value).toFixed(2);
+          $timeout(function() {
+            if (!value)
+              $scope.vehicles.selected.gallon = "";
+            else
+              $scope.vehicles.selected.gallon = parseFloat(value).toFixed(2);
             $scope.$apply();
           });
         }
@@ -123,11 +126,11 @@
 
     function fnSuspend() {
       $ngBootbox.confirm('Are you sure you want to suspend this task on the Onfleet?')
-          .then(function() {
-            $scope.isSubmitting = true;
+        .then(function() {
+          $scope.isSubmitting = true;
 
-            OrderService.suspendOrder({ id: $scope.order.id }, fnCallbackSuspendOrder);
-          });
+          OrderService.suspendOrder({ id: $scope.order.id }, fnCallbackSuspendOrder);
+        });
     }
 
     function fnCompleteRefill() {
