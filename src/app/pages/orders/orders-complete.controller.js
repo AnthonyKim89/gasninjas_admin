@@ -46,9 +46,31 @@
         return;
       }
 
+      $scope.isNumpadOpen = false;
       $("input.numpad").numpad({
         hidePlusMinusButton: true,
-        decimalSeparator: '.'
+        decimalSeparator: '.',
+        appendKeypadTo: $('#numpad_container'),
+        position: 'absolute',
+        textCancel: 'Close',
+        onKeypadOpen: function() {
+          $timeout(function(){
+            $scope.isNumpadOpen = true;
+            $scope.$apply();
+          });
+        },
+        onKeypadClose: function() {
+          $timeout(function(){
+            $scope.isNumpadOpen = false;
+            $scope.$apply();
+          });
+        },
+        onChange: function(event, value) {
+          $timeout(function(){
+            $scope.vehicles.selected.gallon = parseFloat(value).toFixed(2);
+            $scope.$apply();
+          });
+        }
       });
 
       $scope.$watch('refills', function(newVal, oldVal) {

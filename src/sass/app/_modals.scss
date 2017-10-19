@@ -104,6 +104,9 @@ $modal-input-border: #e7e7e7;
 }
 
 .modal-content.numpad {
+  top: -50px !important;
+  left: 90px !important;
+
   button {
     margin: 5px 5px 0px 0px;
   }
@@ -118,5 +121,10 @@ $modal-input-border: #e7e7e7;
 
   button.sep {
     width: 85% !important;
+    background-color: rgba(black, 0.2);
+  }
+
+  button.done {
+    display: none;
   }
 }

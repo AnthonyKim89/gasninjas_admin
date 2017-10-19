@@ -86,7 +86,13 @@
         </div>
         <div class="col-xs-8">
           <div class="form-group">
-            <input class="form-control numpad" type="number" ng-model="vehicles.selected.gallon" placeholder="Gallons" required="" ng-required="true" step="0.01">
+            <input class="form-control numpad" type="text" ng-model="vehicles.selected.gallon" placeholder="Gallons" required="" ng-required="true" step="0.01">
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-show="isNumpadOpen">
+        <div class="col-xs-12">
+          <div id="numpad_container" style="position: relative; height: 170px;">
           </div>
         </div>
       </div>
