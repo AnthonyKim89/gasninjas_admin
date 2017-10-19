@@ -75,6 +75,9 @@
           });
         }
       });
+      $timeout(function() {
+        $("input.numpad").click();
+      });
 
       $scope.$watch('refills', function(newVal, oldVal) {
         if (newVal == oldVal) return;
