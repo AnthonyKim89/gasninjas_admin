@@ -611,3 +611,8 @@ span.truncate {
 label.with_input {
   margin-top: 5px !important;
 }
+
+input.numpad[disabled],
+input.numpad[readonly] {
+  color: $default-text;
+}
