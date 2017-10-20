@@ -612,11 +612,6 @@ label.with_input {
   margin-top: 5px !important;
 }
 
-input.numpad[disabled],
-input.numpad[readonly] {
-  color: $default-text;
-}
-
 @media screen and (max-width: 560px) {
   form[name="orderCompleteForm"] hr {
     margin-top: 0px;

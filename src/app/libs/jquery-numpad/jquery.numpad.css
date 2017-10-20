@@ -52,6 +52,11 @@ input.nmpd-display {
   display: none;
 }
 
+.numpad input[disabled],
+.numpad input[readonly] {
+  color: black;
+}
+
 #numpad_container {
   position: relative;
   height: 220px;

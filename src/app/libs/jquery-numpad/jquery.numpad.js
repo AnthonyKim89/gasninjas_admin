@@ -141,7 +141,7 @@
       } else {
         // If the numpad was already instantiated previously, just load it into the nmpd variable
         //nmpd = $('#'+id);
-        //nmpd.display = $('#'+id+' input.nmpd-display');	
+        //nmpd.display = $('#'+id+' input.nmpd-display'); 
       }
 
       $.data(this, 'numpad', nmpd);
@@ -279,7 +279,7 @@
     openOnEvent: 'click',
     backgroundTpl: '<div></div>',
     gridTpl: '<table class="modal-content numpad"></table>',
-    displayTpl: '<input type="text" class="form-control" />',
+    displayTpl: '<input type="text" class="form-control" readonly />',
     displayCellTpl: '<td colspan="3"></td>',
     rowTpl: '<tr></tr>',
     cellTpl: '<td></td>',
