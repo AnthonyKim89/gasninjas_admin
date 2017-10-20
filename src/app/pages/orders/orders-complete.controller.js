@@ -78,8 +78,8 @@
         }
       });
       $timeout(function() {
-        $scope.moveScroll();
         $scope.increasePanelBody();
+        $scope.moveScroll();
         $("input.numpad-input").click();
       });
 
@@ -117,7 +117,7 @@
         var top = rectBreadcrumb.top + $window.pageYOffset + docElem.clientTop;
         //iPhone5
         if (docElem.clientWidth <= 430) {
-          top+= rectPanelHeading.height + 60;
+          top+= rectPanelHeading.height + 30;
         } else {
           top-= 10;
         }
@@ -131,10 +131,9 @@
     function fnIncreasePanelBody() {
       var elemPanelBody = angular.element('.full-height .panel-body')[0];
       if (typeof elemPanelBody != "undefined") {
-        var rectPanelBody = elemPanelBody.getBoundingClientRect();
         var doc = elemPanelBody.ownerDocument;
         var docElem = doc.documentElement;
-        var vertical_space = docElem.clientHeight - rectPanelBody.height;
+        var vertical_space = docElem.clientHeight - elemPanelBody.clientHeight;
         var threshold = 270;
         //iPad
         if (docElem.clientWidth <= 768) {
@@ -142,7 +141,7 @@
         }
         
         if (vertical_space - threshold > 0) {
-          var new_height = rectPanelBody.height + vertical_space - threshold;
+          var new_height = elemPanelBody.clientHeight + vertical_space - threshold;
           angular.element('.full-height .panel-body').css('height', new_height + 'px');
         }
       }
