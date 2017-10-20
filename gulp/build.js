@@ -3,11 +3,42 @@
 var path = require('path');
 var gulp = require('gulp');
 var conf = require('./conf');
+var settings = require('./config');
 var inject = require('gulp-inject-string');
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
+
+// fetch command line arguments
+const arg = (argList => {
+
+  let arg = {},
+    a, opt, thisOpt, curOpt;
+  for (a = 0; a < argList.length; a++) {
+
+    thisOpt = argList[a].trim();
+    opt = thisOpt.replace(/^\-+/, '');
+
+    if (opt === thisOpt) {
+
+      // argument value
+      if (curOpt) arg[curOpt] = opt;
+      curOpt = null;
+
+    } else {
+
+      // argument name
+      curOpt = opt;
+      arg[curOpt] = true;
+
+    }
+
+  }
+
+  return arg;
+
+})(process.argv);
 
 gulp.task('partials', function() {
   return gulp.src([
@@ -98,39 +129,21 @@ gulp.task('clean', function() {
 
 gulp.task('build', ['html', 'fonts', 'other']);
 
-gulp.task('changeConfig:production', function() {
-  conf.paths.dist = conf.paths.distProduction;
+gulp.task('changeDist:production', function() {
+  console.log('------------------------DESTINATION FOLDER----------------------');
+  console.log(settings.dist);
+  console.log('----------------------------------------------------------------');
+  conf.paths.dist = settings.dist;
 });
 
-gulp.task('changeConfig:staging', function() {
-  conf.paths.dist = conf.paths.distStaging;
-});
-
-gulp.task('production', ['changeConfig:production', 'build'], function() {
+gulp.task('production', ['changeDist:production', 'build'], function() {
+  console.log('------------------------API SERVER----------------------');
+  console.log(settings.apiServer);
+  console.log('--------------------------------------------------------');
   return gulp.src([
       conf.paths.dist + '/index.html',
       conf.paths.dist + '/auth.html'
     ])
-    .pipe(inject.replace('http://localhost/gn_api', 'http://api.gasninjas.com'))
+    .pipe(inject.replace('http://localhost/gn_api', settings.apiServer))
     .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
-});
-
-gulp.task('production:miami', ['build'], function() {
-  return gulp.src([
-      conf.paths.dist + '/index.html',
-      conf.paths.dist + '/auth.html'
-    ])
-    .pipe(inject.replace('http://localhost/gn_api', 'https://api-miami.gasninjas.com/gn_api'))
-    .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
-});
-
-gulp.task('staging', ['changeConfig:staging', 'build'], function() {
-  conf.paths.dist = conf.paths.distStaging;
-
-  return gulp.src([
-      conf.paths.dist + '/index.html',
-      conf.paths.dist + '/auth.html'
-    ])
-    .pipe(inject.replace('http://localhost/gn_api', 'https://devdb.gasninjas.com/gn_api'))
-    .pipe(gulp.dest(path.join(conf.paths.distStaging, '/')));
 });
