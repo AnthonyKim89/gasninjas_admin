@@ -117,7 +117,7 @@
         var top = rectBreadcrumb.top + $window.pageYOffset + docElem.clientTop;
         //iPhone5
         if (docElem.clientWidth <= 430) {
-          top+= rectPanelHeading.height + 30;
+          top+= rectPanelHeading.height + 60;
         } else {
           top-= 10;
         }
