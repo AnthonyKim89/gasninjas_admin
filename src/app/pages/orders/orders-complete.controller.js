@@ -141,8 +141,11 @@
         }
         
         if (vertical_space - threshold > 0) {
-          var new_height = elemPanelBody.clientHeight + vertical_space - threshold;
-          angular.element('.full-height .panel-body').css('height', new_height + 'px');
+          angular.element('.full-height .panel-body').css('height', elemPanelBody.clientHeight + vertical_space - threshold + 'px');
+          angular.element('.numpad button').css('height', 34 + (vertical_space - threshold) / 5 + 'px');
+
+          var elemNumpadContainer = angular.element('#numpad_container')[0];
+          angular.element('#numpad_container').css('height', elemNumpadContainer.clientHeight + vertical_space - threshold + 'px');
         }
       }
     }
