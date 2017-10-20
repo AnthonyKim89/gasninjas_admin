@@ -142,7 +142,10 @@
         
         if (vertical_space - threshold > 0) {
           angular.element('.full-height .panel-body').css('height', elemPanelBody.clientHeight + vertical_space - threshold + 'px');
+          // angular.element('.numpad input').css('height', 34 + (vertical_space - threshold) / 12 + 'px');
           angular.element('.numpad button').css('height', 34 + (vertical_space - threshold) / 5 + 'px');
+          // angular.element('.numpad input').css('font-size', 14 + (vertical_space - threshold) / 12 + 'px');
+          angular.element('.numpad button').css('font-size', 14 + (vertical_space - threshold) / 10 + 'px');
         }
 
         if (docElem.clientWidth > 560) {

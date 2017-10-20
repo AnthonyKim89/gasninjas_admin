@@ -48,6 +48,16 @@ input.nmpd-display {
   width: 100%;
 }
 
+.numpad button:active {
+  -webkit-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+.numpad button:hove {
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}
+
 .numpad button.cancel {
   display: none;
 }
