@@ -102,29 +102,3 @@ $modal-input-border: #e7e7e7;
     text-align: center;
   }
 }
-
-.modal-content.numpad {
-  top: -50px !important;
-  left: -10px !important;
-
-  button {
-    margin: 5px 5px 0px 0px;
-  }
-
-  button.numero {
-    background-color: rgba(black, 0.2);
-  }
-
-  button.neg{
-    width: auto !important;
-  }
-
-  button.sep {
-    width: 85% !important;
-    background-color: rgba(black, 0.2);
-  }
-
-  button.done, button.cancel {
-    display: none;
-  }
-}

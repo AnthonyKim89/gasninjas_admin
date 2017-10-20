@@ -1,6 +1,6 @@
 <div class="widgets row">
-  <div ba-panel="" ba-panel-class="with-scroll" ba-panel-title="ORDER #{{order.id}}" class="col-xs-12 col-md-6">
-    <form name="orderForm" ng-submit="next()">
+  <div ba-panel="" ba-panel-class="full-height" ba-panel-title="ORDER #{{order.id}}" class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+    <form name="orderCompleteForm" ng-submit="next()">
       <div class="row">
         <div class="col-xs-4">
           <div class="form-group">
@@ -79,20 +79,20 @@
       <div class="row">
         <div class="col-xs-4">
           <div class="form-group">
-            <label for="vehicles" class="with_input">
+            <label for="vehicles">
               Gallons
             </label>
           </div>
         </div>
         <div class="col-xs-8">
           <div class="form-group">
-            <input ng-hide="isNumpadOpen" class="form-control numpad" type="text" ng-model="vehicles.selected.gallon" placeholder="Gallons" required="" ng-required="true" step="0.01">
+            <input ng-hide="isNumpadOpen" class="form-control numpad-input" type="text" ng-model="vehicles.selected.gallon" placeholder="Gallons" required="" ng-required="true" step="0.01">
           </div>
         </div>
       </div>
       <div class="row" ng-show="isNumpadOpen">
-        <div class="col-xs-8 pull-right">
-          <div id="numpad_container" style="position: relative; height: 170px;">
+        <div class="col-xs-12">
+          <div id="numpad_container">
           </div>
         </div>
       </div>

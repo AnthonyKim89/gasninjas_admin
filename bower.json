@@ -116,8 +116,8 @@
     },
     "jquery-numpad": {
       "main": [
-        "./jquery.numpad.css",
-        "./jquery.numpad.js"
+        "../../src/app/libs/jquery-numpad/jquery.numpad.css",
+        "../../src/app/libs/jquery-numpad/jquery.numpad.js"
       ]
     }
   }

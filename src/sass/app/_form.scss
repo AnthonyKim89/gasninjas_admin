@@ -616,3 +616,16 @@ input.numpad[disabled],
 input.numpad[readonly] {
   color: $default-text;
 }
+
+@media screen and (max-width: 560px) {
+  form[name="orderCompleteForm"] hr {
+    margin-top: 0px;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .menu-collapsed .page-top.scrolled.transparent-bg {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+  }
+}

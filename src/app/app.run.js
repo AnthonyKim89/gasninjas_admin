@@ -5,12 +5,6 @@
 (function() {
   'use strict';
 
-  $.fn.numpad.defaults.gridTpl = '<div class="modal-content numpad"></div>';
-  $.fn.numpad.defaults.displayTpl = '<input type="text" class="form-control" />';
-  $.fn.numpad.defaults.buttonNumberTpl = '<button type="button" class="btn btn-default"></button>';
-  $.fn.numpad.defaults.buttonFunctionTpl = '<button type="button" class="btn" style="width: 100%;"></button>';
-  $.fn.numpad.defaults.onKeypadCreate = function() { $(this).find('.done').addClass('btn-primary'); };
-
   angular.module('GasNinjasAdmin')
     .run(appRun);
 
