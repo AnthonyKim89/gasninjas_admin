@@ -1,0 +1,22 @@
+<div class="widgets">
+  <div class="row">
+    <div class="col-md-12 hide-nav" ng-if="isDataLoaded">
+      <div ba-panel="" ba-panel-title="{{inspection_category.title}}" ba-panel-class="col-eq-height" ng-if="inspection_forms.length > 1">
+        <ba-wizard>
+          <ba-wizard-step ng-repeat="inspection_form in inspection_forms" title="{{inspection_form.title}}" form="questionForm">
+            <form name="questionForm" ng-submit="next($index == inspection_forms.length - 1)">
+              <div include-with-scope="app/pages/driver_inspection/widgets/form-questions.html" ng-init="currentFormId = inspection_form.id; isFirstPage = ($index == 0); isLastPage = ($index == inspection_forms.length - 1); columns = [0, 1]">
+              </div>
+            </form>
+          </ba-wizard-step>
+        </ba-wizard>
+      </div>
+      <div ba-panel ba-panel-title="{{category.title}}" ba-panel-class="col-eq-height" ng-if="inspection_forms.length == 1">
+        <form name="questionForm" ng-submit="next(true)">
+          <div include-with-scope="app/pages/driver_inspection/widgets/form-questions.html" ng-init="currentFormId = inspection_forms[0].id; isFirstPage = true; isLastPage = true; columns = [0, 1]">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

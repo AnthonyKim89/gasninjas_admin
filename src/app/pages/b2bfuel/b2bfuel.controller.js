@@ -288,8 +288,6 @@
     }
 
     function fnSubmitCallback(result) {
-      console.log(result);
-
       if (result.success) {
         toastr.info('Successfully reported the B2B refills.');
       } else {

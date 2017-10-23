@@ -22,6 +22,7 @@
       'GasNinjasAdmin.pages.delivery_windows',
       'GasNinjasAdmin.pages.customercare',
       'GasNinjasAdmin.pages.settings',
+      'GasNinjasAdmin.pages.driver_inspection',
     ])
     .config(routeConfig);
 
