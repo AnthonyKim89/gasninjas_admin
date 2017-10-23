@@ -17,7 +17,7 @@
     $scope.onDataSubmitted = fnOnDataSubmitted;
     $scope.onDataSubmitFailed = fnOnDataSubmitFailed;
 
-    const category_id = $stateParams.category_id;
+    var category_id = $stateParams.category_id;
 
     $scope.inspection_category = {};
     $scope.inspection_forms = [];
