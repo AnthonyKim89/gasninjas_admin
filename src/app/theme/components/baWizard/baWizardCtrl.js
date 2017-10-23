@@ -54,6 +54,11 @@
       vm.selectTab(vm.tabNum - 1);
     });
 
+    $scope.$on('ba-wizard-force-step', function(event, data){
+      vm.selectTab(data.step);
+      calcProgress();
+    });
+
     function calcProgress() {
       vm.progress = ((vm.tabNum + 1) / vm.tabs.length) * 100;
     }
