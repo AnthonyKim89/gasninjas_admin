@@ -1,0 +1,50 @@
+<div class="horizontal-scroll">
+  <div class="add-row-editable-table">
+    <button class="btn btn-primary" ui-sref="settings.zone-add">Add a New Zone</button>
+  </div>
+  <div class="form-group select-page-size-wrap ">
+    <label>Zones per page
+      <select class="form-control selectpicker show-tick" title="Rows on page" selectpicker
+              ng-model="pagination.perPage" ng-options="i for i in pagination.perPagePresets">
+      </select>
+    </label>
+  </div>
+  <table class="table">
+    <thead>
+    <tr class="sortable ">
+      <th class="table-id" >#</th>
+      <th>Title</th>
+      <th>Zone Type</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><input ng-model="pagination.urlParams.query" placeholder="Search Title" class="input-sm form-control search-input" type="search"/></th>
+      <th></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="zone in pagination.items">
+      <td class="table-id">{{zone.id}}</td>
+      <td>{{zone.title}}</td>
+      <td>
+        <button class="status-button btn btn-xs btn-primary btn-noscale" ng-if="zone.type == 'green'" ng-disabled="true">Green</button>
+        <button class="status-button btn btn-xs btn-danger btn-noscale" ng-if="zone.type == 'red'" ng-disabled="true">Red</button>
+      </td>
+      <td>
+        <div class="buttons" ng-show="!rowform.$visible">
+          <button class="btn btn-danger editable-table-button btn-xs" ng-click="deleteZone(zone.id)">Delete</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="4" class="text-center">
+        <bgf-pagination url="pagination.apiUrl" url-params="pagination.urlParams" auto-presets="false" collection="pagination.items" page="pagination.page" per-page="pagination.perPage" per-page-presets="pagination.perPagePresets" link-group-size="2" template-url="app/pages/settings/paginate/paginate-zones.html"></bgf-pagination>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

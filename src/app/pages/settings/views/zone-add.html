@@ -1,0 +1,47 @@
+<div class="widgets">
+  <div ba-panel="" ba-panel-class="col-eq-height" ba-panel-title="Add New">
+    <form id="zoneForm" name="zoneForm" ng-submit="submit()">
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <label for="zone_type">
+            Zone Type
+          </label>
+          <div class="switches clearfix">
+            <switch color="success" id="zone_type" name="zone_type" ng-model="zone.type" data-on-text="Green" data-off-text="Red">
+            </switch>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <label for="zone_title">
+            Zone Title
+          </label>
+          <input class="form-control" id="zone_title" ng-model="zone.title" placeholder="Zone Title..." required="" type="text">
+          </input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <label for="zone_area">
+            KML file
+          </label>
+          <input class="form-control" id="zone_area" name="zone_area" required="" type="file">
+          </input>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group pull-right">
+            <a class="btn btn-default" ui-sref="settings.zone-list">
+              Cancel
+            </a>
+            <button class="btn btn-primary" type="submit" ng-disabled="isSubmitting">
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

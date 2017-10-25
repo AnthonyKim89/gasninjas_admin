@@ -43,6 +43,21 @@
               order: 100,
             },
             authenticate: true
+          }).state('settings.zone-list', {
+            url: '/zone-list',
+            templateUrl: 'app/pages/settings/views/zone-list.html',
+            controller: 'ZoneListCtrl',
+            title: 'KML-based Zones',
+            sidebarMeta: {
+              order: 300,
+            },
+            authenticate: true
+          }).state('settings.zone-add', {
+            url: '/zone-add',
+            templateUrl: 'app/pages/settings/views/zone-add.html',
+            controller: 'ZoneAddCtrl',
+            title: 'Add a new KML-based Zone',
+            authenticate: true
           });
         }
 

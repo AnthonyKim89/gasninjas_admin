@@ -6,7 +6,9 @@
   'use strict';
   angular.module('GasNinjasAdmin.pages.settings')
     .controller('AppVersionCtrl', AppVersionCtrl)
-    .controller('ZipcodeAreaCtrl', ZipcodeAreaCtrl);
+    .controller('ZipcodeAreaCtrl', ZipcodeAreaCtrl)
+    .controller('ZoneListCtrl', ZoneListCtrl)
+    .controller('ZoneAddCtrl', ZoneAddCtrl);
 
   /** @ngInject */
   function AppVersionCtrl($scope, $state, $http, $ngBootbox, toastr, appConfig, VersionService) {
@@ -186,6 +188,102 @@
         $scope.zipcodes.hasMore = false;
         $scope.zipcodes.loading = false;
       });
+    }
+  }
+
+  function ZoneListCtrl($scope, $state, $http, $ngBootbox, toastr, appConfig, ZoneService) {
+    $scope.deleteZone = fnDeleteZone;
+
+    $scope.pagination = {
+      apiUrl: appConfig.API_URL + '/zones/list_zones',
+      urlParams: {
+        sort: 'created',
+        direction: 'desc',
+      },
+      perPage: 5,
+      page: 0,
+      perPagePresets: [5, 10, 20, 50, 100],
+      items: [],
+    };
+
+    function fnDeleteZone(id) {
+      $ngBootbox.confirm('Are you sure you want to delete this zone?')
+        .then(function() {
+          ZoneService.deleteZone({ id: id }, fnCallbackDeleteZone);
+        }, function() {
+
+        });
+    }
+
+    function fnCallbackDeleteZone(result) {
+      switch (result.success) {
+        case 1:
+          toastr.info('Successfully deleted the zone!');
+          $state.go('settings.zone-list', {}, { reload: true });
+          break;
+        case 0:
+        default:
+          toastr.error(result.message ? result.message : 'Failed to delete the order!');
+          break;
+      }
+    }
+  }
+
+  function ZoneAddCtrl($scope, $state, $http, $ngBootbox, $cookies, toastr, appConfig, ZoneService) {
+    $scope.submit = fnSubmit;
+
+    $scope.zone = {
+      type: true,
+      title: ''
+    };
+    $scope.isSubmitting = false;
+
+    function fnSubmit() {
+      $scope.isSubmitting = true;
+
+      // Get form
+      var form = $('#zoneForm')[0];
+
+      // Create an FormData object
+      var data = new FormData(form);
+
+      // If you want to add an extra field for the FormData
+      data.append("type", $scope.zone.type ? 'green' : 'red');
+      data.append("title", $scope.zone.title);
+
+      $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: appConfig.API_URL + '/zones/add_zone',
+        data: data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 600000,
+        beforeSend: function(xhr) {
+          /* Authorization header */
+          xhr.setRequestHeader("Authorization", 'Bearer ' + $cookies.get('token'));
+        },
+        success: function(data) {
+          $scope.isSubmitting = false;
+
+          if (data.success) {
+            toastr.info('Successfully uploaded the zone info.');
+            $state.go('settings.zone-list');
+          } else {
+            console.error(data);
+            toastr.error(data.message ? data.message : 'Failed to upload the zone info.');
+          }
+        },
+        error: function(e) {
+          $scope.isSubmitting = false;
+
+          console.error('Failed to upload the zone info.', e);
+          toastr.error('Failed to upload the zone info.');
+        }
+      });
+
+      return false;
     }
   }
 })();
